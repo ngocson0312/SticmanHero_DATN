@@ -1,6 +1,6 @@
 //#define FIRBASE_ENABLE
 //#define FIR_DATABASE_E
-// #define ENABLE_LOG_ADMOB_REVENUE
+#define ENABLE_LOG_ADMOB_REVENUE
 #define ENABLE_FIRHELPER_LOG_CLIENT
 
 //#define ENABLE_GETCONFIG
@@ -30,7 +30,6 @@ using Firebase.Database;
 
 #elif ENABLE_GETCONFIG
 using Firebase.RemoteConfig;
-
 #endif
 
 namespace mygame.sdk
@@ -42,7 +41,8 @@ namespace mygame.sdk
 
         public int idxOther { get; private set; }
 
-        private int statusInitFir = 0;
+        public int statusInitFir = 0;
+        private static int isFetchConfig = 0;
 
         private bool statelogData = false;
         public string playerName { get; set; }
@@ -52,7 +52,7 @@ namespace mygame.sdk
         private static List<QueueLogFir> listWaitLog = new List<QueueLogFir>();
 
         public static float ValueDailyAdRevenew = 0.003f;
-        public static long AdmobRevenewDivide = 10000000;
+        public static long AdmobRevenewDivide = 1000000000;
         public static int isLogAdmobRevenueAppsFlyer = 1;
 
 #if FIRBASE_ENABLE
@@ -69,7 +69,7 @@ namespace mygame.sdk
                 Instance = this;
                 gcm_id = PlayerPrefs.GetString("get_gcm_id", "");
                 isLogAdmobRevenueAppsFlyer = PlayerPrefs.GetInt("is_log_admob_va2af", 1);
-                AdmobRevenewDivide = PlayerPrefs.GetInt("ad_va_divide", 10000000);
+                AdmobRevenewDivide = PlayerPrefs.GetInt("ad_va_divide", 1000000000);
 
 #if ENABLE_LOG_UNITY
                 Dictionary<string, object> dicparam = new Dictionary<string, object>();
@@ -88,10 +88,10 @@ namespace mygame.sdk
             Invoke("checkand", 30);
             Invoke("checkCoty", 30);
             checkUpdate();
-            Invoke("downLoadIconPromoGame", 15);
 
 #if FIRBASE_ENABLE
             statusInitFir = 0;
+            isFetchConfig = 0;
             dependencyStatus = DependencyStatus.UnavailableOther;
             if (dependencyStatus != DependencyStatus.Available)
             {
@@ -141,7 +141,7 @@ namespace mygame.sdk
             {
                 if (ss == 1)
                 {
-                    long tcurr = SdkUtil.systemCurrentMiliseconds() / 60000;
+                    long tcurr = GameHelper.CurrentTimeMilisReal() / 60000;
                     int tmem = PlayerPrefs.GetInt("update_memtime_show", 0);
                     if (memverShow >= AppConfig.verapp && (tcurr - tmem) <= 1800)
                     {
@@ -155,7 +155,7 @@ namespace mygame.sdk
                     {
                         PlayerPrefs.SetInt("update_status", 0);
                         PlayerPrefs.SetInt("update_ver_show", AppConfig.verapp);
-                        long tshow = SdkUtil.systemCurrentMiliseconds() / 60000;
+                        long tshow = GameHelper.CurrentTimeMilisReal() / 60000;
                         PlayerPrefs.SetInt("update_memtime_show", (int)tshow);
                     }
                 }
@@ -282,8 +282,8 @@ namespace mygame.sdk
                 {
                     case Firebase.RemoteConfig.LastFetchStatus.Success:
                         //vvvFirebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.ActivateFetched();
-                        SdkUtil.logd(String.Format("Remote data loaded and ready (last fetch time {0}).",
-                            info.FetchTime));
+                        Debug.Log(String.Format("mysdk: fir Remote data loaded and ready (last fetch time {0}-{1}).",
+                            SdkUtil.toTimestamp(info.FetchTime), SdkUtil.CurrentTimeMilis()));
                         Firebase.RemoteConfig.FirebaseRemoteConfig.DefaultInstance.ActivateAsync().ContinueWithOnMainThread(taskac =>
                         {
                             parserConfig();
@@ -465,10 +465,12 @@ namespace mygame.sdk
         }
 
         //int typeAds 0-bn, 1-full, 2-gift
-        public static void logEventAdsPaidAdmob(int typeAds, string adunitId, int precisionType, string currencyCode, long valueMicros)
+        public static void logEventAdsPaidAdmob(int typeAds, string adunitId, int precisionType, string currencyCode, long rvalueMicros)
         {
+            int vapost = PlayerPrefs.GetInt("mem_va_of_ad_postfir", AppConfig.PerValuePostFir);
+            long newvalueMicros = rvalueMicros * vapost / 100;
 #if ENABLE_FIRHELPER_LOG_CLIENT
-            Debug.Log($"mysdk: firhelper logEventAdsPaidAdmob typeAds={typeAds}, adunitId={adunitId}, precisionType={precisionType}, currencyCode={currencyCode} valueMicros={valueMicros}");
+            Debug.Log($"mysdk: firhelper logEventAdsPaidAdmob typeAds={typeAds}, adunitId={adunitId}, precisionType={precisionType}, currencyCode={currencyCode} valueMicros={rvalueMicros} newva={newvalueMicros}");
 #endif
 
 #if ENABLE_AppsFlyer
@@ -488,42 +490,48 @@ namespace mygame.sdk
                 {
                     adformat = "reward_video";
                 }
+                else if (typeAds == 3)
+                {
+                    adformat = "app_open_ads";
+                }
                 additionalParameters.Add(AFAdRevenueEvent.AD_UNIT, adunitId);
                 additionalParameters.Add(AFAdRevenueEvent.AD_TYPE, adformat);
-                double dv = valueMicros / ((double)AdmobRevenewDivide);
+                double dv = newvalueMicros / ((double)AdmobRevenewDivide);
                 AppsFlyerSDK.AppsFlyerAdRevenue.logAdRevenue("googleadmob", AppsFlyerSDK.AppsFlyerAdRevenueMediationNetworkType.AppsFlyerAdRevenueMediationNetworkTypeGoogleAdMob, dv, currencyCode, additionalParameters);
             }
 #endif
 
 #if FIRBASE_ENABLE && ENABLE_LOG_ADMOB_REVENUE
             Firebase.Analytics.Parameter[] paramspaid = new Firebase.Analytics.Parameter[5];
-            paramspaid[0] = new Firebase.Analytics.Parameter("valuemicros", valueMicros);
+            paramspaid[0] = new Firebase.Analytics.Parameter("valuemicros", newvalueMicros);
             paramspaid[1] = new Firebase.Analytics.Parameter("currency", currencyCode);
             paramspaid[2] = new Firebase.Analytics.Parameter("precision", precisionType);
             paramspaid[3] = new Firebase.Analytics.Parameter("adunitid", adunitId);
             paramspaid[4] = new Firebase.Analytics.Parameter("network", "admob");
 
             double maxLtv = PlayerPrefs.GetFloat("mem_paid_max_ltv", 0);
-            double admobLtv = PlayerPrefs.GetInt("mem_paid_admob_ltv", 0);
+            double admobLtv = PlayerPrefs.GetFloat("mem_paid_admob_ltv", 0);
             double ironLtv = PlayerPrefs.GetFloat("mem_paid_iron_ltv", 0);
-            double ltv = maxLtv + ironLtv + (admobLtv + valueMicros) / ((double)AdmobRevenewDivide);
+            double ltv = maxLtv + ironLtv + (admobLtv + newvalueMicros) / ((double)AdmobRevenewDivide);
             if (ltv >= ValueDailyAdRevenew)
             {
                 PlayerPrefs.SetFloat("mem_paid_max_ltv", 0);
-                PlayerPrefs.SetInt("mem_paid_admob_ltv", 0);
+                PlayerPrefs.SetFloat("mem_paid_admob_ltv", 0);
                 PlayerPrefs.SetFloat("mem_paid_iron_ltv", 0);
             }
             else
             {
-                PlayerPrefs.SetInt("mem_paid_admob_ltv", (int)(admobLtv + valueMicros));
+                PlayerPrefs.SetFloat("mem_paid_admob_ltv", (int)(admobLtv + newvalueMicros));
             }
             logEventAdsPaid(paramspaid, ltv);
 #endif
         }
-        public static void logEventAdsPaidMax(string adunitId, string adUnitIdentifier, string adSource, string adformat, double revenue, string countrycode, string netplacement)
+        public static void logEventAdsPaidMax(string adunitId, string adUnitIdentifier, string adSource, string adformat, double rrevenue, string countrycode, string netplacement)
         {
+            float vapost = PlayerPrefs.GetInt("mem_va_of_ad_postfir", AppConfig.PerValuePostFir);
+            double newrevenue = rrevenue * vapost / 100.0f;
 #if ENABLE_FIRHELPER_LOG_CLIENT
-            Debug.Log($"mysdk: firhelper logEventAdsPaidMax adunitId={adunitId}, adUnitIdentifier={adUnitIdentifier}, adSource={adSource}, adformat={adformat}, revenue={revenue}, countrycode={countrycode}, netplacement={netplacement}");
+            Debug.Log($"mysdk: firhelper logEventAdsPaidMax adunitId={adunitId}, adUnitIdentifier={adUnitIdentifier}, adSource={adSource}, adformat={adformat}, revenue={rrevenue}, newva={newrevenue}, countrycode={countrycode}, netplacement={netplacement}");
 #endif
 
 #if ENABLE_AppsFlyer
@@ -533,7 +541,7 @@ namespace mygame.sdk
             additionalParameters.Add(AFAdRevenueEvent.COUNTRY, countrycode);
             additionalParameters.Add(AFAdRevenueEvent.PLACEMENT, netplacement);
             string lownet = adSource.ToLower();
-            AppsFlyerSDK.AppsFlyerAdRevenue.logAdRevenue(lownet, AppsFlyerSDK.AppsFlyerAdRevenueMediationNetworkType.AppsFlyerAdRevenueMediationNetworkTypeApplovinMax, revenue, "USD", additionalParameters);
+            AppsFlyerSDK.AppsFlyerAdRevenue.logAdRevenue(lownet, AppsFlyerSDK.AppsFlyerAdRevenueMediationNetworkType.AppsFlyerAdRevenueMediationNetworkTypeApplovinMax, newrevenue, "USD", additionalParameters);
 #endif
 
 #if FIRBASE_ENABLE
@@ -542,63 +550,64 @@ namespace mygame.sdk
             paramspaid[1] = new Firebase.Analytics.Parameter(FirebaseAnalytics.ParameterAdSource, adSource);
             paramspaid[2] = new Firebase.Analytics.Parameter(FirebaseAnalytics.ParameterAdUnitName, adUnitIdentifier);
             paramspaid[3] = new Firebase.Analytics.Parameter(FirebaseAnalytics.ParameterAdFormat, adformat);
-            paramspaid[4] = new Firebase.Analytics.Parameter(FirebaseAnalytics.ParameterValue, revenue);
+            paramspaid[4] = new Firebase.Analytics.Parameter(FirebaseAnalytics.ParameterValue, newrevenue);
             paramspaid[5] = new Firebase.Analytics.Parameter(FirebaseAnalytics.ParameterCurrency, "USD");
             double maxLtv = PlayerPrefs.GetFloat("mem_paid_max_ltv", 0);
-            double admobLtv = PlayerPrefs.GetInt("mem_paid_admob_ltv", 0);
+            double admobLtv = PlayerPrefs.GetFloat("mem_paid_admob_ltv", 0);
             double ironLtv = PlayerPrefs.GetFloat("mem_paid_iron_ltv", 0);
-            double ltv = (maxLtv + revenue) + ironLtv + admobLtv / ((double)AdmobRevenewDivide);
+            double ltv = (maxLtv + newrevenue) + ironLtv + admobLtv / ((double)AdmobRevenewDivide);
             if (ltv >= ValueDailyAdRevenew)
             {
                 PlayerPrefs.SetFloat("mem_paid_max_ltv", 0);
-                PlayerPrefs.SetInt("mem_paid_admob_ltv", 0);
+                PlayerPrefs.SetFloat("mem_paid_admob_ltv", 0);
                 PlayerPrefs.SetFloat("mem_paid_iron_ltv", 0);
             }
             else
             {
-                PlayerPrefs.SetFloat("mem_paid_max_ltv", (float)(maxLtv + revenue));
+                PlayerPrefs.SetFloat("mem_paid_max_ltv", (float)(maxLtv + newrevenue));
             }
             logEventAdsPaid(paramspaid, ltv);
 #endif
         }
-
-        public static void logEventAdsPaidIron(string adunitId, string instanceName, string adSource, string adformat, double revenue, string countrycode, string netplacement)
+        public static void logEventAdsPaidIron(string adunitId, string adSource, string adunitName, string adformat, double rrevenue, string countrycode, string netplacement)
         {
+            float vapost = PlayerPrefs.GetInt("mem_va_of_ad_postfir", AppConfig.PerValuePostFir);
+            double newrevenue = rrevenue * vapost / 100.0f;
 #if ENABLE_FIRHELPER_LOG_CLIENT
-            Debug.Log($"mysdk: firhelper logEventAdsPaidIron adunitId={adunitId}, adSource={adSource}, adformat={adformat}, revenue={revenue}, countrycode={countrycode}, netplacement={netplacement}");
+            Debug.Log($"mysdk: firhelper logEventAdsPaidIron adunitId={adunitId}, adSource={adSource}, adunitName={adunitName}, adformat={adformat}, revenue={rrevenue}, newva={newrevenue}, countrycode={countrycode}, netplacement={netplacement}");
 #endif
 
 #if ENABLE_AppsFlyer
             Dictionary<string, string> additionalParameters = new Dictionary<string, string>();
             additionalParameters.Add(AFAdRevenueEvent.AD_UNIT, adunitId);
-            additionalParameters.Add(AFAdRevenueEvent.AD_TYPE, adformat);
+            additionalParameters.Add(AFAdRevenueEvent.AD_TYPE, adunitName);
             additionalParameters.Add(AFAdRevenueEvent.COUNTRY, countrycode);
             additionalParameters.Add(AFAdRevenueEvent.PLACEMENT, netplacement);
             string lownet = adSource.ToLower();
-            AppsFlyerSDK.AppsFlyerAdRevenue.logAdRevenue(lownet, AppsFlyerSDK.AppsFlyerAdRevenueMediationNetworkType.AppsFlyerAdRevenueMediationNetworkTypeIronSource, revenue, "USD", additionalParameters);
+            AppsFlyerSDK.AppsFlyerAdRevenue.logAdRevenue(lownet, AppsFlyerSDK.AppsFlyerAdRevenueMediationNetworkType.AppsFlyerAdRevenueMediationNetworkTypeIronSource, newrevenue, "USD", additionalParameters);
 #endif
 
 #if FIRBASE_ENABLE
             Firebase.Analytics.Parameter[] paramspaid = new Firebase.Analytics.Parameter[6];
             paramspaid[0] = new Firebase.Analytics.Parameter(FirebaseAnalytics.ParameterAdPlatform, "ironSource");
             paramspaid[1] = new Firebase.Analytics.Parameter(FirebaseAnalytics.ParameterAdSource, adSource);
-            paramspaid[2] = new Firebase.Analytics.Parameter(FirebaseAnalytics.ParameterAdUnitName, instanceName);
+            paramspaid[2] = new Firebase.Analytics.Parameter(FirebaseAnalytics.ParameterAdUnitName, adunitName);
             paramspaid[3] = new Firebase.Analytics.Parameter(FirebaseAnalytics.ParameterAdFormat, adformat);
-            paramspaid[4] = new Firebase.Analytics.Parameter(FirebaseAnalytics.ParameterValue, revenue);
+            paramspaid[4] = new Firebase.Analytics.Parameter(FirebaseAnalytics.ParameterValue, newrevenue);
             paramspaid[5] = new Firebase.Analytics.Parameter(FirebaseAnalytics.ParameterCurrency, "USD");
             double maxLtv = PlayerPrefs.GetFloat("mem_paid_max_ltv", 0);
-            double admobLtv = PlayerPrefs.GetInt("mem_paid_admob_ltv", 0);
+            double admobLtv = PlayerPrefs.GetFloat("mem_paid_admob_ltv", 0);
             double ironLtv = PlayerPrefs.GetFloat("mem_paid_iron_ltv", 0);
-            double ltv = (ironLtv + revenue) + maxLtv + admobLtv / ((double)AdmobRevenewDivide);
+            double ltv = (ironLtv + newrevenue) + maxLtv + admobLtv / ((double)AdmobRevenewDivide);
             if (ltv >= ValueDailyAdRevenew)
             {
                 PlayerPrefs.SetFloat("mem_paid_max_ltv", 0);
-                PlayerPrefs.SetInt("mem_paid_admob_ltv", 0);
+                PlayerPrefs.SetFloat("mem_paid_admob_ltv", 0);
                 PlayerPrefs.SetFloat("mem_paid_iron_ltv", 0);
             }
             else
             {
-                PlayerPrefs.SetFloat("mem_paid_iron_ltv", (float)(ironLtv + revenue));
+                PlayerPrefs.SetFloat("mem_paid_iron_ltv", (float)(ironLtv + newrevenue));
             }
             logEventAdsPaid(paramspaid, ltv);
 #endif
@@ -633,6 +642,7 @@ namespace mygame.sdk
             try
             {
                 Debug.Log("mysdk: parserConfig0");
+                isFetchConfig = 1;
 #if FIRBASE_ENABLE || ENABLE_GETCONFIG
 #if UNITY_ANDROID
                 ConfigValue v = FirebaseRemoteConfig.DefaultInstance.GetValue("ads_region_android");
@@ -663,6 +673,10 @@ namespace mygame.sdk
                                 {
                                     obads.loadFromPlayerPrefs();
                                 }
+                                if (oitm.ContainsKey("maskAdsStatus"))
+                                {
+                                    obads.maskAdsStatus = Convert.ToInt32(oitm["maskAdsStatus"]);
+                                }
                                 if (oitm.ContainsKey("fullTotalOfday"))
                                 {
                                     obads.fullTotalOfday = Convert.ToInt32(oitm["fullTotalOfday"]);
@@ -670,6 +684,10 @@ namespace mygame.sdk
                                 if (oitm.ContainsKey("fullLevelStart"))
                                 {
                                     obads.fullLevelStart = Convert.ToInt32(oitm["fullLevelStart"]);
+                                }
+                                if (oitm.ContainsKey("fullSessionStart"))
+                                {
+                                    obads.fullSessionStart = Convert.ToInt32(oitm["fullSessionStart"]);
                                 }
                                 if (oitm.ContainsKey("fullTimeStart"))
                                 {
@@ -766,6 +784,12 @@ namespace mygame.sdk
                                     obads.loadOtherWhenLoadedApplovinButNotReady = Convert.ToInt32(oitm["cf_load_other_max_loaded"]);
                                 }
 
+                                if (oitm.ContainsKey("special_con"))
+                                {
+                                    IDictionary<string, object> dicSpec = (IDictionary<string, object>)oitm["special_con"];
+                                    obads.parSerSpecial(dicSpec);
+                                }
+
                                 //openads
                                 if (oitm.ContainsKey("cf_open_ad_typen"))
                                 {
@@ -790,6 +814,10 @@ namespace mygame.sdk
                                 if (oitm.ContainsKey("cf_open_ad_wait_first"))
                                 {
                                     obads.OpenAdTimeWaitShowFirst = Convert.ToInt32(oitm["cf_open_ad_wait_first"]);
+                                }
+                                if (oitm.ContainsKey("cf_type_myopenad"))
+                                {
+                                    obads.typeMyopenAd = Convert.ToInt32(oitm["cf_type_myopenad"]);
                                 }
 
                                 if (oitm.ContainsKey("cf_lv_static_ads"))
@@ -830,6 +858,171 @@ namespace mygame.sdk
                             }
                         }
                         isConfigAds = true;
+                    }
+                }
+
+#if UNITY_ANDROID
+                v = FirebaseRemoteConfig.DefaultInstance.GetValue("ads_region2_android");
+#else
+                v = FirebaseRemoteConfig.DefaultInstance.GetValue("ads_region2_ios");
+#endif
+                if (v.StringValue != null && v.StringValue.Length > 0)
+                {
+                    var listads = (IDictionary<string, object>)JsonDecoder.DecodeText(v.StringValue);
+                    if (listads != null || listads.Count > 0)
+                    {
+                        foreach (KeyValuePair<string, object> item in listads)
+                        {
+                            IDictionary<string, object> oitm = (IDictionary<string, object>)item.Value;
+                            string[] arrkey = item.Key.Split(new char[] { ',' });
+                            foreach (string ctc in arrkey)
+                            {
+                                Debug.Log("mysdk: parserfull2 country=" + ctc);
+                                ObjectAdsCf obads;
+                                if (!AdsHelper.Instance.adsConfigAllRegion.ContainsKey(ctc))
+                                {
+                                    obads = new ObjectAdsCf(ctc);
+                                    if (cgdf != null)
+                                    {
+                                        obads.coppyFromOther(cgdf);
+                                    }
+                                    else
+                                    {
+                                        obads.loadFromPlayerPrefs();
+                                    }
+                                }
+                                else
+                                {
+                                    obads = AdsHelper.Instance.adsConfigAllRegion[ctc];
+                                }
+                                
+                                if (oitm.ContainsKey("full2LevelStart"))
+                                {
+                                    obads.full2LevelStart = Convert.ToInt32(oitm["full2LevelStart"]);
+                                }
+                                if (oitm.ContainsKey("full2Deltatime"))
+                                {
+                                    obads.full2Deltatime = 1000 * Convert.ToInt32(oitm["full2Deltatime"]);
+                                }
+                                if (oitm.ContainsKey("full2Numover"))
+                                {
+                                    obads.full2Numover = Convert.ToInt32(oitm["full2Numover"]);
+                                }
+                                if (oitm.ContainsKey("step_show_full2"))
+                                {
+                                    obads.stepShowFull2 = (string)oitm["step_show_full2"];
+                                    obads.parSerStepFull2(obads.stepShowFull2);
+                                }
+
+                                
+                                if (cgdf == null)
+                                {
+                                    if (AdsHelper.Instance.adsConfigAllRegion.ContainsKey(GameHelper.CountryDefault))
+                                    {
+                                        cgdf = AdsHelper.Instance.adsConfigAllRegion[GameHelper.CountryDefault];
+                                    }
+                                }
+                            }
+                        }
+                        isConfigAds = true;
+                    }
+                }
+
+#if UNITY_ANDROID
+                v = FirebaseRemoteConfig.DefaultInstance.GetValue("admob_defaultid_android");
+#else
+                v = FirebaseRemoteConfig.DefaultInstance.GetValue("admob_defaultid_ios");
+#endif
+
+                if (v.StringValue != null && v.StringValue.Length > 0)
+                {
+                    IDictionary<string, object> cfdfid = (IDictionary<string, object>)JsonDecoder.DecodeText(v.StringValue);
+                    foreach (KeyValuePair<string, object> adsnet in cfdfid)
+                    {
+                        if (adsnet.Key.Equals("admob"))
+                        {
+                            IDictionary<string, object> cfadsType = (IDictionary<string, object>)adsnet.Value;
+                            foreach (KeyValuePair<string, object> adstype in cfadsType)
+                            {
+                                if (adstype.Key.Contains("cf_banner"))
+                                {
+                                    AdsHelper.Instance.adsAdmobMy.setBannerId((string)adstype.Value);
+                                }
+                                else if (adstype.Key.Contains("cf_open"))
+                                {
+                                    PlayerPrefs.SetString($"mem_df0_open_id", (string)adstype.Value);
+                                }
+                                else if (adstype.Key.Contains("cf_full_img"))
+                                {
+                                    AdsHelper.Instance.adsAdmobMy.setSplashId((string)adstype.Value);
+                                }
+                                else if (adstype.Key.Contains("cf_full"))
+                                {
+                                    AdsHelper.Instance.adsAdmobMy.setFullId((string)adstype.Value);
+                                }
+                                else if (adstype.Key.Contains("cf_gift"))
+                                {
+                                    AdsHelper.Instance.adsAdmobMy.setGiftId((string)adstype.Value);
+                                }
+                            }
+                            isConfigAds = true;
+                        }
+                        else if (adsnet.Key.Equals("applovin"))
+                        {
+                            IDictionary<string, object> cfadsType = (IDictionary<string, object>)adsnet.Value;
+                            foreach (KeyValuePair<string, object> adstype in cfadsType)
+                            {
+                                if (adstype.Key.Contains("cf_banner"))
+                                {
+                                    AdsHelper.Instance.adsApplovinMax.setBannerId((string)adstype.Value);
+                                }
+                                else if (adstype.Key.Contains("cf_open"))
+                                {
+                                    PlayerPrefs.SetString($"mem_df6_open_id", (string)adstype.Value);
+                                }
+                                else if (adstype.Key.Contains("cf_full_img"))
+                                {
+                                    AdsHelper.Instance.adsApplovinMax.setSplashId((string)adstype.Value);
+                                }
+                                else if (adstype.Key.Contains("cf_full"))
+                                {
+                                    AdsHelper.Instance.adsApplovinMax.setFullId((string)adstype.Value);
+                                }
+                                else if (adstype.Key.Contains("cf_gift"))
+                                {
+                                    AdsHelper.Instance.adsApplovinMax.setGiftId((string)adstype.Value);
+                                }
+                            }
+                            isConfigAds = true;
+                        }
+                        else if (adsnet.Key.Equals("iron"))
+                        {
+                            IDictionary<string, object> cfadsType = (IDictionary<string, object>)adsnet.Value;
+                            foreach (KeyValuePair<string, object> adstype in cfadsType)
+                            {
+                                if (adstype.Key.Contains("cf_banner"))
+                                {
+                                    AdsHelper.Instance.adsIron.setBannerId((string)adstype.Value);
+                                }
+                                else if (adstype.Key.Contains("cf_open"))
+                                {
+                                    PlayerPrefs.SetString($"mem_df3_open_id", (string)adstype.Value);
+                                }
+                                else if (adstype.Key.Contains("cf_full_img"))
+                                {
+                                    AdsHelper.Instance.adsIron.setSplashId((string)adstype.Value);
+                                }
+                                else if (adstype.Key.Contains("cf_full"))
+                                {
+                                    AdsHelper.Instance.adsIron.setFullId((string)adstype.Value);
+                                }
+                                else if (adstype.Key.Contains("cf_gift"))
+                                {
+                                    AdsHelper.Instance.adsIron.setGiftId((string)adstype.Value);
+                                }
+                            }
+                            isConfigAds = true;
+                        }
                     }
                 }
 
@@ -876,6 +1069,10 @@ namespace mygame.sdk
                                 {
                                     obads.stepFloorECPMFull = (string)oitm["cf_full"];
                                 }
+                                if (oitm.ContainsKey("cf_gift"))
+                                {
+                                    obads.stepFloorECPMGift = (string)oitm["cf_gift"];
+                                }
                             }
                         }
                         isConfigAds = true;
@@ -903,6 +1100,81 @@ namespace mygame.sdk
                 Debug.Log("mysdk: ex=" + ex);
             }
         }
+        public static string FirConfigGet(string key, string vdef)
+        {
+            if (isFetchConfig != 1)
+            {
+                return vdef;
+            }
+#if FIRBASE_ENABLE || ENABLE_GETCONFIG
+            if (FirebaseRemoteConfig.DefaultInstance == null)
+            {
+                return vdef;
+            }
+            //Debug.LogError("mysdk: FirConfigGet string=" + key);
+            ConfigValue v = FirebaseRemoteConfig.DefaultInstance.GetValue(key);
+            if (v.StringValue != null && v.StringValue.Length > 0)
+            {
+                return v.StringValue;
+            }
+            else
+            {
+                return vdef;
+            }
+#else
+            return vdef;
+#endif
+        }
+        public static long FirConfigGet(string key, long vdef)
+        {
+            if (isFetchConfig != 1)
+            {
+                return vdef;
+            }
+#if FIRBASE_ENABLE || ENABLE_GETCONFIG
+            if (FirebaseRemoteConfig.DefaultInstance == null)
+            {
+                return vdef;
+            }
+            //Debug.LogError("mysdk: FirConfigGet long=" + key);
+            ConfigValue v = FirebaseRemoteConfig.DefaultInstance.GetValue(key);
+            if (v.StringValue != null && v.StringValue.Length > 0)
+            {
+                return v.LongValue;
+            }
+            else
+            {
+                return vdef;
+            }
+#else
+            return vdef;
+#endif
+        }
+        public static double FirConfigGet(string key, double vdef)
+        {
+            if (isFetchConfig != 1)
+            {
+                return vdef;
+            }
+#if FIRBASE_ENABLE || ENABLE_GETCONFIG
+            if (FirebaseRemoteConfig.DefaultInstance == null)
+            {
+                return vdef;
+            }
+            //Debug.LogError("mysdk: FirConfigGet double=" + key);
+            ConfigValue v = FirebaseRemoteConfig.DefaultInstance.GetValue(key);
+            if (v.StringValue != null && v.StringValue.Length > 0)
+            {
+                return v.DoubleValue;
+            }
+            else
+            {
+                return vdef;
+            }
+#else
+            return vdef;
+#endif
+        }
         private void parserPromo()
         {
 #if FIRBASE_ENABLE || ENABLE_GETCONFIG
@@ -919,19 +1191,22 @@ namespace mygame.sdk
                 var obPromo = (IDictionary<string, object>)JsonDecoder.DecodeText(v.StringValue);
                 if (obPromo != null || obPromo.Count > 0)
                 {
+                    int verPromo = 0;
                     foreach (KeyValuePair<string, object> item in obPromo)
                     {
-                        if (item.Key.Equals("clear"))
+                        if (item.Key.Equals("ver"))
                         {
-                            int statusClear = Convert.ToInt32(item.Value);
-                            if (statusClear == 1)
-                            {
-                                gamePromoCurr = null;
-                                PlayerPrefs.SetString("cf_game_promo", "");
-                                PlayerPrefs.SetString("mem_game_will_promo", "");
-                            }
+                            verPromo = Convert.ToInt32(item.Value);
                             break;
                         }
+                    }
+                    int memverpromo = PlayerPrefs.GetInt("mem_ver_gamepromo", 1);
+                    if (verPromo > memverpromo)
+                    {
+                        gamePromoCurr = null;
+                        PlayerPrefs.SetInt("mem_ver_gamepromo", verPromo);
+                        PlayerPrefs.SetString("cf_game_promo", "");
+                        PlayerPrefs.SetString("mem_game_will_promo", "");
                     }
                     string memlistgame = PlayerPrefs.GetString("cf_game_promo", "");
                     var obmemgames = (IDictionary<string, object>)JsonDecoder.DecodeText(memlistgame);
@@ -1084,33 +1359,30 @@ namespace mygame.sdk
             if (v.StringValue != null && v.StringValue.Length > 0)
             {
                 var obupdategame = (IDictionary<string, object>)JsonDecoder.DecodeText(v.StringValue);
-                if (obupdategame != null || obupdategame.Count > 0)
+                if (MyAdsOpen.Instance != null && (obupdategame != null || obupdategame.Count > 0))
                 {
-                    int idob = Convert.ToInt32(obupdategame["id"]);
-                    int memid = PlayerPrefs.GetInt("my_open_ads_id_mem", 0);
-                    Debug.Log("mysdk: parserOpenAds idcf=" + idob + ", idmem=" + memid);
-                    if (idob > memid)
+                    int ver = Convert.ToInt32(obupdategame["ver"]);
+                    int memver = PlayerPrefs.GetInt("mem_ver_myopen", 0);
+                    Debug.Log("mysdk: parserOpenAds vercf=" + ver + ", memver=" + memver);
+                    if (ver > memver)
                     {
-                        MyOpenAdsOb myads = new MyOpenAdsOb();
-                        myads.idOb = idob;
-                        myads.status = Convert.ToInt32(obupdategame["status"]);
-                        myads.countShow = Convert.ToInt32(obupdategame["countShow"]);
-                        myads.playOnClient = Convert.ToInt32(obupdategame["playOnClient"]);
-                        myads.isStatic = Convert.ToInt32(obupdategame["isStatic"]);
-                        myads.linkAds = (string)obupdategame["linkAds"];
-                        if (obupdategame.ContainsKey("buttonNo"))
+                        if (obupdategame.ContainsKey("games"))
                         {
-                            myads.btNo = (string)obupdategame["buttonNo"];
+                            PlayerPrefs.SetString("mem_data_myopen_ad", v.StringValue);
+                            PlayerPrefs.SetInt("mem_ver_myopen", ver);
+                            MyAdsOpen.Instance.ListMyAdsOpen.Clear();
+                            var games = (List<object>)obupdategame["games"];
+                            foreach (var itemgame in games)
+                            {
+                                var gameopen = (IDictionary<string, object>)itemgame;
+                                MyOpenAdsOb myads = new MyOpenAdsOb();
+                                MyAdsOpen.Instance.ListMyAdsOpen.Add(myads);
+
+                                myads.linkAds = (string)gameopen["linkAds"];
+                                myads.gameId = (string)gameopen["gameId"];
+                            }
+                            AdsHelper.Instance.loadOpenAd();
                         }
-                        if (obupdategame.ContainsKey("posNo"))
-                        {
-                            myads.posBtNo = (string)obupdategame["posNo"];
-                        }
-                        PlayerPrefs.SetInt("my_open_ads_id_mem", myads.idOb);
-                        PlayerPrefs.SetInt("my_open_ads_show_count_mem", myads.countShow);
-                        PlayerPrefs.SetString("my_open_ads_data_mem", myads.ToString());
-                        SDKManager.Instance.myAdsOpen = myads;
-                        SDKManager.Instance.downMyopenAds();
                     }
                 }
             }
@@ -1259,6 +1531,22 @@ namespace mygame.sdk
             {
                 PlayerPrefsBase.Instance().setInt("mem_procinva_gema", (int)v.LongValue);
             }
+            v = FirebaseRemoteConfig.DefaultInstance.GetValue("cf_game_flag_bira");
+            if (v.StringValue != null && v.StringValue.Length > 0)
+            {
+                PlayerPrefsBase.Instance().setInt("mem_flag_check_bira", (int)v.LongValue);
+            }
+            v = FirebaseRemoteConfig.DefaultInstance.GetValue("is_vali_appsf");
+            if (v.StringValue != null && v.StringValue.Length > 0)
+            {
+                PlayerPrefsBase.Instance().setInt("is_vali_appsf", (int)v.LongValue);
+            }
+            v = FirebaseRemoteConfig.DefaultInstance.GetValue("cf_per_post_adva");
+            if (v.StringValue != null && v.StringValue.Length > 0)
+            {
+                PlayerPrefs.SetInt("mem_va_of_ad_postfir", (int)v.LongValue);
+            }
+
 
 #if ENABLE_ADCANVAS
 #if UNITY_IOS || UNITY_IPHONE
@@ -1332,28 +1620,42 @@ namespace mygame.sdk
             gamePromoCurr = null;
             return getGamePromo();
         }
-        private void downLoadIconPromoGame()
+        private void downLoadIconPromoGame(List<object> listmemgames, string pkgstart)
         {
-            string memlistgame = PlayerPrefs.GetString("cf_game_promo", "");
-            if (memlistgame != null && memlistgame.Length > 10)
+            if (listmemgames != null && listmemgames.Count > 0)
             {
-                var obmemgames = (IDictionary<string, object>)JsonDecoder.DecodeText(memlistgame);
-                List<object> listmemgames = null;
-                if (obmemgames != null && obmemgames.ContainsKey("games"))
+                int idxDown = -1;
+                if (pkgstart == null || pkgstart.Length == 0)
                 {
-                    listmemgames = (List<object>)obmemgames["games"];
+                    idxDown = 0;
                 }
-                if (listmemgames != null)
+                else
                 {
                     for (int i = 0; i < listmemgames.Count; i++)
                     {
                         var gamepromo = (IDictionary<string, object>)listmemgames[i];
-                        string linkicon = (string)gamepromo["icon"];
-                        string nameimg = ImageLoader.url2nameData(linkicon, 1);
-                        if (!System.IO.File.Exists(DownLoadUtil.pathCache() + "/" + nameimg))
+                        string pkgcuu = (string)gamepromo["pkg"];
+                        if (pkgstart.CompareTo(pkgcuu) == 0)
                         {
-                            ImageLoader.loadImageTexture(linkicon, 100, 100, null);
+                            idxDown = i;
+                            break;
                         }
+                    }
+                }
+                for (int i = 0; i < 5; i++)
+                {
+                    var gamepromo = (IDictionary<string, object>)listmemgames[idxDown];
+                    idxDown++;
+                    if (idxDown >= listmemgames.Count)
+                    {
+                        idxDown = 0;
+                    }
+
+                    string linkicon = (string)gamepromo["icon"];
+                    string nameimg = ImageLoader.url2nameData(linkicon, 1);
+                    if (!System.IO.File.Exists(DownLoadUtil.pathCache() + "/" + nameimg))
+                    {
+                        ImageLoader.loadImageTexture(linkicon, 100, 100, null);
                     }
                 }
             }
@@ -1502,6 +1804,7 @@ namespace mygame.sdk
                         {
                             gamePromoCurr = tmpCurr;
                         }
+                        downLoadIconPromoGame(listmemgames, gamePromoCurr.pkg);
                     }
                 }
                 else
@@ -1517,7 +1820,7 @@ namespace mygame.sdk
             if (game != null)
             {
                 string memclick = PlayerPrefs.GetString("mem_game_promo_click", "");
-                memclick += (";" + game.pkg + "," + SdkUtil.systemCurrentMiliseconds());
+                memclick += (";" + game.pkg + "," + GameHelper.CurrentTimeMilisReal());
                 PlayerPrefs.SetString("mem_game_promo_click", memclick);
                 logEvent("click_promo");
 
@@ -1557,7 +1860,7 @@ namespace mygame.sdk
                 string[] gameclick = listmemclick[i].Split(new char[] { ',' });
                 if (gameclick != null && gameclick.Length == 2)
                 {
-                    long tcurr = SdkUtil.systemCurrentMiliseconds();
+                    long tcurr = GameHelper.CurrentTimeMilisReal();
                     long tmem = long.Parse(gameclick[1]);
                     if ((tcurr - tmem) > (24 * 60 * 60000))
                     {
@@ -1651,6 +1954,10 @@ namespace mygame.sdk
                             }
                         }
                         listTmp.Clear();
+                    }
+                    if (re.Count > 0)
+                    {
+                        downLoadIconPromoGame(listmemgames, re[re.Count - 1].pkg);
                     }
                     return re;
                 }

@@ -4,32 +4,55 @@ using UnityEngine;
 using MyJson;
 using System;
 
+[Serializable]
 public class NotifyObject
 {
-    public int afterday;
+    public int ver;
+    public List<NotiData> data;
+
+    public string data2String()
+    {
+        string re = "";
+
+        if (data != null && data.Count > 0)
+        {
+            re = "[";
+            for (int i = 0; i < data.Count; i++)
+            {
+                re += JsonUtility.ToJson(data[i]);
+                if (i < (data.Count - 1))
+                {
+                    re += ",";
+                }
+            }
+            re += "]";
+        }
+
+        return re;
+    }
+
+    public Dictionary<string, NotiData> getGroupNoti()
+    {
+        Dictionary<string, NotiData> re = new Dictionary<string, NotiData>();
+        for (int i = 0; i < data.Count; i++)
+        {
+            string keynoti = string.Format("{0:d2}:{1:d2}", data[i].hour, data[i].minus);
+            if (!re.ContainsKey(keynoti))
+            {
+                re.Add(keynoti, data[i]);
+            }
+        }
+        return re;
+    }
+}
+
+[Serializable]
+public class NotiData
+{
+    public int id;
     public int hour;
     public int minus;
-    public int second;
-    public string message;
-
-    public string toJsonData() {
-        string jsonString = "{";
-        jsonString += "\"afterday\":" + afterday + ",";
-        jsonString += "\"hour\":" + hour + ",";
-        jsonString += "\"minus\":" + minus + ",";
-        jsonString += "\"second\":" + second + ",";
-        jsonString += "\"message\":\"" + message + "\"";
-        jsonString += "}";
-
-        return jsonString;
-    }
-
-    public void fromJsonData(string data) {
-        var jsondata = (IDictionary<string, object>) MyJson.JsonDecoder.DecodeText(data);
-        afterday = Convert.ToInt32(jsondata["afterday"]);
-        hour = Convert.ToInt32(jsondata["hour"]);
-        minus = Convert.ToInt32(jsondata["minus"]);
-        second = Convert.ToInt32(jsondata["second"]);
-        message = (string)jsondata["message"];
-    }
+    public string repeat;
+    public string titleNoti;
+    public string msgNoti;
 }

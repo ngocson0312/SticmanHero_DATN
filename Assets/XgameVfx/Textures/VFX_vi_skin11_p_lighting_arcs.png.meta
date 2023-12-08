@@ -523,22 +523,22 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      vi_skin11_p_lighting_arcs_0: -3095308398908595362
       vi_skin11_p_lighting_arcs_1: -5734098029540638630
-      vi_skin11_p_lighting_arcs_10: -3001128578186683636
-      vi_skin11_p_lighting_arcs_11: -1209200659986092041
       vi_skin11_p_lighting_arcs_12: -6354666574908513939
-      vi_skin11_p_lighting_arcs_13: 2981467417640665108
-      vi_skin11_p_lighting_arcs_14: -7046071235898736033
-      vi_skin11_p_lighting_arcs_15: 5419431542033322746
-      vi_skin11_p_lighting_arcs_2: -5463090830490625468
+      vi_skin11_p_lighting_arcs_7: -1769788556284506285
       vi_skin11_p_lighting_arcs_3: -7078186262515671993
-      vi_skin11_p_lighting_arcs_4: 8182970839458930066
+      vi_skin11_p_lighting_arcs_13: 2981467417640665108
+      vi_skin11_p_lighting_arcs_0: -3095308398908595362
+      vi_skin11_p_lighting_arcs_11: -1209200659986092041
+      vi_skin11_p_lighting_arcs_15: 5419431542033322746
       vi_skin11_p_lighting_arcs_5: -4946101376382858523
       vi_skin11_p_lighting_arcs_6: 5559852470907741527
-      vi_skin11_p_lighting_arcs_7: -1769788556284506285
+      vi_skin11_p_lighting_arcs_4: 8182970839458930066
+      vi_skin11_p_lighting_arcs_14: -7046071235898736033
       vi_skin11_p_lighting_arcs_8: 3906394217265567205
+      vi_skin11_p_lighting_arcs_10: -3001128578186683636
       vi_skin11_p_lighting_arcs_9: 1004642770945563210
+      vi_skin11_p_lighting_arcs_2: -5463090830490625468
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

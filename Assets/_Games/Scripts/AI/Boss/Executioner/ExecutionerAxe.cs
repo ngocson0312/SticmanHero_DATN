@@ -21,7 +21,10 @@ namespace SuperFight
         {
             if (other.GetInstanceID() != damageInfo.idSender)
             {
-                other.GetComponent<IDamage>()?.TakeDamage(damageInfo);
+                if (other.GetComponent<IDamage>() != null)
+                {
+                    other.GetComponent<IDamage>().TakeDamage(damageInfo);
+                }
             }
         }
     }

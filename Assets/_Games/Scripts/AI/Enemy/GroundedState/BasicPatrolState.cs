@@ -24,7 +24,7 @@ namespace SuperFight
             Controller target = enemy.GetTargetInView();
             if (target != null)
             {
-                enemy.SwitchState(enemy.chaseState);
+                // enemy.SwitchState(enemy.chaseState);
                 return;
             }
         }

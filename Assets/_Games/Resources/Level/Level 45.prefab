@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2165983229657746781}
-  - component: {fileID: 8560301247277703523}
+  - component: {fileID: 4684962647132893312}
   m_Layer: 0
-  m_Name: E_ZOMBIE
+  m_Name: Zombie
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -27,11 +27,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 56.08, y: 1.19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5311912503462756617}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8560301247277703523
+--- !u!114 &4684962647132893312
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,17 +41,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 612487369949736262}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 3
-  enemyStats:
-    health: 275
-    damage: 55
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Zombie
+  coinReward: 0
 --- !u!1 &791241964349658473
 GameObject:
   m_ObjectHideFlags: 0
@@ -60,9 +63,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1668836619226871565}
-  - component: {fileID: 7490908953522144587}
+  - component: {fileID: 7775937332134677826}
   m_Layer: 0
-  m_Name: E_SKELETON
+  m_Name: Skeleton
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -78,11 +81,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 106.94, y: -0.87, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5311912503462756617}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7490908953522144587
+--- !u!114 &7775937332134677826
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -91,17 +95,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 791241964349658473}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 6
-  enemyStats:
-    health: 330
-    damage: 82
-  overrideBaseStats: 1
-  attackSpeed: 1.5
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Skeleton
+  coinReward: 0
 --- !u!1 &890630788105389343
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,6 +134,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 100}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 417903452214960273}
   - {fileID: 3921974108979103898}
@@ -162,6 +169,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -93.93, y: -0.44, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8575121395209744222}
   m_RootOrder: 1
@@ -194,6 +202,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.4000015, y: -1.4, z: 295}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 417903452214960273}
   m_RootOrder: 1
@@ -8249,6 +8258,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -8295,9 +8305,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8738582897205258440}
-  - component: {fileID: 1169724632849625228}
+  - component: {fileID: 450596033381954845}
   m_Layer: 0
-  m_Name: E_PIG
+  m_Name: Piglet
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -8313,11 +8323,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 92.38, y: -0.82, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5311912503462756617}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1169724632849625228
+--- !u!114 &450596033381954845
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8326,17 +8337,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1653488030192611143}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
-  enemyStats:
-    health: 330
-    damage: 27
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Piglet
+  coinReward: 0
 --- !u!1 &1954669786698606423
 GameObject:
   m_ObjectHideFlags: 0
@@ -8346,9 +8359,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1555440086298490176}
-  - component: {fileID: 2115273686236466107}
+  - component: {fileID: 8614302010564830524}
   m_Layer: 0
-  m_Name: E_CREEPER
+  m_Name: Creeper
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -8364,11 +8377,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 28.69, y: -2.88, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5311912503462756617}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2115273686236466107
+--- !u!114 &8614302010564830524
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8377,17 +8391,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1954669786698606423}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
-  enemyStats:
-    health: 550
-    damage: 110
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Creeper
+  coinReward: 0
 --- !u!1 &2024849962568637981
 GameObject:
   m_ObjectHideFlags: 0
@@ -8415,6 +8431,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -103.6, y: 0.44999993, z: -12.2}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6063099246624624480}
   - {fileID: 7921672474965043342}
@@ -8461,6 +8478,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.4000015, y: -1.4, z: 295}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7177427853337430739}
   m_RootOrder: 0
@@ -21978,6 +21996,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -22042,6 +22061,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -98.8, y: 1.4, z: -295}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7469561337279201569}
   - {fileID: 7469561335535785122}
@@ -22092,6 +22112,7 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 35.745186, y: -4.1, z: 223.54356}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6856617213885604159}
   m_RootOrder: 1
@@ -22103,19 +22124,19 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2376001016057955976}
-  serializedVersion: 7
+  serializedVersion: 8
   lengthInSec: 5
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
+  emitterVelocityMode: 0
   looping: 1
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
-  useRigidbodyForVelocity: 1
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -22665,6 +22686,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     maxNumParticles: 1000
+    customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -26816,6 +26838,7 @@ ParticleSystemRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -26846,6 +26869,7 @@ ParticleSystemRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -10
   m_RenderMode: 0
+  m_MeshDistribution: 0
   m_SortMode: 0
   m_MinParticleSize: 0
   m_MaxParticleSize: 0.5
@@ -26869,6 +26893,10 @@ ParticleSystemRenderer:
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
+  m_MeshWeighting: 1
+  m_MeshWeighting1: 1
+  m_MeshWeighting2: 1
+  m_MeshWeighting3: 1
   m_MaskInteraction: 0
 --- !u!1 &2653996295737042758
 GameObject:
@@ -26897,6 +26925,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.927, y: 30, z: 295}
   m_LocalScale: {x: 699.95526, y: 150, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7177427853337430739}
   m_RootOrder: 2
@@ -26912,6 +26941,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -26978,6 +27008,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -97.4, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1555440086298490176}
   - {fileID: 4702405728756474993}
@@ -27023,6 +27054,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -36.5, y: 2.4, z: -136.1}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8480832224226101374}
   - {fileID: 7817825543483415648}
@@ -27070,6 +27102,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.4000015, y: -1.4, z: 317.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2881467775496662241}
   m_RootOrder: 2
@@ -27515,6 +27548,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -27580,6 +27614,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.4000015, y: -1.4, z: 295}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7399840912407720636}
   m_RootOrder: 1
@@ -36767,6 +36802,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -36813,9 +36849,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2972086286666009147}
-  - component: {fileID: 6494954315711434575}
+  - component: {fileID: 1912354497628587161}
   m_Layer: 0
-  m_Name: E_CREEPER
+  m_Name: Creeper
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -36831,11 +36867,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 102.79, y: -1.85, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5311912503462756617}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6494954315711434575
+--- !u!114 &1912354497628587161
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -36844,17 +36881,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 3616047675322302610}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
-  enemyStats:
-    health: 550
-    damage: 110
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Creeper
+  coinReward: 0
 --- !u!1 &3736805502864285709
 GameObject:
   m_ObjectHideFlags: 0
@@ -36882,6 +36921,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 18.3641, y: 19.9, z: 295}
   m_LocalScale: {x: 455.665, y: 150, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 417903452214960273}
   m_RootOrder: 2
@@ -36897,6 +36937,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -36946,9 +36987,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 929765815113215982}
-  - component: {fileID: 3714841699584206917}
+  - component: {fileID: 353569806517787631}
   m_Layer: 0
-  m_Name: E_BLASTER
+  m_Name: Blazer
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -36964,11 +37005,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 15.45, y: 0.45, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5311912503462756617}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3714841699584206917
+--- !u!114 &353569806517787631
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -36977,17 +37019,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 3910665284531259021}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 17
-  enemyStats:
-    health: 247
-    damage: 121
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Blazer
+  coinReward: 0
 --- !u!1 &3973778355484293709
 GameObject:
   m_ObjectHideFlags: 0
@@ -37014,6 +37058,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -34.845184, y: 3.5605593, z: -209.82356}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1055256422108368547}
   - {fileID: 2012091564615598572}
@@ -37029,9 +37074,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1822628471929446407}
-  - component: {fileID: 7577116071720022893}
+  - component: {fileID: 6757411926663509849}
   m_Layer: 0
-  m_Name: E_PIG
+  m_Name: Piglet
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -37047,11 +37092,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 42.26, y: -0.63, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5311912503462756617}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7577116071720022893
+--- !u!114 &6757411926663509849
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -37060,17 +37106,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 4076435065176623109}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
-  enemyStats:
-    health: 330
-    damage: 27
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Piglet
+  coinReward: 0
 --- !u!1 &4507742672324017836
 GameObject:
   m_ObjectHideFlags: 0
@@ -37098,6 +37146,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 55, y: 12.4, z: 552.3}
   m_LocalScale: {x: 350, y: 150, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2881467775496662241}
   m_RootOrder: 4
@@ -37113,6 +37162,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -37162,7 +37212,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4759624123294191721}
-  - component: {fileID: 4051223854928016042}
   m_Layer: 9
   m_Name: SavePoint
   m_TagString: Untagged
@@ -37180,23 +37229,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 76.2, y: 1.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8845065629093411049}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4051223854928016042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4759624123294191720}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac8ed5dc458cf204e97fd5920561f778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 0
 --- !u!1 &5036711264466327556
 GameObject:
   m_ObjectHideFlags: 0
@@ -37225,6 +37262,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.4000015, y: -1.4, z: 295}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 417903452214960273}
   m_RootOrder: 0
@@ -47716,6 +47754,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -47762,9 +47801,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4979771403127500563}
-  - component: {fileID: 2876446943663169488}
+  - component: {fileID: 4961520142184109429}
   m_Layer: 0
-  m_Name: E_BLASTER
+  m_Name: Blazer
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -47780,11 +47819,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 22.76, y: 0.45, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5311912503462756617}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2876446943663169488
+--- !u!114 &4961520142184109429
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47793,17 +47833,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 5286242284443891459}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 17
-  enemyStats:
-    health: 247
-    damage: 121
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Blazer
+  coinReward: 0
 --- !u!1 &5535918964748607177
 GameObject:
   m_ObjectHideFlags: 0
@@ -47813,9 +47855,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4156574340183242029}
-  - component: {fileID: 6153202757519498045}
+  - component: {fileID: 8212169863265637769}
   m_Layer: 0
-  m_Name: E_CREEPER
+  m_Name: Creeper
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -47831,11 +47873,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 31.99, y: -2.88, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5311912503462756617}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6153202757519498045
+--- !u!114 &8212169863265637769
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47844,17 +47887,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 5535918964748607177}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
-  enemyStats:
-    health: 550
-    damage: 110
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Creeper
+  coinReward: 0
 --- !u!1 &5812264802690742736
 GameObject:
   m_ObjectHideFlags: 0
@@ -47882,6 +47927,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -101.47, y: 0.30000007, z: -136.1}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7814283087453153830}
   - {fileID: 6801064377855517401}
@@ -47928,6 +47974,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.4000015, y: -1.4, z: 295}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7399840912407720636}
   m_RootOrder: 0
@@ -62729,6 +62776,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -62775,9 +62823,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2623744387644776605}
-  - component: {fileID: 188217290492782824}
+  - component: {fileID: 2141304109374824832}
   m_Layer: 0
-  m_Name: E_PIGLETSLIDE
+  m_Name: PigmanShield
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -62793,11 +62841,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 35.89, y: -2.88, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5311912503462756617}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &188217290492782824
+--- !u!114 &2141304109374824832
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -62806,17 +62855,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 5907511946230791327}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 14
-  enemyStats:
-    health: 330
-    damage: 27
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: PigmanShield
+  coinReward: 0
 --- !u!1 &5930325853895482623
 GameObject:
   m_ObjectHideFlags: 0
@@ -62845,6 +62896,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.4000015, y: -1.4, z: 295}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7177427853337430739}
   m_RootOrder: 1
@@ -71966,6 +72018,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -72030,6 +72083,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -39.6, y: 2.4, z: -12.2}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7025199791782824676}
   - {fileID: 7356951660796604242}
@@ -72073,8 +72127,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6040134140783818287}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -53.8, y: -0.5, z: 0}
+  m_LocalPosition: {x: -53.8, y: -0.5, z: 4}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8575121395209744222}
   m_RootOrder: 7
@@ -72103,8 +72158,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6474703217205932609}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.26, y: -1.82, z: 0}
+  m_LocalPosition: {x: 3.26, y: -1.82, z: 4}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8575121395209744222}
   m_RootOrder: 9
@@ -72136,6 +72192,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 55, y: 12.4, z: 552.3}
   m_LocalScale: {x: 350, y: 150, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2881467775496662241}
   m_RootOrder: 3
@@ -72151,6 +72208,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -72215,8 +72273,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7100541533193342298}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -78.31, y: 0.35, z: 0}
+  m_LocalPosition: {x: -78.31, y: 0.35, z: 4}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8575121395209744222}
   m_RootOrder: 6
@@ -72230,9 +72289,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1417015375826685171}
-  - component: {fileID: 1480181173610673915}
+  - component: {fileID: 6685884851545502239}
   m_Layer: 0
-  m_Name: E_GOLEM
+  m_Name: Golem
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -72248,11 +72307,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 83.77, y: 0.18, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5311912503462756617}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1480181173610673915
+--- !u!114 &6685884851545502239
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -72261,17 +72321,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 7124261286822642431}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 7
-  enemyStats:
-    health: 660
-    damage: 82
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Golem
+  coinReward: 0
 --- !u!1 &7148194825343596582
 GameObject:
   m_ObjectHideFlags: 0
@@ -72281,9 +72343,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7685814551389105886}
-  - component: {fileID: 8733141874508476299}
+  - component: {fileID: 5166940440488336791}
   m_Layer: 0
-  m_Name: E_GOLEM
+  m_Name: Golem
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -72299,11 +72361,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 66.64, y: 0.18, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5311912503462756617}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8733141874508476299
+--- !u!114 &5166940440488336791
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -72312,17 +72375,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 7148194825343596582}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 7
-  enemyStats:
-    health: 660
-    damage: 82
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Golem
+  coinReward: 0
 --- !u!1 &7293341693968595114
 GameObject:
   m_ObjectHideFlags: 0
@@ -72349,6 +72414,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -97.4, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4759624123294191721}
   - {fileID: 7636760770517750298}
@@ -72387,6 +72453,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.4000015, y: -1.4, z: 295}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2881467775496662241}
   m_RootOrder: 1
@@ -101434,6 +101501,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -101523,7 +101591,7 @@ CompositeCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_GeometryType: 0
-  m_GenerationType: 1
+  m_GenerationType: 0
   m_EdgeRadius: 0
   m_ColliderPaths:
   - m_Collider: {fileID: 3008368586229828323}
@@ -101597,7 +101665,41 @@ CompositeCollider2D:
       - X: -190000000
         Y: -140000000
   m_CompositePaths:
-    m_Paths: []
+    m_Paths:
+    - - {x: 138.99997, y: -14}
+      - {x: 138.99997, y: 21}
+      - {x: 120, y: 20.999971}
+      - {x: 119.99998, y: 1}
+      - {x: 109, y: 0.99997073}
+      - {x: 108.99998, y: 0}
+      - {x: 108, y: -0.000029300001}
+      - {x: 107.99998, y: -1}
+      - {x: 106, y: -1.0000293}
+      - {x: 105.99997, y: -2}
+      - {x: 99, y: -1.9999707}
+      - {x: 98.99997, y: -1}
+      - {x: 88, y: -0.9999706}
+      - {x: 87.99997, y: 0}
+      - {x: 64, y: 0.0000294}
+      - {x: 63.99997, y: 1}
+      - {x: 48, y: 0.99997073}
+      - {x: 47.999973, y: 0}
+      - {x: 45, y: -0.000029300001}
+      - {x: 44.999973, y: -1}
+      - {x: 39, y: -1.0000293}
+      - {x: 38.999973, y: -2}
+      - {x: 38, y: -2.0000293}
+      - {x: 37.999973, y: -3}
+      - {x: 25, y: -2.9999707}
+      - {x: 24.999971, y: 0}
+      - {x: 12, y: -0.000029300001}
+      - {x: 11.99997, y: -1}
+      - {x: 11, y: -1.0000293}
+      - {x: 10.99997, y: -2}
+      - {x: -2, y: -1.9999707}
+      - {x: -2.0000293, y: 21}
+      - {x: -19, y: 20.999971}
+      - {x: -18.999971, y: -14}
   m_VertexDistance: 0.5
   m_OffsetDistance: 0.00005
 --- !u!1 &7469561337279201574
@@ -101628,6 +101730,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.4000015, y: -1.4, z: 306}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2881467775496662241}
   m_RootOrder: 0
@@ -103103,6 +103206,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -103168,6 +103272,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.4000015, y: -1.4, z: 317.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2881467775496662241}
   m_RootOrder: 5
@@ -104423,6 +104528,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -104469,7 +104575,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4443953077218728173}
-  - component: {fileID: 8681443802053311749}
   m_Layer: 9
   m_Name: Health
   m_TagString: Untagged
@@ -104487,23 +104592,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 62.17, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8845065629093411049}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8681443802053311749
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7726111548129803856}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac8ed5dc458cf204e97fd5920561f778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 2
 --- !u!1 &7813267022251973692
 GameObject:
   m_ObjectHideFlags: 0
@@ -104528,8 +104621,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7813267022251973692}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -28.1, y: 0.2, z: 0}
+  m_LocalPosition: {x: -28.1, y: 0.2, z: 4}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8575121395209744222}
   m_RootOrder: 8
@@ -104562,6 +104656,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.4000015, y: -1.4, z: 295}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3921974108979103898}
   m_RootOrder: 1
@@ -113591,6 +113686,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -113656,6 +113752,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.4000015, y: -1.4, z: 295}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3921974108979103898}
   m_RootOrder: 0
@@ -125087,6 +125184,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -125134,7 +125232,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8575121395209744222}
   - component: {fileID: 8575121395209744223}
-  - component: {fileID: 568492187761822895}
+  - component: {fileID: -3246974829577931667}
   m_Layer: 0
   m_Name: Level 45
   m_TagString: Untagged
@@ -125152,6 +125250,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 99.4, y: 0.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2881467775496662241}
   - {fileID: 1239203854374891608}
@@ -125178,7 +125277,7 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!114 &568492187761822895
+--- !u!114 &-3246974829577931667
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125187,38 +125286,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 8575121395209744224}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72ba555d689d6e54b892cb9c99e5274c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4923af3629e30674f926a50600f2c596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelIndex: 45
-  playerPoint: {fileID: 1239203854374891608}
-  typeThemes: 0
-  isLevelBoss: 0
-  bossFightArena: {fileID: 0}
-  listEnemies:
-  - {fileID: 2115273686236466107}
-  - {fileID: 6409206083986396212}
-  - {fileID: 7577116071720022893}
-  - {fileID: 3714841699584206917}
-  - {fileID: 2876446943663169488}
-  - {fileID: 6153202757519498045}
-  - {fileID: 188217290492782824}
-  - {fileID: 8560301247277703523}
-  - {fileID: 1169724632849625228}
-  - {fileID: 65861445452492649}
-  - {fileID: 6494954315711434575}
-  - {fileID: 7490908953522144587}
-  - {fileID: 8733141874508476299}
-  - {fileID: 1480181173610673915}
-  listItems:
-  - {fileID: 4051223854928016042}
-  - {fileID: 7986056923675105625}
-  - {fileID: 8681443802053311749}
-  listPosAdmix:
+  spawnPoint: {fileID: 1239203854374891608}
+  minX: -50
+  maxX: 50
+  minY: -50
+  maxY: 50
+  enemySpawners:
+  - {fileID: 8614302010564830524}
+  - {fileID: 5517803830008216898}
+  - {fileID: 6757411926663509849}
+  - {fileID: 353569806517787631}
+  - {fileID: 4961520142184109429}
+  - {fileID: 8212169863265637769}
+  - {fileID: 2141304109374824832}
+  - {fileID: 4684962647132893312}
+  - {fileID: 450596033381954845}
+  - {fileID: 1813876427422928085}
+  - {fileID: 1912354497628587161}
+  - {fileID: 7775937332134677826}
+  - {fileID: 5166940440488336791}
+  - {fileID: 6685884851545502239}
+  bossFightArena: []
+  admixAnchors:
   - {fileID: 7620618661179807712}
   - {fileID: 6384148598444043413}
   - {fileID: 7432518667422271110}
   - {fileID: 5949559574180866299}
+  doorAnchor: {fileID: 7636760770517750298}
 --- !u!1 &8631587796227800925
 GameObject:
   m_ObjectHideFlags: 0
@@ -125247,6 +125344,7 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -28.954815, y: -6.09, z: 223.54356}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6856617213885604159}
   m_RootOrder: 0
@@ -125258,19 +125356,19 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8631587796227800925}
-  serializedVersion: 7
+  serializedVersion: 8
   lengthInSec: 5
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
+  emitterVelocityMode: 0
   looping: 1
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
-  useRigidbodyForVelocity: 1
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -125820,6 +125918,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     maxNumParticles: 1000
+    customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -129971,6 +130070,7 @@ ParticleSystemRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -130001,6 +130101,7 @@ ParticleSystemRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -10
   m_RenderMode: 0
+  m_MeshDistribution: 0
   m_SortMode: 0
   m_MinParticleSize: 0
   m_MaxParticleSize: 0.5
@@ -130024,6 +130125,10 @@ ParticleSystemRenderer:
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
+  m_MeshWeighting: 1
+  m_MeshWeighting1: 1
+  m_MeshWeighting2: 1
+  m_MeshWeighting3: 1
   m_MaskInteraction: 0
 --- !u!1 &8839400924586214442
 GameObject:
@@ -130034,9 +130139,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4702405728756474993}
-  - component: {fileID: 6409206083986396212}
+  - component: {fileID: 5517803830008216898}
   m_Layer: 0
-  m_Name: E_ZOMBIE
+  m_Name: Zombie
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -130052,11 +130157,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 53.03, y: 1.19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5311912503462756617}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6409206083986396212
+--- !u!114 &5517803830008216898
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -130065,17 +130171,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8839400924586214442}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 3
-  enemyStats:
-    health: 275
-    damage: 55
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Zombie
+  coinReward: 0
 --- !u!1 &9142844331969994758
 GameObject:
   m_ObjectHideFlags: 0
@@ -130085,9 +130193,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7937373684761262295}
-  - component: {fileID: 65861445452492649}
+  - component: {fileID: 1813876427422928085}
   m_Layer: 0
-  m_Name: E_PIG
+  m_Name: Piglet
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -130103,11 +130211,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 96.12, y: -0.73, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5311912503462756617}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &65861445452492649
+--- !u!114 &1813876427422928085
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -130116,17 +130225,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 9142844331969994758}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
-  enemyStats:
-    health: 330
-    damage: 27
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Piglet
+  coinReward: 0
 --- !u!1 &9158087334205339333
 GameObject:
   m_ObjectHideFlags: 0
@@ -130136,7 +130247,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7636760770517750298}
-  - component: {fileID: 7986056923675105625}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -130154,20 +130264,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 116.45, y: 2.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8845065629093411049}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7986056923675105625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9158087334205339333}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac8ed5dc458cf204e97fd5920561f778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 4

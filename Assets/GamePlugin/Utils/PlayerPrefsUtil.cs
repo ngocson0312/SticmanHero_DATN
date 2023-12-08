@@ -38,39 +38,17 @@ namespace mygame.sdk
             get { return PlayerPrefsBase.Instance().getInt("is_show_rate", 0); }
             set { PlayerPrefsBase.Instance().setInt("is_show_rate", value); }
         }
-
-        public static int SoundFxSetting
-        {
-            get { return PlayerPrefsBase.Instance().getInt("SoundFxSetting", 1); }
-            set { PlayerPrefsBase.Instance().setInt("SoundFxSetting", value); }
-        }
-
-        public static int MusicSetting
-        {
-            get { return PlayerPrefsBase.Instance().getInt("MusicSetting", 1); }
-            set { PlayerPrefsBase.Instance().setInt("MusicSetting", value); }
-        }
-        public static int BgMusicSetting
-        {
-            get { return PlayerPrefsBase.Instance().getInt("key_config_bgmusic", 0); }
-            set { PlayerPrefsBase.Instance().setInt("key_config_bgmusic", value); }
-        }
-
         public static int VibrateSetting
         {
             get { return PlayerPrefsBase.Instance().getInt("key_config_vibrate", 1); }
             set { PlayerPrefsBase.Instance().setInt("key_config_vibrate", value); }
         }
-
-        public static int AudioSetting
-        {
-            get { return PlayerPrefsBase.Instance().getInt("audio_setting", 1); }
-            set { PlayerPrefsBase.Instance().setInt("audio_setting", value); }
-        }
-
         public static int Theme
         {
-            get { return PlayerPrefsBase.Instance().getInt("game_res_theme", 0); }
+            get
+            {
+                return PlayerPrefsBase.Instance().getInt("game_res_theme", 0);
+            }
             set
             {
                 PlayerPrefsBase.Instance().setInt("game_res_theme", value);

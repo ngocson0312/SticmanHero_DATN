@@ -5,8 +5,8 @@ namespace SuperFight
 {
     public class BasicChaseState : State
     {
-        GroundEnemy enemy;
-        int currentDirection;
+        private GroundEnemy enemy;
+        private int currentDirection;
         public BasicChaseState(GroundEnemy controller, string stateName) : base(controller, stateName)
         {
             this.enemy = controller;
@@ -23,8 +23,9 @@ namespace SuperFight
 
         public override void UpdateLogic()
         {
-            
+
         }
+
 
         public override void UpdatePhysic()
         {
@@ -33,6 +34,7 @@ namespace SuperFight
             {
                 if (!controller.core.collisionSenses.GroundAhead() || controller.core.collisionSenses.IsTouchWall())
                 {
+
                     enemy.core.movement.Flip();
                     controller.core.movement.SetVelocityX(0);
                     return;
@@ -40,7 +42,7 @@ namespace SuperFight
             }
             if (target == null)
             {
-                enemy.SwitchState(enemy.patrol);
+                // enemy.SwitchState(enemy.patrol);
             }
             else
             {
@@ -58,13 +60,18 @@ namespace SuperFight
                 {
                     controller.core.movement.Flip();
                 }
-                controller.core.movement.SetVelocityX(controller.core.movement.facingDirection * enemy.speed * 2);
+
+                 controller.core.movement.SetVelocityX(controller.core.movement.facingDirection * enemy.speed * 2);
+
+
                 if (Vector2.SqrMagnitude(target.transform.position - enemy.transform.position) <= enemy.attackRange)
                 {
-                    enemy.SwitchState(enemy.attackState);
+
+                    // enemy.SwitchState(enemy.attackState);
                 }
             }
         }
+
     }
 }
 

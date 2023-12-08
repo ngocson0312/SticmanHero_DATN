@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -10,6 +10,7 @@ namespace Myapi
 {
     public class ApiManager : MonoBehaviour
     {
+        private const bool isLog = false;
         public static ApiManager Instance;
         private bool isLoading = false;
         //for game
@@ -56,89 +57,183 @@ namespace Myapi
             StartCoroutine(_getTimeOnline(result));
         }
 
-        public void getRequest(string urlget, Action<bool, string> result = null)
+        public void getRequest(string urlget, Action<bool, string> result = null, int timeout = -1, bool isgetCache = false, bool isCache = false)
         {
-            StartCoroutine(_getRequest(urlget, result));
+            StartCoroutine(_getRequest(urlget, result, timeout, isgetCache, isCache));
         }
 
-        public void postRequest(string urlpost, Action<bool, string> result = null)
+        public void postRequest(string urlpost, Action<bool, string> result = null, int timeout = -1, bool isgetCache = false, bool isCache = false)
         {
-            StartCoroutine(_postRequest(urlpost, "", result));
+            StartCoroutine(_postRequest(urlpost, "", result, timeout, isgetCache, isCache));
         }
 
-        public void postRequest(string urlpost, string data, Action<bool, string> result = null)
+        public void postRequest(string urlpost, string data, Action<bool, string> result = null, int timeout = -1, bool isgetCache = false, bool isCache = false)
         {
-            StartCoroutine(_postRequest(urlpost, data, result));
+            StartCoroutine(_postRequest(urlpost, data, result, timeout, isgetCache, isCache));
         }
 
-        public void postRequest(string urlpost, byte[] bytes, Action<bool, string> result = null)
+        public void postRequest(string urlpost, byte[] bytes, Action<bool, string> result = null, int timeout = -1, bool isgetCache = false, bool isCache = false)
         {
-            StartCoroutine(_postRequest(urlpost, bytes, result));
+            StartCoroutine(_postRequest(urlpost, bytes, result, timeout, isgetCache, isCache));
         }
-        public void postRequest(string urlpost, Dictionary<string, string> field, Dictionary<string, string> dicfiles, Action<bool, string> result = null)
+        public void postRequest(string urlpost, Dictionary<string, string> field, Dictionary<string, string> dicfiles, Action<bool, string> result = null, int timeout = -1, bool isgetCache = false, bool isCache = false)
         {
-            StartCoroutine(_postRequest(urlpost, field, dicfiles, result));
+            StartCoroutine(_postRequest(urlpost, field, dicfiles, result, timeout, isgetCache, isCache));
         }
 
-        private IEnumerator _getRequest(string url, Action<bool, string> result)
+        private IEnumerator _getRequest(string url, Action<bool, string> result, int timeout, bool isgetCache, bool isCache)
         {
-            Debug.Log("mysdk: get request=" + url);
+            if (isLog)
+            {
+                Debug.Log("mysdk: ApiManager get request=" + url);
+            }
+            if (isgetCache && Application.internetReachability != NetworkReachability.NotReachable)
+            {
+                string datacache = getCache(url);
+                if (datacache != null && datacache.Length > 5)
+                {
+                    yield return new WaitForSeconds(0.2f);
+                    result?.Invoke(true, datacache);
+                    yield break;
+                }
+            }
             UnityWebRequest uwr = UnityWebRequest.Get(url);
+            if (timeout > 0)
+            {
+                uwr.timeout = timeout;
+            }
             yield return uwr.SendWebRequest();
             if (uwr.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log(uwr.error + "=" + uwr.error);
+                if (isLog)
+                {
+                    Debug.Log("mysdk: ApiManager " + uwr.error + "=" + uwr.error);
+                }
                 result?.Invoke(false, uwr.error);
             }
             else
             {
-                Debug.Log("Form upload complete!");
+                if (isLog)
+                {
+                    Debug.Log("mysdk: ApiManager Form upload complete!");
+                }
                 result?.Invoke(true, uwr.downloadHandler.text);
+                if (isCache)
+                {
+                    saveCache(url, uwr.downloadHandler.text);
+                }
             }
         }
 
-        private IEnumerator _postRequest(string url, string data, Action<bool, string> result)
+        private IEnumerator _postRequest(string url, string data, Action<bool, string> result, int timeout, bool isgetCache, bool isCache)
         {
-            Debug.Log("mysdk: postRequest=" + url);
+            if (isLog)
+            {
+                Debug.Log("mysdk: ApiManager postRequest=" + url);
+            }
+            if (isgetCache && Application.internetReachability != NetworkReachability.NotReachable)
+            {
+                string datacache = getCache(url);
+                if (datacache != null && datacache.Length > 5)
+                {
+                    yield return new WaitForSeconds(0.2f);
+                    result?.Invoke(true, datacache);
+                    yield break;
+                }
+            }
             UnityWebRequest uwr = UnityWebRequest.Post(url, data);
+            if (timeout > 0)
+            {
+                uwr.timeout = timeout;
+            }
             yield return uwr.SendWebRequest();
             if (uwr.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log(uwr.error + "=" + uwr.error);
+                if (isLog)
+                {
+                    Debug.Log("mysdk: ApiManager " + uwr.error + "=" + uwr.error);
+                }
                 result?.Invoke(false, uwr.error);
             }
             else
             {
-                Debug.Log("Form upload complete!");
+                if (isLog)
+                {
+                    Debug.Log("mysdk: ApiManager Form upload complete!");
+                }
                 result?.Invoke(true, uwr.downloadHandler.text);
+                if (isCache)
+                {
+                    saveCache(url, uwr.downloadHandler.text);
+                }
             }
         }
 
-        private IEnumerator _postRequest(string url, byte[] data, Action<bool, string> result)
+        private IEnumerator _postRequest(string url, byte[] data, Action<bool, string> result, int timeout, bool isgetCache, bool isCache)
         {
-            Debug.Log("mysdk: postRequest=" + url);
+            if (isLog)
+            {
+                Debug.Log("mysdk: ApiManager postRequest=" + url);
+            }
+            if (isgetCache && Application.internetReachability != NetworkReachability.NotReachable)
+            {
+                string datacache = getCache(url);
+                if (datacache != null && datacache.Length > 5)
+                {
+                    yield return new WaitForSeconds(0.2f);
+                    result?.Invoke(true, datacache);
+                    yield break;
+                }
+            }
             UnityWebRequest uwr = new UnityWebRequest(url, "POST")
             {
                 uploadHandler = new UploadHandlerRaw(data),
                 downloadHandler = new DownloadHandlerBuffer()
             };
             uwr.SetRequestHeader("Content-Type", "application/json");
+            if (timeout > 0)
+            {
+                uwr.timeout = timeout;
+            }
             yield return uwr.SendWebRequest();
             if (uwr.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log(uwr.error + "=" + uwr.error);
+                if (isLog)
+                {
+                    Debug.Log("mysdk: ApiManager " + uwr.error + "=" + uwr.error);
+                }
                 result?.Invoke(false, uwr.error);
             }
             else
             {
-                Debug.Log("Form upload complete!");
+                if (isLog)
+                {
+                    Debug.Log("mysdk: ApiManager Form upload complete!");
+                }
                 result?.Invoke(true, uwr.downloadHandler.text);
+                if (isCache)
+                {
+                    saveCache(url, uwr.downloadHandler.text);
+                }
             }
         }
 
-        private IEnumerator _postRequest(string url, Dictionary<string, string> fields, Dictionary<string, string> dicfiles, Action<bool, string> result)
+        private IEnumerator _postRequest(string url, Dictionary<string, string> fields, Dictionary<string, string> dicfiles, Action<bool, string> result, int timeout, bool isgetCache, bool isCache)
         {
-            Debug.Log("mysdk: postRequest=" + url);
+            if (isLog)
+            {
+                Debug.Log("mysdk: ApiManager postRequest=" + url);
+            }
+            if (isgetCache && Application.internetReachability != NetworkReachability.NotReachable)
+            {
+                string datacache = getCache(url);
+                if (datacache != null && datacache.Length > 5)
+                {
+                    yield return new WaitForSeconds(0.2f);
+                    result?.Invoke(true, datacache);
+                    yield break;
+                }
+            }
             WWWForm form = new WWWForm();
             if (fields != null)
             {
@@ -159,16 +254,30 @@ namespace Myapi
                 }
             }
             UnityWebRequest uwr = UnityWebRequest.Post(url, form);
+            if (timeout > 0)
+            {
+                uwr.timeout = timeout;
+            }
             yield return uwr.SendWebRequest();
             if (uwr.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log("uwr.error=" + uwr.error);
+                if (isLog)
+                {
+                    Debug.Log("mysdk: ApiManager uwr.error=" + uwr.error);
+                }
                 result?.Invoke(false, uwr.error);
             }
             else
             {
-                Debug.Log("Form upload complete!");
+                if (isLog)
+                {
+                    Debug.Log("mysdk: ApiManager Form upload complete!");
+                }
                 result?.Invoke(true, uwr.downloadHandler.text);
+                if (isCache)
+                {
+                    saveCache(url, uwr.downloadHandler.text);
+                }
             }
         }
 
@@ -189,6 +298,41 @@ namespace Myapi
                     , System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat
                     , System.Globalization.DateTimeStyles.AssumeUniversal);
                 result?.Invoke(true, (dd.Ticks - 621355968000000000) / 10000);
+            }
+        }
+
+        private string getCache(string url)
+        {
+            try
+            {
+                string pathdata = mygame.sdk.ImageLoader.url2nameData(url, 0);
+                if (File.Exists(DownLoadUtil.pathCache() + "/" + pathdata))
+                {
+                    string txtcahe = File.ReadAllText(DownLoadUtil.pathCache() + "/" + pathdata);
+                    return txtcahe;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("mysdk: ApiManager-getCache err=" + ex.ToString());
+            }
+            return "";
+        }
+
+        private void saveCache(string url, string dataurl)
+        {
+            try
+            {
+                if (dataurl != null && url != null && dataurl.Length > 5 && url.Length > 5)
+                {
+                    DownLoadUtil.checkDirecCache();
+                    string pathdata = mygame.sdk.ImageLoader.url2nameData(url, 0);
+                    File.WriteAllText(DownLoadUtil.pathCache() + "/" + pathdata, dataurl);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("mysdk: ApiManager-saveCache err=" + ex.ToString());
             }
         }
     }

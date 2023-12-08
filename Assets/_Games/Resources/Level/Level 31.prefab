@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4408498675538368925}
-  - component: {fileID: 1499096824649163539}
+  - component: {fileID: 1487409834267880369}
   m_Layer: 0
-  m_Name: E_SPIDERHANGING
+  m_Name: SpiderHanging
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -27,11 +27,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 25.56, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1499096824649163539
+--- !u!114 &1487409834267880369
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,17 +41,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 276816961951604756}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 8
-  enemyStats:
-    health: 143
-    damage: 82
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 3
-  firstDelay: 1.2
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: SpiderHanging
+  coinReward: 0
 --- !u!1 &466475117652331584
 GameObject:
   m_ObjectHideFlags: 0
@@ -77,13 +80,12 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 806784156595474975}
   - {fileID: 7051119136250395836}
   - {fileID: 4469070071493362459}
-  - {fileID: 6963536914491483685}
   - {fileID: 7716084913513735982}
-  - {fileID: 1512263454822721485}
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -96,9 +98,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6750793548706553429}
-  - component: {fileID: 6358170675726615852}
+  - component: {fileID: 2583839644697774550}
   m_Layer: 0
-  m_Name: E_ENDERMAN
+  m_Name: Piglet
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -114,11 +116,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 83.94, y: -2.74, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6358170675726615852
+--- !u!114 &2583839644697774550
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,17 +130,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 579216718716116487}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  enemyStats:
-    health: 328
-    damage: 61
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Piglet
+  coinReward: 0
 --- !u!1 &817497454439026077
 GameObject:
   m_ObjectHideFlags: 0
@@ -147,9 +152,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4535625353657970143}
-  - component: {fileID: 4482368202805433183}
+  - component: {fileID: 4051644329825278786}
   m_Layer: 0
-  m_Name: E_SPIDERHANGING
+  m_Name: SpiderHanging
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -165,11 +170,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 101.45, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4482368202805433183
+--- !u!114 &4051644329825278786
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -178,17 +184,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 817497454439026077}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 8
-  enemyStats:
-    health: 143
-    damage: 82
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 3
-  firstDelay: 1
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: SpiderHanging
+  coinReward: 0
 --- !u!1 &1195806953844226799
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,6 +223,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 229338314445747052}
   - {fileID: 7084379195722579816}
@@ -238,9 +247,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8576162986092014186}
-  - component: {fileID: 2258929628267180402}
+  - component: {fileID: 8078520201320656213}
   m_Layer: 0
-  m_Name: E_ENDERMANLASER
+  m_Name: Enderman
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -256,11 +265,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 166.74, y: -4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2258929628267180402
+--- !u!114 &8078520201320656213
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -269,17 +279,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1253667099728011719}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 15
-  enemyStats:
-    health: 225
-    damage: 82
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Enderman
+  coinReward: 0
 --- !u!1 &1356615854031082532
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,9 +301,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4172287355701285166}
-  - component: {fileID: 497258770186417275}
+  - component: {fileID: 3298434098547250855}
   m_Layer: 0
-  m_Name: E_ENDERMAN
+  m_Name: Zombie
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -307,11 +319,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 78.16, y: -2.74, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &497258770186417275
+--- !u!114 &3298434098547250855
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -320,17 +333,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1356615854031082532}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  enemyStats:
-    health: 328
-    damage: 61
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Zombie
+  coinReward: 0
 --- !u!1 &1507762767807719453
 GameObject:
   m_ObjectHideFlags: 0
@@ -340,9 +355,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8320246681013848036}
-  - component: {fileID: 7554937544320268141}
+  - component: {fileID: 5352583341455328342}
   m_Layer: 0
-  m_Name: E_ENDERMAN
+  m_Name: Enderman
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -358,11 +373,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 138.85, y: -1.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7554937544320268141
+--- !u!114 &5352583341455328342
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -371,17 +387,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1507762767807719453}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  enemyStats:
-    health: 328
-    damage: 61
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Enderman
+  coinReward: 0
 --- !u!1 &1641290286663067431
 GameObject:
   m_ObjectHideFlags: 0
@@ -391,9 +409,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 561181211959415251}
-  - component: {fileID: 7483234000537643695}
+  - component: {fileID: 6152253619761639423}
   m_Layer: 0
-  m_Name: E_ENDERMAN
+  m_Name: Piglet
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -409,11 +427,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 38.43, y: -1.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7483234000537643695
+--- !u!114 &6152253619761639423
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -422,17 +441,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1641290286663067431}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  enemyStats:
-    health: 328
-    damage: 61
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Piglet
+  coinReward: 0
 --- !u!1 &2048161069048339095
 GameObject:
   m_ObjectHideFlags: 0
@@ -461,6 +482,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -21.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3016840096561287592}
   m_RootOrder: 1
@@ -3176,6 +3198,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -3239,6 +3262,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -1.99, z: 26.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8823625760774611390}
   - {fileID: 4898439067210487416}
@@ -3254,7 +3278,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7051119136250395836}
-  - component: {fileID: 3905754305861880149}
   m_Layer: 0
   m_Name: SavePoint (1)
   m_TagString: Untagged
@@ -3272,23 +3295,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 90.07, y: -0.95, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4607863181406058346}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3905754305861880149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2840935697078326901}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac8ed5dc458cf204e97fd5920561f778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 0
 --- !u!1 &3369011312692584946
 GameObject:
   m_ObjectHideFlags: 0
@@ -3315,6 +3326,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.48, y: -2.02, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 0
@@ -3328,7 +3340,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 806784156595474975}
-  - component: {fileID: 437782140907052442}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -3346,23 +3357,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 196, y: -6.95, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4607863181406058346}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &437782140907052442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3668632382630210474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac8ed5dc458cf204e97fd5920561f778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 4
 --- !u!1 &4070582294920661156
 GameObject:
   m_ObjectHideFlags: 0
@@ -3391,6 +3390,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 2
@@ -3496,6 +3496,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -3542,9 +3543,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6352091915329596148}
-  - component: {fileID: 4948428280426316213}
+  - component: {fileID: 5508642575221330651}
   m_Layer: 0
-  m_Name: E_ENDERMAN
+  m_Name: Enderman
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3560,11 +3561,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 13.49, y: -0.77, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4948428280426316213
+--- !u!114 &5508642575221330651
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3573,17 +3575,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 4425082639855365568}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  enemyStats:
-    health: 328
-    damage: 61
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Enderman
+  coinReward: 0
 --- !u!1 &4589330596877172583
 GameObject:
   m_ObjectHideFlags: 0
@@ -3593,9 +3597,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8709490162382768150}
-  - component: {fileID: 6629537570253066091}
+  - component: {fileID: 2939258755249663798}
   m_Layer: 0
-  m_Name: E_ENDERMAN
+  m_Name: Blazer
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3611,11 +3615,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 42.57, y: -1.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6629537570253066091
+--- !u!114 &2939258755249663798
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3624,17 +3629,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 4589330596877172583}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  enemyStats:
-    health: 328
-    damage: 61
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Blazer
+  coinReward: 0
 --- !u!1 &4626016023983866553
 GameObject:
   m_ObjectHideFlags: 0
@@ -3644,9 +3651,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8771722154017888701}
-  - component: {fileID: 5009138107522469266}
+  - component: {fileID: 4477945279148776825}
   m_Layer: 0
-  m_Name: E_SPIDER
+  m_Name: Pigman
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3662,11 +3669,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 25.35, y: -4.89, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5009138107522469266
+--- !u!114 &4477945279148776825
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3675,17 +3683,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 4626016023983866553}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
-  enemyStats:
-    health: 246
-    damage: 82
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Pigman
+  coinReward: 0
 --- !u!1 &4892382259142119457
 GameObject:
   m_ObjectHideFlags: 0
@@ -3695,9 +3705,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6593382603072166962}
-  - component: {fileID: 4470286404723502580}
+  - component: {fileID: 914911380913438930}
   m_Layer: 0
-  m_Name: E_SPIDER
+  m_Name: Blazer
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3713,11 +3723,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 132.88, y: -3.74, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4470286404723502580
+--- !u!114 &914911380913438930
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3726,17 +3737,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 4892382259142119457}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
-  enemyStats:
-    health: 246
-    damage: 82
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Blazer
+  coinReward: 0
 --- !u!1 &5006410342855503394
 GameObject:
   m_ObjectHideFlags: 0
@@ -3763,6 +3776,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 181.7, y: -5.3, z: 3}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 11
@@ -3798,6 +3812,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 1
@@ -61675,6 +61690,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -62407,6 +62423,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 2.23}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 7
@@ -72822,6 +72839,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -72869,7 +72887,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5732591552421084465}
   - component: {fileID: 5732591552421084464}
-  - component: {fileID: 2470538631793914950}
+  - component: {fileID: 6572592342312234535}
   m_Layer: 0
   m_Name: Level 31
   m_TagString: Untagged
@@ -72887,6 +72905,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8391883043269399981}
   - {fileID: 5732591550803286427}
@@ -72915,7 +72934,7 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!114 &2470538631793914950
+--- !u!114 &6572592342312234535
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -72924,44 +72943,41 @@ MonoBehaviour:
   m_GameObject: {fileID: 5732591552421084467}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72ba555d689d6e54b892cb9c99e5274c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4923af3629e30674f926a50600f2c596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelIndex: 31
-  playerPoint: {fileID: 8391883043269399981}
-  typeThemes: 3
-  isLevelBoss: 0
-  bossFightArena: {fileID: 0}
-  listEnemies:
-  - {fileID: 2046449000581925223}
-  - {fileID: 3758178583777097692}
-  - {fileID: 1499096824649163539}
-  - {fileID: 6997065434879809817}
-  - {fileID: 6031933445653325719}
-  - {fileID: 5009138107522469266}
-  - {fileID: 6290204555872223286}
-  - {fileID: 6629537570253066091}
-  - {fileID: 7483234000537643695}
-  - {fileID: 4948428280426316213}
-  - {fileID: 8929719709056760959}
-  - {fileID: 4297634561603797431}
-  - {fileID: 2258929628267180402}
-  - {fileID: 4482368202805433183}
-  - {fileID: 4395282860254862384}
-  - {fileID: 497258770186417275}
-  - {fileID: 6358170675726615852}
-  - {fileID: 4470286404723502580}
-  - {fileID: 7554937544320268141}
-  - {fileID: 3111886743964998596}
-  listItems:
-  - {fileID: 437782140907052442}
-  - {fileID: 3905754305861880149}
-  - {fileID: 2962364305885942013}
-  - {fileID: 909597163869072251}
-  listPosAdmix:
+  spawnPoint: {fileID: 8391883043269399981}
+  minX: -50
+  maxX: 50
+  minY: -50
+  maxY: 50
+  enemySpawners:
+  - {fileID: 569028389956556101}
+  - {fileID: 7275046128665005838}
+  - {fileID: 1487409834267880369}
+  - {fileID: 4893451129721073772}
+  - {fileID: 1038808235948707017}
+  - {fileID: 4477945279148776825}
+  - {fileID: 5568761552786056452}
+  - {fileID: 2939258755249663798}
+  - {fileID: 6152253619761639423}
+  - {fileID: 5508642575221330651}
+  - {fileID: 3351891153057886726}
+  - {fileID: 5073335227480139358}
+  - {fileID: 8078520201320656213}
+  - {fileID: 4051644329825278786}
+  - {fileID: 4478094553697403793}
+  - {fileID: 3298434098547250855}
+  - {fileID: 2583839644697774550}
+  - {fileID: 914911380913438930}
+  - {fileID: 5352583341455328342}
+  - {fileID: 390614819224528436}
+  bossFightArena: []
+  admixAnchors:
   - {fileID: 7259318135375466070}
   - {fileID: 1349777161153153682}
   - {fileID: 5563084151569036321}
+  doorAnchor: {fileID: 806784156595474975}
 --- !u!1 &5788821110177774378
 GameObject:
   m_ObjectHideFlags: 0
@@ -72971,9 +72987,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4162165881170548353}
-  - component: {fileID: 8929719709056760959}
+  - component: {fileID: 3351891153057886726}
   m_Layer: 0
-  m_Name: E_SKELETON
+  m_Name: Skeleton
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -72989,11 +73005,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 62.85, y: -0.78, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8929719709056760959
+--- !u!114 &3351891153057886726
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73002,17 +73019,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 5788821110177774378}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 6
-  enemyStats:
-    health: 246
-    damage: 61
-  overrideBaseStats: 1
-  attackSpeed: 2
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Skeleton
+  coinReward: 0
 --- !u!1 &6405810616949876878
 GameObject:
   m_ObjectHideFlags: 0
@@ -73022,9 +73041,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7553598157140479662}
-  - component: {fileID: 4395282860254862384}
+  - component: {fileID: 4478094553697403793}
   m_Layer: 0
-  m_Name: E_ENDERMAN
+  m_Name: Zombie
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -73040,11 +73059,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 72.45, y: -2.87, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4395282860254862384
+--- !u!114 &4478094553697403793
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73053,17 +73073,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 6405810616949876878}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  enemyStats:
-    health: 328
-    damage: 61
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Zombie
+  coinReward: 0
 --- !u!1 &6531595596565106309
 GameObject:
   m_ObjectHideFlags: 0
@@ -73073,9 +73095,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3306486762652587401}
-  - component: {fileID: 6031933445653325719}
+  - component: {fileID: 1038808235948707017}
   m_Layer: 0
-  m_Name: E_ENDERMAN
+  m_Name: Golem
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -73091,11 +73113,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 8.19, y: -0.85, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6031933445653325719
+--- !u!114 &1038808235948707017
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73104,17 +73127,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 6531595596565106309}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  enemyStats:
-    health: 328
-    damage: 61
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Golem
+  coinReward: 0
 --- !u!1 &6591059226789570111
 GameObject:
   m_ObjectHideFlags: 0
@@ -73143,6 +73168,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3016840096561287592}
   m_RootOrder: 0
@@ -83818,6 +83844,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -83881,6 +83908,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 9.54, y: -1.56, z: 3}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 9
@@ -83911,6 +83939,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 48.6, y: -2.89, z: 3}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 10
@@ -83924,9 +83953,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5615987454051202982}
-  - component: {fileID: 6997065434879809817}
+  - component: {fileID: 4893451129721073772}
   m_Layer: 0
-  m_Name: E_SPIDERHANGING
+  m_Name: SpiderHanging
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -83942,11 +83971,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 105.45, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6997065434879809817
+--- !u!114 &4893451129721073772
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -83955,17 +83985,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 7391903212670426941}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 8
-  enemyStats:
-    health: 143
-    damage: 82
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 3
-  firstDelay: 0.5
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: SpiderHanging
+  coinReward: 0
 --- !u!1 &7473273521383460981
 GameObject:
   m_ObjectHideFlags: 0
@@ -83994,6 +84026,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8427110371045513107}
   m_RootOrder: 0
@@ -143499,6 +143532,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -143545,9 +143579,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1125607303807728184}
-  - component: {fileID: 2046449000581925223}
+  - component: {fileID: 569028389956556101}
   m_Layer: 0
-  m_Name: E_SPIDERHANGING
+  m_Name: SpiderHanging
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -143563,11 +143597,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 22.52, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2046449000581925223
+--- !u!114 &569028389956556101
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143576,17 +143611,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 7574821799234458446}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 8
-  enemyStats:
-    health: 143
-    damage: 82
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 3
-  firstDelay: 0.8
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: SpiderHanging
+  coinReward: 0
 --- !u!1 &7654714571216279567
 GameObject:
   m_ObjectHideFlags: 0
@@ -143613,6 +143650,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 26.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4871209685634680201}
   m_Father: {fileID: 5732591552421084465}
@@ -143627,7 +143665,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4469070071493362459}
-  - component: {fileID: 2962364305885942013}
   m_Layer: 0
   m_Name: Health (1)
   m_TagString: Untagged
@@ -143645,23 +143682,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 67, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4607863181406058346}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2962364305885942013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7831863587036992983}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac8ed5dc458cf204e97fd5920561f778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 2
 --- !u!1 &8170475086607454759
 GameObject:
   m_ObjectHideFlags: 0
@@ -143688,6 +143713,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1125607303807728184}
   - {fileID: 160616214539589129}
@@ -143721,7 +143747,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7716084913513735982}
-  - component: {fileID: 909597163869072251}
   m_Layer: 0
   m_Name: SwordItem
   m_TagString: Untagged
@@ -143739,23 +143764,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 55, y: -1.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4607863181406058346}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &909597163869072251
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8237931782122704890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac8ed5dc458cf204e97fd5920561f778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 1
 --- !u!1 &8508207940163192414
 GameObject:
   m_ObjectHideFlags: 0
@@ -143765,9 +143778,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 389446905696353730}
-  - component: {fileID: 6290204555872223286}
+  - component: {fileID: 5568761552786056452}
   m_Layer: 0
-  m_Name: E_ENDERMAN
+  m_Name: Enderman
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -143783,11 +143796,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 48.89, y: -1.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6290204555872223286
+--- !u!114 &5568761552786056452
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143796,17 +143810,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8508207940163192414}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  enemyStats:
-    health: 328
-    damage: 61
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Enderman
+  coinReward: 0
 --- !u!1 &8609474331608020648
 GameObject:
   m_ObjectHideFlags: 0
@@ -143816,9 +143832,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6277190296652771144}
-  - component: {fileID: 4297634561603797431}
+  - component: {fileID: 5073335227480139358}
   m_Layer: 0
-  m_Name: E_GOLEM
+  m_Name: Golem
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -143834,11 +143850,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 181.29, y: -3.88, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4297634561603797431
+--- !u!114 &5073335227480139358
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143847,17 +143864,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8609474331608020648}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 7
-  enemyStats:
-    health: 492
-    damage: 61
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Golem
+  coinReward: 0
 --- !u!1 &8631503250958645898
 GameObject:
   m_ObjectHideFlags: 0
@@ -143867,9 +143886,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2356222630224783035}
-  - component: {fileID: 3111886743964998596}
+  - component: {fileID: 390614819224528436}
   m_Layer: 0
-  m_Name: E_ENDERMAN
+  m_Name: Enderman
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -143885,11 +143904,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 33.08, y: -1.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3111886743964998596
+--- !u!114 &390614819224528436
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143898,17 +143918,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8631503250958645898}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  enemyStats:
-    health: 328
-    damage: 61
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Enderman
+  coinReward: 0
 --- !u!1 &8820938891241929440
 GameObject:
   m_ObjectHideFlags: 0
@@ -143918,9 +143940,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 160616214539589129}
-  - component: {fileID: 3758178583777097692}
+  - component: {fileID: 7275046128665005838}
   m_Layer: 0
-  m_Name: E_SPIDERHANGING
+  m_Name: SpiderHanging
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -143936,11 +143958,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 28.45, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3758178583777097692
+--- !u!114 &7275046128665005838
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143949,161 +143972,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8820938891241929440}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 8
-  enemyStats:
-    health: 143
-    damage: 82
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 3
-  firstDelay: 0.4
---- !u!1001 &147802018497055749
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 4607863181406058346}
-    m_Modifications:
-    - target: {fileID: 73980082442522455, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 73980082442522455, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: f3dffc6e73326f846b646cfcf8ffe01f, type: 2}
-    - target: {fileID: 73980082442522455, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-      propertyPath: m_Materials.Array.data[2]
-      value: 
-      objectReference: {fileID: 2100000, guid: 4c32ed2aa570f4147b5190081f63120b, type: 2}
-    - target: {fileID: 1617824574816341582, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7110738281524881515, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-      propertyPath: m_Name
-      value: ChangeSkinItem
-      objectReference: {fileID: 0}
-    - target: {fileID: 7110738281524881952, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7110738281524881952, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -10.66
-      objectReference: {fileID: 0}
-    - target: {fileID: 7110738281524881952, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.61
-      objectReference: {fileID: 0}
-    - target: {fileID: 7110738281524881952, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7110738281524881952, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7110738281524881952, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7110738281524881952, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7110738281524881952, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7110738281524881952, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7110738281524881952, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
-      objectReference: {fileID: 0}
-    - target: {fileID: 7110738281524881952, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
---- !u!4 &6963536914491483685 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7110738281524881952, guid: 159724ddf1b7f664abc917fc917b9396, type: 3}
-  m_PrefabInstance: {fileID: 147802018497055749}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &3585512068720410135
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 4607863181406058346}
-    m_Modifications:
-    - target: {fileID: 2683845912500361690, guid: 2ed4992af20a4094e8fa3511097cb02e, type: 3}
-      propertyPath: m_RootOrder
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2683845912500361690, guid: 2ed4992af20a4094e8fa3511097cb02e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 129
-      objectReference: {fileID: 0}
-    - target: {fileID: 2683845912500361690, guid: 2ed4992af20a4094e8fa3511097cb02e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2683845912500361690, guid: 2ed4992af20a4094e8fa3511097cb02e, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2683845912500361690, guid: 2ed4992af20a4094e8fa3511097cb02e, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2683845912500361690, guid: 2ed4992af20a4094e8fa3511097cb02e, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2683845912500361690, guid: 2ed4992af20a4094e8fa3511097cb02e, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2683845912500361690, guid: 2ed4992af20a4094e8fa3511097cb02e, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2683845912500361690, guid: 2ed4992af20a4094e8fa3511097cb02e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2683845912500361690, guid: 2ed4992af20a4094e8fa3511097cb02e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2683845912500361690, guid: 2ed4992af20a4094e8fa3511097cb02e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6647854352604971735, guid: 2ed4992af20a4094e8fa3511097cb02e, type: 3}
-      propertyPath: m_Name
-      value: Chest
-      objectReference: {fileID: 0}
-    - target: {fileID: 6647854352604971735, guid: 2ed4992af20a4094e8fa3511097cb02e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2ed4992af20a4094e8fa3511097cb02e, type: 3}
---- !u!4 &1512263454822721485 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2683845912500361690, guid: 2ed4992af20a4094e8fa3511097cb02e, type: 3}
-  m_PrefabInstance: {fileID: 3585512068720410135}
-  m_PrefabAsset: {fileID: 0}
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: SpiderHanging
+  coinReward: 0
 --- !u!1001 &4045551890936388645
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -144119,11 +144000,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -5.5
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101302109520108884, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 5.5
       objectReference: {fileID: 0}
@@ -144197,11 +144090,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -5.5
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101302109520108884, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 5.5
       objectReference: {fileID: 0}
@@ -144283,6 +144188,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -5.5
@@ -144292,6 +144201,10 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 5.5
       objectReference: {fileID: 0}
@@ -144365,11 +144278,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -5.5
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101302109520108884, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 5.5
       objectReference: {fileID: 0}
@@ -144443,11 +144368,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -5.5
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101302109520108884, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 5.5
       objectReference: {fileID: 0}
@@ -144521,11 +144458,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -5.5
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101302109520108884, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 5.5
       objectReference: {fileID: 0}
@@ -144763,11 +144712,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -5.5
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101302109520108884, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 5.5
       objectReference: {fileID: 0}
@@ -144841,11 +144802,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -5.5
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101302109520108884, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 5.5
       objectReference: {fileID: 0}

@@ -17,7 +17,7 @@ public class LaserBeamNew : MonoBehaviour
     }
     public void Active(int dmg)
     {
-        main.GetComponent<Laser>().SetDamage(dmg);
+        // main.GetComponent<Laser>().SetDamage(dmg);
         main.gameObject.SetActive(false);
         main.GetComponent<BoxCollider2D>().enabled = true;
         StartCoroutine(_Active());

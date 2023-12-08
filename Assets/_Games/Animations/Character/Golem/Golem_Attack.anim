@@ -16226,8 +16226,8 @@ AnimationClip:
     intParameter: 1
     messageOptions: 0
   - time: 0.5
-    functionName: TriggerSkill
-    data: 
+    functionName: SendEvent
+    data: TriggerDamage
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

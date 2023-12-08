@@ -6,13 +6,21 @@ namespace SuperFight
 {
     public class Spike : MonoBehaviour
     {
-        public int damage = 30;
+        Controller controller;
+
         private void OnTriggerEnter2D(Collider2D col)
         {
-            DamageInfo damageInfo = new DamageInfo();
-            damageInfo.damage = damage;
-            damageInfo.characterType = CharacterType.Boss;
-            col.GetComponent<IDamage>()?.TakeDamage(damageInfo);
+            IDamage id = col.GetComponent<IDamage>();
+            if (id != null)
+            {
+                controller = id.controller;
+                DamageInfo damageInfo = new DamageInfo();
+                damageInfo.damage = controller.originalStats.health / 5;
+                damageInfo.stunTime = 0.1f;
+                damageInfo.characterType = CharacterType.Boss;
+                id.TakeDamage(damageInfo);
+            }
+
         }
     }
 }

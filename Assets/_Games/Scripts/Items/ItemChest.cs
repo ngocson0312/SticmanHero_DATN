@@ -60,7 +60,7 @@ namespace SuperFight
         }
         void OpenChest(Vector3 position)
         {
-            SoundManager.Instance.playSoundFx(SoundManager.Instance.effChestBreak);
+          //  SoundManager.Instance.playSoundFx(SoundManager.Instance.effChestBreak);
             LidAnchor.DOLocalRotate(new Vector3(90,0,-65),.5f).OnComplete(()=> {
                 FXChest.Stop();
                 CreateCoinChest(position);
@@ -77,7 +77,7 @@ namespace SuperFight
             for (int i = 0; i < CoinNum; i++)
             {
                 yield return new WaitForSeconds(delayTime);
-                GameplayCtrl.Instance.objManager.createCoin(position);
+               // GameplayCtrl.Instance.objManager.createCoin(position);
                 delayTime += 0.005f;
             }
         }

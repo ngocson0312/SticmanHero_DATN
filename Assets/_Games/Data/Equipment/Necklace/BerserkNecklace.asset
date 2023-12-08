@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90bd872860d8f564390f2c0d54235f1f, type: 3}
+  m_Name: BerserkNecklace
+  m_EditorClassIdentifier: 
+  id: 14
+  icon: {fileID: 21300000, guid: ed92c31209157774fa3f22b66ab34b49, type: 3}
+  itemType: 0
+  itemName: Blood Thirsty
+  description: 
+  prefab: {fileID: 7710082010539043824, guid: 07ded1280b9b01b4a8971c2154bbaf53, type: 3}
+  equipmentType: 3
+  gradeSkillDesc:
+  - <color=#4dff3a>+50</color> HP
+  - <color=#4dff3a>+5%</color> HP
+  - Increase <color=#4dff3a>+10%</color> ATK in 8s after kill an enemy
+  - <color=#4dff3a>+15%</color> HP

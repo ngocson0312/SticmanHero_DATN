@@ -45,6 +45,22 @@ public class MysdkTool : MonoBehaviour
         SettingBuildAndroid.backupGamePlugin(GameName);
     }
 
+    [MenuItem("Tools/ClearAllData")]
+    static void ClearAllData()
+    {
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+        try
+        {
+            string pathgame = Application.persistentDataPath;
+            delFolder(pathgame);
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
     static void createRootDir(string path)
     {
         try
@@ -63,5 +79,23 @@ public class MysdkTool : MonoBehaviour
             Debug.LogError("mysdk: createRootDir ex=" + ex.ToString());
         }
 
+    }
+
+    static void delFolder(string path)
+    {
+        if (Directory.Exists(path))
+        {
+            string[] listDirs = Directory.GetDirectories(path);
+            foreach (string subpath in listDirs)
+            {
+                delFolder(subpath);
+            }
+            string[] listFiles = Directory.GetFiles(path);
+            foreach (string subpath in listFiles)
+            {
+                File.Delete(subpath);
+            }
+            Directory.Delete(path);
+        }
     }
 }

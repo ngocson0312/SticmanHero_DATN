@@ -20,8 +20,8 @@ namespace SuperFight
 
         private void beEat()
         {
-            SoundManager.Instance.playSoundFx(SoundManager.Instance.effItemHealthTouch);
-            GameplayCtrl.Instance.itemHealthBeEat(this, valuePercent);
+           // SoundManager.Instance.playSoundFx(SoundManager.Instance.effItemHealthTouch);
+           // GameplayCtrl.Instance.itemHealthBeEat(this, valuePercent);
         }
     }
 }

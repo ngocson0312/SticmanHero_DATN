@@ -8,7 +8,7 @@ namespace SuperFight
         public override void ResetAnimator()
         {
             ResumeAnimator();
-            animator.Rebind();
+            Animator.Rebind();
         }
     }
 }

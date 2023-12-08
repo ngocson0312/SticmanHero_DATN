@@ -46,6 +46,28 @@ public class GameAdsHelperBridge : MonoBehaviour
         });
     }
 
+    public void onOpenAdPaidEvent(string description)
+    {
+        AdsProcessCB.Instance().Enqueue(() =>
+        {
+            string[] sarr = description.Split(new char[] { ';' });
+            if (sarr != null && sarr.Length == 3)
+            {
+                int Precision = 0;
+                int.TryParse(sarr[0], out Precision);
+                long lva = 0;
+                long.TryParse(sarr[2], out lva);
+                string adopenid = "";
+#if UNITY_IOS || UNITY_IPHONE
+                adopenid = PlayerPrefs.GetString($"mem_df0_open_id", AdsHelper.Instance.OpenAdIdiOS);
+#elif UNITY_ANDROID
+                adopenid = PlayerPrefs.GetString($"mem_df0_open_id", AdsHelper.Instance.OpenAdIdAndroid);
+#endif
+                FIRhelper.logEventAdsPaidAdmob(3, adopenid, Precision, sarr[1], lva);
+            }
+        });
+    }
+
     void _onShowOpenNative(string description)
     {
         Debug.Log("mysdk: call _onShowOpenNative=" + description);
@@ -84,9 +106,21 @@ public class GameAdsHelperBridge : MonoBehaviour
         Debug.Log("mysdk: _showOpenAds isAdsShowing=" + isAdsShowing);
         if (isAllowShow && !isAdsShowing && AdsHelper.Instance != null && AdsHelper.Instance.isShowOpenAds(false) > 0)
         {
-            if (SDKManager.Instance != null && !SDKManager.Instance.showMyOpenAds())
+            bool isshow = AdsHelper.Instance.showOpenAd((statusShow) =>
             {
-                bool isshow = AdsHelper.Instance.showFull(isFirst, 99, false, false, "OpenAds", true, false, (satead) =>
+                if (statusShow == AD_State.AD_CLOSE)
+                {
+                    SDKManager.Instance.flagTimeScale = 0;
+                    Time.timeScale = 1;
+                    if (SDKManager.Instance.CBPauseGame != null)
+                    {
+                        SDKManager.Instance.CBPauseGame.Invoke(false);
+                    }
+                }
+            });
+            if (!isshow)
+            {
+                isshow = AdsHelper.Instance.showFull(isFirst, 99, false, false, "OpenAds", true, false, (satead) =>
                 {
                     if (satead == AD_State.AD_CLOSE || satead == AD_State.AD_SHOW_FAIL)
                     {
@@ -117,6 +151,15 @@ public class GameAdsHelperBridge : MonoBehaviour
                         mygame.plugin.Android.GameHelperAndroid.showAppOpenAd(false);
 #endif
                     }
+                }
+            }
+            else
+            {
+                SDKManager.Instance.flagTimeScale = 1;
+                Time.timeScale = 0;
+                if (SDKManager.Instance.CBPauseGame != null)
+                {
+                    SDKManager.Instance.CBPauseGame.Invoke(true);
                 }
             }
             isFirst = false;
@@ -190,9 +233,15 @@ public class GameAdsHelperBridge : MonoBehaviour
         }
     }
 
+    private void onshowCmp()
+    {
+        PlayerPrefs.SetInt("mem_show_CMP", 1);
+    }
+
     public void AndroidCBOnShowCMP(string description)
     {
         Debug.Log("mysdk: GameAdsHelperBridge AndroidCBOnShowCMP");
+        onshowCmp();
         if (CBRequestGDPR != null)
         {
             CBRequestGDPR(0, description);
@@ -216,6 +265,7 @@ public class GameAdsHelperBridge : MonoBehaviour
     public void iOSCBOnShowCMP(string description)
     {
         Debug.Log("mysdk: GameAdsHelperBridge iOSCBOnShowCMP");
+        onshowCmp();
         if (CBRequestGDPR != null)
         {
             CBRequestGDPR(0, description);

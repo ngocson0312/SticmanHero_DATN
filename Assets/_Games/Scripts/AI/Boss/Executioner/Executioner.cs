@@ -14,7 +14,7 @@ namespace SuperFight
         public float xMin;
         public ExecutionerIdleState idleState;
         public ExecutionerAttackState attackState;
-        public ParticleSystem deathFX;
+        public bool rotateWhenAction;
         public override void Initialize(BossFightArena arena)
         {
             base.Initialize(arena);
@@ -27,59 +27,63 @@ namespace SuperFight
             SwitchState(idleState);
         }
 
+
         protected override void UpdateLogic()
         {
-            isInteracting = animatorHandle.animator.GetBool("IsInteracting");
+            isInteracting = animatorHandle.GetBool("IsInteracting");
             animatorHandle.SetFloat("MoveAmount", moveAmount);
-            HandleRotate();
         }
-        void HandleRotate()
+        public override void OnTakeDamage(DamageInfo damageInfo)
         {
+            if (!isActive) return;
+            base.OnTakeDamage(damageInfo);
+            if (runtimeStats.health <= 0)
+            {
+                Die(false);
+                animatorHandle.PlayAnimation("Die", 0.1f, 1, true);
+                isActive = false;
+            }
+            else
+            {
+                animatorHandle.PlayAnimation("Hit", 0.1f, 0, false);
+            }
+        }
+        public void HandleLockTarget(Transform target, float snapValue)
+        {
+            Vector3 direction = target.position - transform.position;
+            if (direction.x < 0 && core.movement.facingDirection == 1)
+            {
+                core.movement.Flip();
+            }
+            if (direction.x > 0 && core.movement.facingDirection == -1)
+            {
+                core.movement.Flip();
+            }
             if (core.movement.facingDirection < 0)
             {
-                animatorHandle.transform.localRotation = Quaternion.Lerp(animatorHandle.transform.localRotation, Quaternion.Euler(0, 270, 0), 0.5f);
+                animatorHandle.transform.localRotation = Quaternion.Lerp(animatorHandle.transform.localRotation, Quaternion.Euler(0, 270, 0), snapValue);
             }
             if (core.movement.facingDirection > 0)
             {
-                animatorHandle.transform.localRotation = Quaternion.Lerp(animatorHandle.transform.localRotation, Quaternion.Euler(0, 90, 0), 0.5f);
+                animatorHandle.transform.localRotation = Quaternion.Lerp(animatorHandle.transform.localRotation, Quaternion.Euler(0, 90, 0), snapValue);
             }
         }
         protected override void UpdatePhysic()
         {
 
         }
-        public Collider2D[] GetTargetsInView()
+        public Controller GetTargetsInView()
         {
-            var colls = new Collider2D[3];
-            Physics2D.OverlapBoxNonAlloc(transform.position + (Vector3)centerView, viewSize, 0, colls, layerTarget);
-
-            List<Collider2D> listColl = new List<Collider2D>();
-            for (int i = 0; i < colls.Length; i++)
-            {
-                if (colls[i] != null && !colls[i].Equals(core.combat.GetComponent<Collider2D>()) && colls[i].GetComponent<Combat>().getType != characterType)
-                {
-                    listColl.Add(colls[i]);
-                }
-            }
-            return listColl.ToArray();
-        }
-        public override void OnTakeDamage(DamageInfo damageInfo)
-        {
-            if (!isActive) return;
-            base.OnTakeDamage(damageInfo);
-            if (stats.currHealth <= 0)
-            {
-                isActive = false;
-                deathFX.Play();
-                Die(true);
-                animatorHandle.PlayAnimation("Die", 0.1f, 1, false);
-                SoundManager.Instance.playSoundFx(SoundManager.Instance.effBossDie);
-                GameplayCtrl.Instance.CreateCoinOnKillBoss(transform.position, 20, 40);
-            }
-            else
-            {
-                animatorHandle.PlayAnimation("Hit", 0.1f, 0, false);
-            }
+            // Collider2D[] colls = Physics2D.OverlapBoxAll(transform.position + (Vector3)centerView, viewSize, 0, layerTarget);
+            // List<Collider2D> listColl = new List<Collider2D>();
+            // for (int i = 0; i < colls.Length; i++)
+            // {
+            //     if (!colls[i].Equals(core.combat.GetComponent<Collider2D>()) && colls[i].GetComponent<Combat>().getType != characterType)
+            //     {
+            //         listColl.Add(colls[i]);
+            //     }
+            // }
+            return PlayerManager.Instance.playerController;
         }
         private void OnDrawGizmosSelected()
         {

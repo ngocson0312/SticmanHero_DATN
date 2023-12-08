@@ -19,6 +19,14 @@ namespace SuperFight
             controller.animatorHandle.PlayAnimation("Slash", 0.1f, 1, true);
         }
 
+        public override void OnPause()
+        {
+        }
+
+        public override void OnResume()
+        {
+        }
+
         public override void UpdateLogic(float deltaTime)
         {
         }

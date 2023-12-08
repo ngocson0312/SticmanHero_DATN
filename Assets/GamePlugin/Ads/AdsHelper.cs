@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 #if ENABLE_ADJUST
@@ -47,6 +47,7 @@ namespace mygame.sdk
 
     public class AdsHelper : MonoBehaviour
     {
+        public static event Action<int, Rect> CBGetHighBanner = null;
         //-------------AppOpenAd-------------
         [Header("App Open Ad")]
         public string AdmobAppID4Android;
@@ -109,6 +110,8 @@ namespace mygame.sdk
         private string actionBanner = "";
         public int stateMybanner = 0;
         public bool isShowBNAdsMob { get; set; }
+        private bool isShowMyopenAd = false;
+        private int stepShowMyAdOpen = 10000;
 
         private Rect posNative;
         private bool isShowNatie = false;
@@ -130,6 +133,12 @@ namespace mygame.sdk
         private AdCallBack _cbFullShow;
         private List<AdsBase> listStepShowFullCircle;
         private List<AdsBase> listStepShowFullRe;
+
+        private long tFull2Show;
+        private int deltaloverCountFull2 = 100;
+        private int idxFull2Load;
+        private int idxFull2ShowCircle;
+        private List<AdsBase> listStepShowFull2Circle;
         public bool isShowFulled { get; private set; }
 
         //-------------gift----------------------------
@@ -159,7 +168,7 @@ namespace mygame.sdk
         public int levelCurr4Full { get; private set; }
         public int levelCurr4Gift { get; private set; }
         public int cfStatusRemoveAdsInterval { get; set; }
-        private bool isinitafteridfa = true;
+        private bool isinitCall = false;
 
         private static int countTotalShowAds = 0;
         private int typeFullGift = 0;
@@ -167,6 +176,12 @@ namespace mygame.sdk
         private bool isWaitShowBanner = false;
         private long timeOpenGame = 0;
         private int countTryCheckRemoveInterval = 0;
+
+        private int specialTypeCurr = 0;
+        private int specialStartCurr = 0;
+        private int specialEndCurr = 0;
+        private int fullDeltalTimeCurr = 0;
+        private bool isApplySpec = false;
 
 #if UNITY_EDITOR
         [Header("Ad Editor")]
@@ -263,7 +278,7 @@ namespace mygame.sdk
                 timeOpenGame = PlayerPrefs.GetInt("mem_topen_game", -1);
                 if (timeOpenGame < 0)
                 {
-                    timeOpenGame = SdkUtil.systemCurrentMiliseconds();
+                    timeOpenGame = GameHelper.CurrentTimeMilisReal();
                     PlayerPrefs.SetInt("mem_topen_game", (int)(timeOpenGame / 1000));
                 }
                 else
@@ -278,18 +293,11 @@ namespace mygame.sdk
                 listStepShowFullRe = new List<AdsBase>();
                 listStepShowGiftCircle = new List<AdsBase>();
                 listStepShowGiftRe = new List<AdsBase>();
+                listStepShowFull2Circle = new List<AdsBase>();
 
                 countFullShowOfDay = currConfig.fullTotalOfday;
                 countGiftShowOfDay = currConfig.giftTotalOfday;
 
-                if (!GameHelper.requestIDFA())
-                {
-                    isinitafteridfa = true;
-                }
-                else
-                {
-                    isinitafteridfa = false;
-                }
                 if (isRemoveAds == 1)
                 {
                     GameHelper.setRemoveAds4OpenAds(1);
@@ -319,6 +327,9 @@ namespace mygame.sdk
             stepFullLoad = 0;
             idxFullShowCircle = 0;
 
+            idxFull2Load = 0;
+            idxFull2ShowCircle = 0;
+
             idxGiftLoad = 0;
             countGiftLoad = 0;
             stepGiftLoad = 0;
@@ -326,17 +337,19 @@ namespace mygame.sdk
 
             checkTotalShowGiftFull();
 
+            checkSpecialCon(true);
             initListBN();
             initListNative();
             initListFull();
+            initListFull2();
             initListGift();
 
-            if (isinitafteridfa)
-            {
-                Debug.Log("mysdk: adshelper start isinitafteridfa");
-                isinitafteridfa = false;
-                initAds();
-            }
+#if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
+            StartCoroutine(waitIosInitAds());
+#else
+            wrapperInitAds();
+#endif
+
             StartCoroutine(waitFlagInitSuc());
             countTryCheckRemoveInterval = 0;
             checkRemoveAdsInterval();
@@ -353,7 +366,7 @@ namespace mygame.sdk
                     if (status)
                     {
                         SDKManager.Instance.timeOnline = (int)(time / 60000);
-                        SDKManager.Instance.timeWhenGetOnline = (int)(SdkUtil.systemCurrentMiliseconds() / 60000);
+                        SDKManager.Instance.timeWhenGetOnline = (int)(GameHelper.CurrentTimeMilisReal() / 60000);
                     }
                     else
                     {
@@ -371,7 +384,7 @@ namespace mygame.sdk
             int tinval = PlayerPrefs.GetInt("ads_remove_inval", 0);
             if (tinval > 0 && SDKManager.Instance.timeOnline > 0 && cfStatusRemoveAdsInterval == 1)
             {
-                long t = SdkUtil.systemCurrentMiliseconds() / 60000;
+                long t = GameHelper.CurrentTimeMilisReal() / 60000;
                 if (t > SDKManager.Instance.timeWhenGetOnline)
                 {
                     long tbg = PlayerPrefs.GetInt("ads_remove_inval_tbegin", 0);
@@ -388,15 +401,49 @@ namespace mygame.sdk
             return false;
         }
 
+        public void wrapperInitAds()
+        {
+            if (!GameHelper.isRequestIDFA())
+            {
+                initAds();
+            }
+            else
+            {
+                GameHelper.requestIDFA();
+                StartCoroutine(waitInitAds());
+            }
+        }
+
+        IEnumerator waitIosInitAds()
+        {
+            yield return new WaitForSeconds(0.5f);
+            AdsHelper.Instance.wrapperInitAds();
+        }
+
+        IEnumerator waitInitAds()
+        {
+            yield return new WaitForSeconds(10);
+            initAds();
+        }
+
         public void initAds()
         {
-            Debug.Log("mysdk: adshelper init ads");
-            foreach (var item in listAds)
+            if (!isinitCall)
             {
-                item.Value.InitAds();
+                isinitCall = true;
+                Debug.Log("mysdk: adshelper init ads");
+                foreach (var item in listAds)
+                {
+                    item.Value.InitAds();
+                }
+                StartCoroutine(loadStart());
             }
-            StartCoroutine(loadStart());
+            else
+            {
+                Debug.Log("mysdk: adshelper re call init ads");
+            }
         }
+
         IEnumerator loadStart()
         {
             if (isShowOpenAds(true) > 0)
@@ -404,6 +451,7 @@ namespace mygame.sdk
                 GameHelper.Instance.loadAppOpenAdFull4First();
             }
             yield return new WaitForSeconds(1.1f);
+            loadOpenAd();
             if (isFullLoadStart)
             {
                 loadFull4ThisTurn(false, 99, false);
@@ -454,15 +502,18 @@ namespace mygame.sdk
             }
 #endif
         }
+
         public void reinit()
         {
             try
             {
                 if (listAds != null && listStepShowFullCircle != null && listStepShowFullRe != null)
                 {
+                    checkSpecialCon(false);
                     initListBN();
                     initListNative();
                     initListFull();
+                    initListFull2();
                     initListGift();
                 }
             }
@@ -471,6 +522,98 @@ namespace mygame.sdk
 
             }
         }
+
+        public bool checkSpecialCon(bool isForceNew)
+        {
+            if (isForceNew)
+            {
+                specialStartCurr = 0;
+                specialEndCurr = 0;
+            }
+            bool re = false;
+            specialTypeCurr = currConfig.specialType;
+            fullDeltalTimeCurr = currConfig.fullDeltatime;
+            bool memisapply = isApplySpec;
+            bool newapply = false;
+            isApplySpec = false;
+            if (currConfig.listSpecialShow.Count > 0 && SDKManager.Instance != null)
+            {
+                for (int i = 0; i < currConfig.listSpecialShow.Count; i++)
+                {
+                    SpecialConditionShow con = currConfig.listSpecialShow[i];
+                    int concomp;
+                    if (currConfig.specialType == 0)
+                    {
+                        concomp = SDKManager.Instance.counSessionGame;
+                    }
+                    else
+                    {
+                        concomp = SDKManager.Instance.totalTimePlayGame;
+                    }
+                    if (concomp >= con.startCon && concomp < con.endCon)
+                    {
+                        if (specialStartCurr != con.startCon || specialEndCurr != con.endCon)
+                        {
+                            newapply = true;
+                        }
+                        specialStartCurr = con.startCon;
+                        specialEndCurr = con.endCon;
+                        if (con.deltal4Show > 1)
+                        {
+                            fullDeltalTimeCurr = con.deltal4Show;
+                        }
+                        if (con.stepFull != null && con.stepFull.Length > 3)
+                        {
+                            if (newapply)
+                            {
+                                re = true;
+                                currConfig.parSerStepFull(con.stepFull);
+                            }
+                            isApplySpec = true;
+                        }
+                        if (con.stepGift != null && con.stepGift.Length > 3)
+                        {
+                            if (newapply)
+                            {
+                                re = true;
+                                currConfig.parSerStepGift(con.stepGift);
+                            }
+                            isApplySpec = true;
+                        }
+                        break;
+                    }
+                }
+            }
+            if (memisapply && !isApplySpec)
+            {
+                Debug.Log("mysdk: ads change to common cf from spec type=" + specialTypeCurr);
+                currConfig.parSerStepFull(currConfig.stepShowFull);
+                currConfig.parSerStepGift(currConfig.stepShowGift);
+                re = true;
+            }
+            else if (!memisapply && isApplySpec)
+            {
+                Debug.Log("mysdk: ads change to spec cf from common type=" + specialTypeCurr);
+            }
+            else
+            {
+                Debug.Log("mysdk: ads change spec logic isApplySpec=" + isApplySpec + ", type=" + specialTypeCurr);
+            }
+            return re;
+        }
+
+        public void checkChangeSpecialCon()
+        {
+            if (checkSpecialCon(false))
+            {
+                initListBN();
+                initListNative();
+                initListFull();
+                initListFull2();
+                initListGift();
+            }
+        }
+
         public void removeAdsWithTimeInterval(int timeIntervalInHour, Action<bool> result)
         {
             Myapi.ApiManager.Instance.getTimeOnline((status, time) =>
@@ -479,20 +622,22 @@ namespace mygame.sdk
                 if (status)
                 {
                     SDKManager.Instance.timeOnline = (int)(time / 60000);
-                    SDKManager.Instance.timeWhenGetOnline = (int)(SdkUtil.systemCurrentMiliseconds() / 60000);
+                    SDKManager.Instance.timeWhenGetOnline = (int)(GameHelper.CurrentTimeMilisReal() / 60000);
                     PlayerPrefs.SetInt("ads_remove_inval", timeIntervalInHour * 60);
                     PlayerPrefs.SetInt("ads_remove_inval_tbegin", SDKManager.Instance.timeOnline);
                 }
             });
         }
+
         public void setStartTimeNoAds()
         {
-            long ts = SdkUtil.systemCurrentMiliseconds() / 60000;
+            long ts = GameHelper.CurrentTimeMilisReal() / 60000;
             PlayerPrefs.SetInt("time_start_noads_fi", (int)ts);
         }
+
         public bool isNoAdsTime()
         {
-            long tcurr = SdkUtil.systemCurrentMiliseconds() / 60000;
+            long tcurr = GameHelper.CurrentTimeMilisReal() / 60000;
             int ts = PlayerPrefs.GetInt("time_start_noads_fi", 0);
             if ((tcurr - ts) <= 240)
             {
@@ -501,6 +646,13 @@ namespace mygame.sdk
             }
 
             return false;
+        }
+        //flag = 0-banner, 1-full, 2-gift
+        public bool isDisableAds(int flag)
+        {
+            int[] ch = { 1, 2, 4 };
+            int ns = (currConfig.maskAdsStatus & ch[flag]);
+            return (ns == 0);
         }
 
         private void setIsAdsShowing(bool isshow)
@@ -553,10 +705,12 @@ namespace mygame.sdk
                 return 0;
             }
         }
+
         private void checkUseAds()
         {
 
         }
+
         private void checkLogVipAds()
         {
             int countfull4point = PlayerPrefs.GetInt("count_full_4_point", 0);
@@ -639,6 +793,7 @@ namespace mygame.sdk
             {
                 ((AdsAdmobMy)adsAdmobMy).initBanner();
                 ((AdsAdmobMy)adsAdmobMy).initFull();
+                ((AdsAdmobMy)adsAdmobMy).initGift();
             }
         }
         private void initMyBanner()
@@ -770,6 +925,48 @@ namespace mygame.sdk
                 idxFullShowCircle = 0;
             }
         }
+        private void initListFull2()
+        {
+            bool hasAdsEnable = false;
+            foreach (var item in listAds)
+            {
+                if (item.Value.isEnable)
+                {
+                    hasAdsEnable = true;
+                    break;
+                }
+            }
+            listStepShowFull2Circle.Clear();
+            string steplog = "";
+            bool iscontainadmoblow = false;
+            for (int i = 0; i < currConfig.full2StepShowCircle.Count; i++)
+            {
+                if (listAds.ContainsKey(currConfig.full2StepShowCircle[i]))
+                {
+                    if (!hasAdsEnable || listAds[currConfig.full2StepShowCircle[i]].isEnable)
+                    {
+                        listStepShowFull2Circle.Add(listAds[currConfig.full2StepShowCircle[i]]);
+                        if (currConfig.full2StepShowCircle[i] == 10)
+                        {
+                            iscontainadmoblow = true;
+                        }
+                        steplog += $"{currConfig.full2StepShowCircle[i]},";
+                    }
+                }
+            }
+
+            if (listStepShowFull2Circle.Count > 0 && !iscontainadmoblow)
+            {
+                listStepShowFull2Circle.Add(listAds[10]);
+                steplog += $"_10";
+            }
+
+            Debug.Log("mysdk: adshelper init ListFull2=" + steplog);
+            if (idxFull2ShowCircle >= listStepShowFull2Circle.Count)
+            {
+                idxFull2ShowCircle = 0;
+            }
+        }
         private void initListGift()
         {
             bool hasAdsEnable = false;
@@ -826,26 +1023,16 @@ namespace mygame.sdk
         }
         public void configWithRegion()
         {
-            // if (adsConfigAllRegion.ContainsKey(GameHelper.CountryDefault))
-            // {
-            //     ObjectAdsCf cgdf = adsConfigAllRegion[GameHelper.CountryDefault];
-            //     foreach (var item in adsConfigAllRegion)
-            //     {
-            //         if (!item.Key.Contains(GameHelper.CountryDefault))
-            //         {
-            //             item.Value.coppyFromOther(cgdf);
-            //         }
-            //     }
-            // }
-
             Debug.Log("mysdk: ads helper cf ads=" + GameHelper.Instance.countryCode);
             if (adsConfigAllRegion.ContainsKey(GameHelper.Instance.countryCode))
             {
                 currConfig = adsConfigAllRegion[GameHelper.Instance.countryCode];
                 currConfig.saveAllConfig();
+                checkSpecialCon(true);
                 initListBN();
                 initListNative();
                 initListFull();
+                initListFull2();
                 initListGift();
                 checkUseAds();
             }
@@ -854,9 +1041,11 @@ namespace mygame.sdk
                 Debug.Log("mysdk: ads helper cf2 ads=default");
                 currConfig = adsConfigAllRegion[GameHelper.CountryDefault];
                 currConfig.saveAllConfig();
+                checkSpecialCon(true);
                 initListBN();
                 initListNative();
                 initListFull();
+                initListFull2();
                 initListGift();
                 checkUseAds();
             }
@@ -865,11 +1054,15 @@ namespace mygame.sdk
             {
                 string adopenid = "";
 #if UNITY_IOS || UNITY_IPHONE
-                adopenid = OpenAdIdiOS;
+                adopenid = PlayerPrefs.GetString($"mem_df0_open_id", OpenAdIdiOS);
 #elif UNITY_ANDROID
-                adopenid = OpenAdIdAndroid;
+                adopenid = PlayerPrefs.GetString($"mem_df0_open_id", OpenAdIdAndroid);
 #endif
                 GameHelper.Instance.configAppOpenAd(currConfig.OpenAdShowtype, currConfig.OpenAdShowat, currConfig.OpenAdIsShowFirstOpen, currConfig.OpenAdDelTimeOpen, adopenid);
+                if (isDisableAds(0))
+                {
+                    hideBanner(0);
+                }
             }
         }
         private void checkTotalShowGiftFull()
@@ -938,6 +1131,14 @@ namespace mygame.sdk
                 }
             }
         }
+        public void onGetBanner(int adType, Rect r)
+        {
+            Debug.Log("aaaaa=" + r);
+            if (CBGetHighBanner != null)
+            {
+                CBGetHighBanner(adType, r);
+            }
+        }
         public float getBannerSize(int bannersize)
         {
 #if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
@@ -958,9 +1159,9 @@ namespace mygame.sdk
         public void showBanner(AD_BANNER_POS location, App_Open_ad_Orien orien, int width, float _dxCenter = 0)
         {
             SdkUtil.logd($"ads helper showBanner location={location}, width={width}, dxCenter={_dxCenter}");
-            if (isRemoveAds == 1 || isNoAdsTime()) //vvv
+            if (isRemoveAds == 1 || isNoAdsTime() || isDisableAds(0)) //vvv
             {
-                SdkUtil.logd("ads helper showBanner is removee ads");
+                SdkUtil.logd("ads helper showBanner is removee ads or disable");
                 ImgBgBanner.gameObject.SetActive(false);
                 return;
             }
@@ -1027,7 +1228,7 @@ namespace mygame.sdk
                 stepBNLoad = 1;
                 countBNLoad = listStepShowBNRe.Count;
             }
-            if (!isInitSuc)
+            if (!isInitSuc || isShowMyopenAd)
             {
                 isWaitShowBanner = true;
                 Debug.Log("mysdk: ads helper wait show banner");
@@ -1133,7 +1334,7 @@ namespace mygame.sdk
                 if (!isCallReloadBanner)
                 {
                     isCallReloadBanner = true;
-                    tbnLoadOk = SdkUtil.systemCurrentMiliseconds();
+                    tbnLoadOk = GameHelper.CurrentTimeMilisReal();
                     tbnLoadFail = tbnLoadOk;
                     StartCoroutine(reloadBanner());
                 }
@@ -1165,7 +1366,7 @@ namespace mygame.sdk
 #endif
             if (statusLoadBanner != -1)
             {
-                tbnLoadFail = SdkUtil.systemCurrentMiliseconds();
+                tbnLoadFail = GameHelper.CurrentTimeMilisReal();
                 statusLoadBanner = -1;
             }
         }
@@ -1174,7 +1375,7 @@ namespace mygame.sdk
 #if ENABLE_MYLOG
             SdkUtil.logd("ads helper onBannerLoadOk 0");
 #endif
-            tbnLoadOk = SdkUtil.systemCurrentMiliseconds();
+            tbnLoadOk = GameHelper.CurrentTimeMilisReal();
             tbnLoadFail = tbnLoadOk;
             statusLoadBanner = 1;
             isLoadBannerok = true;
@@ -1192,7 +1393,7 @@ namespace mygame.sdk
 #endif
                 if (statusLoadBanner == -1)
                 {
-                    long tcu = SdkUtil.systemCurrentMiliseconds();
+                    long tcu = GameHelper.CurrentTimeMilisReal();
                     if ((tcu - tbnLoadFail) >= 20000 && !isLoadBannerok)
                     {
 #if ENABLE_MYLOG
@@ -1210,7 +1411,7 @@ namespace mygame.sdk
                 }
                 else if (statusLoadBanner == 1)
                 {
-                    long tcu = SdkUtil.systemCurrentMiliseconds();
+                    long tcu = GameHelper.CurrentTimeMilisReal();
                     if ((tcu - tbnLoadOk) > 60000)
                     {
 #if ENABLE_MYLOG
@@ -1241,6 +1442,31 @@ namespace mygame.sdk
                 {
                     ads.Value.hideBanner(type);
                 }
+            }
+        }
+        public void onShowMyAdsOpen()
+        {
+            isShowMyopenAd = true;
+            if (isShowBanner)
+            {
+                SdkUtil.logd("ads helper onShowMyAdsOpen 1");
+                ImgBgBanner.gameObject.SetActive(false);
+                foreach (var ads in listAds)
+                {
+                    if (ads.Value != null)
+                    {
+                        ads.Value.hideBanner(0);
+                    }
+                }
+            }
+        }
+        public void onHideMyAdsOpen()
+        {
+            isShowMyopenAd = false;
+            if (isShowBanner)
+            {
+                SdkUtil.logd("ads helper onShowMyAdsOpen 1");
+                showBanner(bnLocation, bnOrien, bannerWidth, dxCenter);
             }
         }
         public void destroyBanner(int type)
@@ -1318,6 +1544,39 @@ namespace mygame.sdk
                 }
             }
         }
+
+        //====================openad==================================
+        public void loadOpenAd()
+        {
+            if (currConfig.typeMyopenAd > 0)
+            {
+                if (MyAdsOpen.Instance != null)
+                {
+                    MyAdsOpen.Instance.loadMyOpenAds();
+                    MyAdsOpen.Instance.load();
+                }
+            }
+        }
+        public bool showOpenAd(AdCallBack cb)
+        {
+            if (currConfig.typeMyopenAd > 0 && MyAdsOpen.Instance != null)
+            {
+                stepShowMyAdOpen++;
+                bool isTurnShow = false;
+                if (stepShowMyAdOpen >= currConfig.typeMyopenAd)
+                {
+                    stepShowMyAdOpen = 0;
+                    isTurnShow = true;
+                }
+                if (MyAdsOpen.Instance.isShow() && isTurnShow)
+                {
+                    return MyAdsOpen.Instance.show(cb);
+                }
+            }
+
+            return false;
+        }
+
         //----------------------
         private void checkStaticAdsFull(int lv)
         {
@@ -1350,7 +1609,7 @@ namespace mygame.sdk
 #endif
             checkResumeAudio();
             _cbFullLoad = null;
-            if (isRemoveAds == 1 || isNoAdsTime()) //vvv
+            if (isRemoveAds == 1 || isNoAdsTime() || isDisableAds(1)) //vvv
             {
                 SdkUtil.logd("ads helper loadFull4ThisTurn is removee ads");
                 if (cb != null)
@@ -1385,11 +1644,11 @@ namespace mygame.sdk
                     return;
                 }
             }
-            long dtstart = (SdkUtil.systemCurrentMiliseconds() - timeOpenGame) * 2;
-            if ((level < currConfig.fullLevelStart || dtstart < currConfig.fullTimeStart) && !isSplash)
+            long dtstart = (GameHelper.CurrentTimeMilisReal() - timeOpenGame) * 2;
+            if ((SDKManager.Instance.counSessionGame < currConfig.fullSessionStart || level < currConfig.fullLevelStart || dtstart < currConfig.fullTimeStart) && !isSplash)
             {
 #if ENABLE_MYLOG
-                SdkUtil.logd("ads helper loadFull4ThisTurn lvstart: curr=" + level + ", lvs=" + currConfig.fullLevelStart + ", dtstart=" + dtstart + " dtcf=" + currConfig.fullTimeStart);
+                SdkUtil.logd("ads helper loadFull4ThisTurn lvstart: curr=" + level + ", lvs=" + currConfig.fullLevelStart + ", dtstart=" + dtstart + " dtcf=" + currConfig.fullTimeStart + "ss=" + SDKManager.Instance.counSessionGame + "cfss=" + currConfig.fullSessionStart);
 #endif
                 if (cb != null)
                 {
@@ -1409,24 +1668,9 @@ namespace mygame.sdk
                 return;
             }
 
-            // long t = SdkUtil.systemCurrentMiliseconds();
-            // SdkUtil.logd("ads helper loadFull4ThisTurn + d:" + currConfig.fullDeltatime + " del_t:" + (t - tFullShow));
-            // if ((t - tFullShow) < (currConfig.fullDeltatime - 300000) && !isSplash)
-            // {
-            //     if (cb != null)
-            //     {
-            //         cb(AD_State.AD_LOAD_FAIL);
-            //     }
-            //     return;
-            // }
-            // SdkUtil.logd("ads helper loadFull4ThisTurn 2");
-            //if (isFull4Show(false)) return;
 #if ENABLE_MYLOG
             SdkUtil.logd("ads helper loadFull4ThisTurn load");
 #endif
-            // if (isChangeToStaticAds) {
-            //     isSplash = true;
-            // }
             _cbFullLoad = cb;
             if (listStepShowFullCircle.Count == 0 && listStepShowFullRe.Count == 0)
             {
@@ -1471,6 +1715,10 @@ namespace mygame.sdk
             }
 
             loadFullCircle(isSplash, level);
+            if (currConfig.full2LevelStart >= level)
+            {
+                loadFull2(level, null);
+            }
         }
         private void loadFullCircle(bool isSplash, int lv)
         {
@@ -1568,6 +1816,125 @@ namespace mygame.sdk
                 }
             }
         }
+        private void loadFull2(int level, AdCallBack cb)
+        {
+            checkResumeAudio();
+            if (isRemoveAds == 1 || isNoAdsTime() || isDisableAds(1)) //vvv
+            {
+                SdkUtil.logd("ads helper loadFull2 is removee ads");
+                if (cb != null)
+                {
+                    cb(AD_State.AD_LOAD_FAIL);
+                }
+                return;
+            }
+            if (currConfig.full2LevelStart >= level)
+            {
+                SdkUtil.logd("ads helper loadFull2 is not pass level");
+                if (cb != null)
+                {
+                    cb(AD_State.AD_LOAD_FAIL);
+                }
+                return;
+            }
+            if (countFullShowOfDay <= 0)
+            {
+#if ENABLE_MYLOG
+                SdkUtil.logd("ads helper loadFull2 over num show of day, to=" + currConfig.fullTotalOfday);
+#endif
+                if (cb != null)
+                {
+                    cb(AD_State.AD_LOAD_FAIL);
+                }
+                return;
+            }
+
+#if ENABLE_MYLOG
+            SdkUtil.logd("ads helper loadFull2 load");
+#endif
+            if (listStepShowFull2Circle.Count == 0)
+            {
+                initListFull2();
+            }
+            if (idxFull2ShowCircle >= listStepShowFull2Circle.Count)
+            {
+                idxFull2ShowCircle = 0;
+            }
+
+            if (listStepShowFull2Circle.Count == 0)
+            {
+                if (cb != null)
+                {
+                    cb(AD_State.AD_LOAD_FAIL);
+                }
+                return;
+            }
+
+            loadFull2Circle(level, cb);
+        }
+        private void loadFull2Circle(int lv, AdCallBack cb)
+        {
+#if UNITY_EDITOR
+            if (!adsEditorCtr.isFullEditorLoading && !adsEditorCtr.isFullEditorLoaded)
+            {
+                loadFullEditor();
+            }
+            return;
+#endif      
+#if ENABLE_MYLOG
+            SdkUtil.logd("ads helper loadFull2Circle idx=" + idxFullLoad);
+#endif
+            level4ApplovinFull = lv;
+            int idxcurr = idxFull2Load;
+            idxFull2Load++;
+            if (idxFull2Load >= listStepShowFull2Circle.Count)
+            {
+                idxFull2Load = 0;
+            }
+
+            if (listStepShowFull2Circle != null && listStepShowFull2Circle.Count > idxcurr && idxcurr >= 0)
+            {
+                bool isNextLoad = false;
+                if (listStepShowFull2Circle[idxcurr].adsType == 6 && currConfig.stateShowAppLlovin == 2 && currConfig.levelShowAppLovin >= lv && listStepShowFull2Circle.Count > 1)
+                {
+#if ENABLE_MYLOG
+                        SdkUtil.logd("ads helper loadFull2Circle Applovin Nextload");
+#endif
+                    isNextLoad = true;
+                }
+                if (isNextLoad)
+                {
+                    AdsProcessCB.Instance().Enqueue(() =>
+                    {
+                        loadFull2Circle(lv, cb);
+                    });
+                }
+                else
+                {
+                    listStepShowFull2Circle[idxcurr].loadFull(false, (AD_State state) =>
+                    {
+                        if (state == AD_State.AD_LOAD_OK)
+                        {
+                            if (cb != null)
+                            {
+                                cb(AD_State.AD_LOAD_OK);
+                            }
+                        }
+                        else
+                        {
+                            loadFull2Circle(lv, cb);
+                        }
+                    });
+                }
+            }
+            else
+            {
+                if (cb != null)
+                {
+                    cb(AD_State.AD_LOAD_FAIL);
+                }
+            }
+        }
         public bool isFull4Show(bool isOpenAds, bool isAll, bool isExcluse)
         {
             checkResumeAudio();
@@ -1624,11 +1991,45 @@ namespace mygame.sdk
             }
             return false;
         }
+        public bool isFull24Show(bool isExcluse)
+        {
+            checkResumeAudio();
+            SdkUtil.logd($"ads helper isFull24Show isExcluse={isExcluse}");
+
+#if UNITY_EDITOR
+            return adsEditorCtr.isFullEditorLoaded;
+#endif
+            List<int> lex = null;
+            if (isExcluse)
+            {
+                lex = currConfig.fullExcluseShowRunning;
+            }
+            for (int i = 0; i < listStepShowFull2Circle.Count; i++)
+            {
+                if (listStepShowFull2Circle[i].getFullLoaded(false) > 0)
+                {
+                    if (lex != null && lex.Count > 0)
+                    {
+                        if (!lex.Contains(listStepShowFull2Circle[i].adsType))
+                        {
+                            SdkUtil.logd("ads helper isFull24Show m true = " + listStepShowFull2Circle[i].adsType);
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        SdkUtil.logd("ads helper isFull24Show m true = " + listStepShowFull2Circle[i].adsType);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         private int checkShowFull(bool isSplash, int level)
         {
             if (isSplash)
             {
-                long t1 = SdkUtil.systemCurrentMiliseconds();
+                long t1 = GameHelper.CurrentTimeMilisReal();
                 if (t1 - tFullShow <= 5000)
                 {
                     return 0;
@@ -1638,9 +2039,9 @@ namespace mygame.sdk
                     return 1;
                 }
             }
-            long dtstart = SdkUtil.systemCurrentMiliseconds() - timeOpenGame;
-            SdkUtil.logd("ads helper checkShowFull lvstart: curr=" + level + ", lvs=" + currConfig.fullLevelStart + ", dtstart=" + dtstart + ", dtcf=" + currConfig.fullTimeStart);
-            if ((level < currConfig.fullLevelStart || dtstart < currConfig.fullTimeStart) && !isSplash)
+            long dtstart = GameHelper.CurrentTimeMilisReal() - timeOpenGame;
+            SdkUtil.logd("ads helper checkShowFull lvstart: curr=" + level + ", lvs=" + currConfig.fullLevelStart + ", dtstart=" + dtstart + ", dtcf=" + currConfig.fullTimeStart + "ss=" + SDKManager.Instance.counSessionGame + "cfss=" + currConfig.fullSessionStart);
+            if ((SDKManager.Instance.counSessionGame < currConfig.fullSessionStart || level < currConfig.fullLevelStart || dtstart < currConfig.fullTimeStart) && !isSplash)
             {
                 return 0;
             }
@@ -1650,9 +2051,30 @@ namespace mygame.sdk
                 return -1;
             }
 
-            long t = SdkUtil.systemCurrentMiliseconds();
-            SdkUtil.logd("ads helper checkShowFull + d:" + currConfig.fullDeltatime + " dt:" + (t - tFullShow));
-            if (t - tFullShow < currConfig.fullDeltatime)
+            long t = GameHelper.CurrentTimeMilisReal();
+            SdkUtil.logd("ads helper checkShowFull + d:" + fullDeltalTimeCurr + " dt:" + (t - tFullShow));
+            if (t - tFullShow < fullDeltalTimeCurr)
+            {
+                return 2;
+            }
+            return 1;
+        }
+        private int checkShowFull2(int level)
+        {
+            SdkUtil.logd("ads helper checkShowFull2 lvstart: curr=" + level + ", lvs=" + currConfig.full2LevelStart);
+            if (level < currConfig.full2LevelStart)
+            {
+                return 0;
+            }
+            SdkUtil.logd("ads helper checkShowFull2 over num show of day, to=" + currConfig.fullTotalOfday);
+            if (countFullShowOfDay <= 0)
+            {
+                return -1;
+            }
+
+            long t = GameHelper.CurrentTimeMilisReal();
+            SdkUtil.logd("ads helper checkShowFull2 + d:" + currConfig.full2Deltatime + " dt:" + (t - tFull2Show));
+            if (t - tFull2Show < currConfig.full2Deltatime)
             {
                 return 2;
             }
@@ -1661,13 +2083,13 @@ namespace mygame.sdk
         public void setTimeShowFull()
         {
             checkResumeAudio();
-            tFullShow = SdkUtil.systemCurrentMiliseconds();
+            tFullShow = GameHelper.CurrentTimeMilisReal();
         }
         public bool checkFullWillShow(bool isSplash, int level, bool isShowOnPlaying, bool isExcluse, bool ischecknumover)
         {
             checkResumeAudio();
             SdkUtil.logd("ads helper checkFullWillShow issplash=" + isSplash + ", lv=" + level + ", isExcluse=" + isExcluse);
-            if (isRemoveAds == 1 || isNoAdsTime()) //vvv
+            if (isRemoveAds == 1 || isNoAdsTime() || isDisableAds(1)) //vvv
             {
                 SdkUtil.logd("ads helper checkFullWillShow is removed ads");
                 return false;
@@ -1684,7 +2106,7 @@ namespace mygame.sdk
 
             if (isAdsShowing)
             {
-                long tc = SdkUtil.systemCurrentMiliseconds();
+                long tc = GameHelper.CurrentTimeMilisReal();
                 if ((tc - tShowAdsCheckContinue) >= 30 * 1000)
                 {
                     SdkUtil.logd("ads helper checkFullWillShow isAdsShowing and overtime -> reset isAdsShowing=false");
@@ -1728,7 +2150,7 @@ namespace mygame.sdk
         {
             checkResumeAudio();
             SdkUtil.logd("ads helper showFull issplash=" + isSplash + ", lv=" + level + ", isExcluse=" + isExcluse);
-            if (isRemoveAds == 1 || isNoAdsTime() || isRemoveAdsInterval()) //vvv
+            if (isRemoveAds == 1 || isNoAdsTime() || isRemoveAdsInterval() || isDisableAds(1)) //vvv
             {
                 SdkUtil.logd("ads helper showFull is removed ads");
                 return false;
@@ -1744,7 +2166,7 @@ namespace mygame.sdk
 
             if (isAdsShowing)
             {
-                long tc = SdkUtil.systemCurrentMiliseconds();
+                long tc = GameHelper.CurrentTimeMilisReal();
                 if ((tc - tShowAdsCheckContinue) >= 30 * 1000)
                 {
                     SdkUtil.logd("ads helper showFull isAdsShowing and overtime -> reset isAdsShowing=false");
@@ -1804,7 +2226,7 @@ namespace mygame.sdk
             if (isFull4Show(isSplash, false, isExcluse))
             {
                 _cbFull = cb;
-                tFullShow = SdkUtil.systemCurrentMiliseconds();
+                tFullShow = GameHelper.CurrentTimeMilisReal();
                 deltaloverCountFull = 0;
                 subCountShowFull();
                 showFullEditor();
@@ -1824,7 +2246,7 @@ namespace mygame.sdk
             {
                 lex = currConfig.fullExcluseShowRunning;
             }
-            if (!showFullCircle(isSplash, showWhere, lex, isShowLoad))
+            if (!showFullCircle(isSplash, showWhere, lex, isShowLoad, isShowOnPlaying, ischecknumover))
             {
                 if (Application.internetReachability == NetworkReachability.NotReachable)
                 {
@@ -1858,6 +2280,106 @@ namespace mygame.sdk
                 return true;
             }
         }
+        private bool showFull2(int level, bool isShowLoad, string showWhere, bool isShowOnPlaying, bool ischecknumover, AdCallBack cb = null)
+        {
+            checkResumeAudio();
+            SdkUtil.logd("ads helper showFull2");
+            if (isRemoveAds == 1 || isNoAdsTime() || isRemoveAdsInterval() || isDisableAds(1)) //vvv
+            {
+                SdkUtil.logd("ads helper showFull2 is removed ads");
+                return false;
+            }
+            if (isShowOnPlaying)
+            {
+                return false;
+            }
+
+            int scheck = checkShowFull2(level);
+            if (scheck != 1)
+            {
+                if (scheck == 2)
+                {
+                    loadFull2(level, null);
+                }
+                return false;
+            }
+            if (ischecknumover)
+            {
+                deltaloverCountFull2++;
+                int overconfig = currConfig.full2Numover;
+                SdkUtil.logd("ads helper showFull2 count4ShowFull2 = " + deltaloverCountFull2 + "; numOverShowFull2 = " + overconfig);
+                if (deltaloverCountFull2 < overconfig) return false;
+            }
+
+            if (idxFull2ShowCircle >= listStepShowFull2Circle.Count)
+            {
+                idxFull2ShowCircle = 0;
+            }
+            FIRhelper.logEvent("show_ads_full_call");
+            FIRhelper.logEvent("show_ads_full2_call");
+            SdkUtil.logd("ads helper showFull2 call");
+            fullIsloadWhenErr = true;
+
+#if UNITY_EDITOR
+            if (isFull24Show(false))
+            {
+                _cbFull = cb;
+                tFullShow = GameHelper.CurrentTimeMilisReal();
+                deltaloverCountFull = 0;
+                tFull2Show = tFullShow;
+                deltaloverCountFull2 = 0;
+                subCountShowFull();
+                showFullEditor();
+                int countfull4pointe = PlayerPrefs.GetInt("count_full_4_point", 0);
+                countfull4pointe++;
+                AnalyticCommonParam.Instance.countShowAdsFull = countfull4pointe;
+                PlayerPrefs.SetInt("count_full_4_point", countfull4pointe);
+                checkLogVipAds();
+                return true;
+            }
+
+            loadFull2(levelCurr4Full, null);
+            return false;
+#endif
+            List<int> lex = null;
+            if (isShowOnPlaying)
+            {
+                lex = currConfig.fullExcluseShowRunning;
+            }
+            if (!showFull2Circle(false, showWhere, lex, true))
+            {
+                if (Application.internetReachability == NetworkReachability.NotReachable)
+                {
+                    FIRhelper.logEvent("show_ads_full_fail_not_con");
+                }
+                loadFull2(levelCurr4Full, null);
+                return false;
+            }
+            else
+            {
+                isFullCallMissCB = false;
+                deltaloverCountFull = 0;
+                deltaloverCountFull2 = 0;
+                int countfull4point = PlayerPrefs.GetInt("count_full_4_point", 0);
+                countfull4point++;
+                AnalyticCommonParam.Instance.countShowAdsFull = countfull4point;
+                PlayerPrefs.SetInt("count_full_4_point", countfull4point);
+                checkLogVipAds();
+                AdjustHelper.LogEvent(AdjustEventName.AdsFull);
+                AdjustHelper.LogEvent(AdjustEventName.AdsTotal);
+                Myapi.LogEventApi.Instance().LogAds(Myapi.AdsTypeLog.Interstitial, showWhere);//vvv
+#if UNITY_IOS || UNITY_IPHONE
+                statuschekAdsFullErr = 1;
+                statuschekAdsGiftErr = 0;
+                Invoke("waitStatusAdsShowErr", 3);
+                isPauseAudio = true;
+                AudioListener.pause = true;
+#elif UNITY_ANDROID
+                Invoke("waitCheckCbFullErr", 3);
+#endif
+                return true;
+            }
+        }
         private void waitCheckCbFullErr()
         {
             SdkUtil.logd("ads helper waitCheckCbFullErr 0");
@@ -1871,7 +2393,7 @@ namespace mygame.sdk
                 }
             }
         }
-        private bool showFullCircle(bool isSplash, string where, List<int> listExcluse, bool isShowLoad)
+        private bool showFullCircle(bool isSplash, string where, List<int> listExcluse, bool isShowLoad, bool isShowOnPlaying, bool ischecknumover)
         {
             SdkUtil.logd("ads helper showFullCircle idxFullShowCircle=" + idxFullShowCircle + ", idxFullShow=" + idxFullShowCircle);
             bool re = false;
@@ -1924,16 +2446,27 @@ namespace mygame.sdk
                                 isFullCallMissCB = true;
                                 statuschekAdsFullErr = 0;
                                 SDKManager.Instance.closeWaitShowFull();
-                                onclickCloseFullGift(false, true);
+                                onclickCloseFullGift(false, true, false);
+                                bool isshow2 = showFull2(levelCurr4Full, isShowLoad, where, isShowOnPlaying, ischecknumover);
+                                if (!isshow2)
+                                {
+                                    SdkUtil.logd("ads showFullCircle callback call close = " + _cbFullShow);
+                                    if (_cbFullShow != null)
+                                    {
+                                        _cbFullShow(stateshow);
+                                    }
+                                }
 #if UNITY_IOS || UNITY_IPHONE
                                 isPauseAudio = false;
                                 AudioListener.pause = false;
 #endif
                             }
-                            else if (stateshow == AD_State.AD_SHOW)
+                            else
                             {
-                                bgFullGift.SetActive(false);
-                                SDKManager.Instance.closeWaitShowFull();
+                                if (stateshow == AD_State.AD_SHOW)
+                                {
+                                    bgFullGift.SetActive(false);
+                                    SDKManager.Instance.closeWaitShowFull();
 #if UNITY_IOS || UNITY_IPHONE
                                 if (statuschekAdsFullErr == 1)
                                 {
@@ -1941,17 +2474,18 @@ namespace mygame.sdk
                                     Invoke("waitStatusAdsCloseErr", 5);
                                 }
 #endif
-                            }
-                            if (_cbFullShow != null)
-                            {
-                                _cbFullShow(stateshow);
+                                }
+                                if (_cbFullShow != null)
+                                {
+                                    _cbFullShow(stateshow);
+                                }
                             }
                         });
                         isShowFulled = true;
                         setIsAdsShowing(true);
                         typeFullGift = 0;
                         showTransFullGift();
-                        tFullShow = SdkUtil.systemCurrentMiliseconds();
+                        tFullShow = GameHelper.CurrentTimeMilisReal();
                         tShowAdsCheckContinue = tFullShow;
                         if (isShowLoad)
                         {
@@ -1996,16 +2530,27 @@ namespace mygame.sdk
                                 isFullCallMissCB = true;
                                 statuschekAdsFullErr = 0;
                                 SDKManager.Instance.closeWaitShowFull();
-                                onclickCloseFullGift(false, true);
+                                onclickCloseFullGift(false, true, false);
+                                bool isshow2 = showFull2(levelCurr4Full, isShowLoad, where, isShowOnPlaying, ischecknumover);
+                                if (!isshow2)
+                                {
+                                    SdkUtil.logd("ads showFullCircle callback call close = " + _cbFullShow);
+                                    if (_cbFullShow != null)
+                                    {
+                                        _cbFullShow(stateshow);
+                                    }
+                                }
 #if UNITY_IOS || UNITY_IPHONE
                                 isPauseAudio = false;
                                 AudioListener.pause = false;
 #endif
                             }
-                            else if (stateshow == AD_State.AD_SHOW)
+                            else
                             {
-                                bgFullGift.SetActive(false);
-                                SDKManager.Instance.closeWaitShowFull();
+                                if (stateshow == AD_State.AD_SHOW)
+                                {
+                                    bgFullGift.SetActive(false);
+                                    SDKManager.Instance.closeWaitShowFull();
 #if UNITY_IOS || UNITY_IPHONE
                                 if (statuschekAdsFullErr == 1)
                                 {
@@ -2013,17 +2558,18 @@ namespace mygame.sdk
                                     Invoke("waitStatusAdsCloseErr", 5);
                                 }
 #endif
-                            }
-                            if (_cbFullShow != null)
-                            {
-                                _cbFullShow(stateshow);
+                                }
+                                if (_cbFullShow != null)
+                                {
+                                    _cbFullShow(stateshow);
+                                }
                             }
                         });
                         isShowFulled = true;
                         setIsAdsShowing(true);
                         typeFullGift = 0;
                         showTransFullGift();
-                        tFullShow = SdkUtil.systemCurrentMiliseconds();
+                        tFullShow = GameHelper.CurrentTimeMilisReal();
                         tShowAdsCheckContinue = tFullShow;
                         if (isShowLoad)
                         {
@@ -2044,17 +2590,122 @@ namespace mygame.sdk
             }
             return re;
         }
+        private bool showFull2Circle(bool isSplash, string where, List<int> listExcluse, bool isShowLoad)
+        {
+            SdkUtil.logd("ads helper showFull2Circle idxFull2ShowCircle=" + idxFull2ShowCircle);
+            bool re = false;
+            setIsAdsShowing(false);
+            for (int ii = 0; ii < listStepShowFull2Circle.Count; ii++)
+            {
+                int idxcurr = idxFull2ShowCircle;
+                idxFull2ShowCircle++;
+                if (idxFull2ShowCircle >= listStepShowFull2Circle.Count)
+                {
+                    idxFull2ShowCircle = 0;
+                }
+                bool isShow = true;
+                if (listExcluse != null && listExcluse.Count > 0)
+                {
+                    if (listExcluse.Contains(listStepShowFull2Circle[idxcurr].adsType))
+                    {
+                        if (listStepShowFull2Circle[idxcurr].adsType == 6)
+                        {
+                            if (listStepShowFull2Circle[idxcurr].getFullLoaded(isSplash) > 0)
+                            {
+                                if (listExcluse.Contains(listStepShowFull2Circle[idxcurr].adsFullSubType))
+                                {
+                                    isShow = false;
+                                }
+                            }
+                            else
+                            {
+                                isShow = false;
+                            }
+                        }
+                        else
+                        {
+                            isShow = false;
+                        }
+                    }
+                }
 
-        public void onclickCloseFullGift(bool isCallCb, bool isFull)
+                if (isShow)
+                {
+                    if (listStepShowFull2Circle[idxcurr].getFullLoaded(isSplash) > 0)
+                    {
+                        subCountShowFull();
+                        listStepShowFull2Circle[idxcurr].showFull(isSplash, (stateshow) =>
+                        {
+                            SdkUtil.logd("ads showFull2Circle callback ads=" + listStepShowFull2Circle[idxcurr].adsType + ", state=" + stateshow.ToString());
+                            if (stateshow == AD_State.AD_CLOSE || stateshow == AD_State.AD_SHOW_FAIL)
+                            {
+                                setIsAdsShowing(false);
+                                isFullCallMissCB = true;
+                                statuschekAdsFullErr = 0;
+                                SDKManager.Instance.closeWaitShowFull();
+                                onclickCloseFullGift(false, true, true);
+                                SdkUtil.logd("ads showFull2Circle callback call close = " + _cbFullShow);
+                                if (_cbFullShow != null)
+                                {
+                                    _cbFullShow(stateshow);
+                                }
+#if UNITY_IOS || UNITY_IPHONE
+                                isPauseAudio = false;
+                                AudioListener.pause = false;
+#endif
+                            }
+                        });
+                        isShowFulled = true;
+                        setIsAdsShowing(true);
+                        typeFullGift = 0;
+                        showTransFullGift();
+                        tFullShow = GameHelper.CurrentTimeMilisReal();
+                        tFull2Show = tFullShow;
+                        tShowAdsCheckContinue = tFullShow;
+                        if (isShowLoad)
+                        {
+                            SDKManager.Instance.showWait4ShowFull();
+                        }
+                        re = true;
+                        FIRhelper.logEvent("show_ads_full");
+                        FIRhelper.logEvent("show_ads_full2");
+                        if (where != null && where.CompareTo("OpenAds") == 0)
+                        {
+                            FIRhelper.logEvent("show_ads_full_open");
+                        }
+                        FIRhelper.logEvent("show_ads_full_" + listStepShowFull2Circle[idxcurr].adsType);
+                        FIRhelper.logEvent("show_ads_total");
+                        logCountTotal();
+                        break;
+                    }
+                    else if (fullIsloadWhenErr)
+                    {
+                        //fullIsloadWhenErr = false;
+                        if (listStepShowFull2Circle[idxcurr].adsType != 6 || currConfig.stateShowAppLlovin != 2 || currConfig.levelShowAppLovin < levelCurr4Full || (listStepShowFullRe.Count == 0 && listStepShowFull2Circle.Count <= 1))
+                        {
+                            SdkUtil.logd("ads helper showFull2Circle fullIsloadWhenErr=" + idxcurr);
+                            listStepShowFull2Circle[idxcurr].loadFull(isSplash, null);
+                        }
+                    }
+                }
+            }
+            return re;
+        }
+
+        public void onclickCloseFullGift(bool isCallCb, bool isFull, bool isFull2)
         {
             bgFullGift.SetActive(false);
             if (isFull)
             {
-                tFullShow = SdkUtil.systemCurrentMiliseconds();
+                tFullShow = GameHelper.CurrentTimeMilisReal();
+                if (isFull2)
+                {
+                    tFull2Show = tFullShow;
+                }
             }
             else
             {
-                tGiftShow = SdkUtil.systemCurrentMiliseconds();
+                tGiftShow = GameHelper.CurrentTimeMilisReal();
             }
             if (isCallCb)
             {
@@ -2095,6 +2746,11 @@ namespace mygame.sdk
         public void loadGift4ThisTurn(int lv, AdCallBack cb)
         {
             SdkUtil.logd("ads helper loadGift4ThisTurn 1");
+            if (isDisableAds(2)) //vvv
+            {
+                SdkUtil.logd("ads helper loadGift4ThisTurn is dis");
+                return;
+            }
             checkResumeAudio();
             _cbGiftLoad = null;
 
@@ -2104,7 +2760,7 @@ namespace mygame.sdk
                 return;
             }
 
-            // long t = SdkUtil.systemCurrentMiliseconds();
+            // long t = GameHelper.CurrentTimeMilisReal();
             // SdkUtil.logd("ads helper loadGift4ThisTurn + d:" + currConfig.giftDeltatime + " del_t:" + (t - tGiftShow));
             // if ((t - tGiftShow) < (currConfig.giftDeltatime - 30000)) return;
             // SdkUtil.logd("ads helper loadGift4ThisTurn 2");
@@ -2240,6 +2896,11 @@ namespace mygame.sdk
         public bool isGift4Show(bool isAll)
         {
             SdkUtil.logd("ads helper isGift4Show 1");
+            if (isDisableAds(2)) //vvv
+            {
+                SdkUtil.logd("ads helper isGift4Show is dis");
+                return false;
+            }
             checkResumeAudio();
 #if UNITY_EDITOR
             return adsEditorCtr.isGiftEditorLoaded;
@@ -2271,7 +2932,7 @@ namespace mygame.sdk
                 return -1;
             }
 
-            long t = SdkUtil.systemCurrentMiliseconds();
+            long t = GameHelper.CurrentTimeMilisReal();
             SdkUtil.logd("ads helper checkShowGift + d:" + currConfig.giftDeltatime + " dt:" + (t - tGiftShow));
             if (t - tGiftShow < currConfig.giftDeltatime)
             {
@@ -2279,12 +2940,29 @@ namespace mygame.sdk
             }
             return 1;
         }
+        public int showGiftGuide(int lv, string showWhere, AdCallBack cb)
+        {
+            FIRhelper.logEvent("click_guide_ads_total");
+            FIRhelper.logEvent("click_guide_ads_" + showWhere);
+            int re = showGift(lv, showWhere, cb);
+            if (re == 0)
+            {
+                FIRhelper.logEvent("click_guide_ads_ok");
+            }
+
+            return re;
+        }
         public int showGift(int lv, string showWhere, AdCallBack cb)
         {
+            if (isDisableAds(2)) //vvv
+            {
+                SdkUtil.logd("ads helper showGift is dis");
+                return -4;
+            }
             checkResumeAudio();
             if (isAdsShowing)
             {
-                long tc = SdkUtil.systemCurrentMiliseconds();
+                long tc = GameHelper.CurrentTimeMilisReal();
                 if ((tc - tShowAdsCheckContinue) >= 30 * 1000)
                 {
                     SdkUtil.logd("ads helper showGift isAdsShowing and overtime -> reset isAdsShowing=false");
@@ -2322,7 +3000,7 @@ namespace mygame.sdk
             if (adsEditorCtr.isGiftEditorLoaded)
             {
                 _cbGift = cb;
-                tGiftShow = SdkUtil.systemCurrentMiliseconds();
+                tGiftShow = GameHelper.CurrentTimeMilisReal();
                 tShowAdsCheckContinue = tGiftShow;
                 subCountShowGift();
                 showGiftEditor();
@@ -2475,10 +3153,10 @@ namespace mygame.sdk
                             setIsAdsShowing(false);
                             isGiftCallMissCB = true;
                             statuschekAdsGiftErr = 0;
-                            onclickCloseFullGift(false, false);
+                            onclickCloseFullGift(false, false, false);
 #if UNITY_IOS || UNITY_IPHONE
-                            isPauseAudio = false;
-                            AudioListener.pause = false;
+                                isPauseAudio = false;
+                                AudioListener.pause = false;
 #endif
                         }
                         else if (stateshow == AD_State.AD_SHOW)
@@ -2500,7 +3178,7 @@ namespace mygame.sdk
                     setIsAdsShowing(true);
                     typeFullGift = 1;
                     showTransFullGift();
-                    tGiftShow = SdkUtil.systemCurrentMiliseconds();
+                    tGiftShow = GameHelper.CurrentTimeMilisReal();
                     tShowAdsCheckContinue = tGiftShow;
                     FIRhelper.logEvent("show_ads_reward");
                     FIRhelper.logEvent("show_ads_reward_" + listStepShowGiftCircle[idxcurr].adsType);
@@ -2535,7 +3213,7 @@ namespace mygame.sdk
                                 setIsAdsShowing(false);
                                 isGiftCallMissCB = true;
                                 statuschekAdsGiftErr = 0;
-                                onclickCloseFullGift(false, false);
+                                onclickCloseFullGift(false, false, false);
 #if UNITY_IOS || UNITY_IPHONE
                                 isPauseAudio = false;
                                 AudioListener.pause = false;
@@ -2560,7 +3238,7 @@ namespace mygame.sdk
                         setIsAdsShowing(true);
                         typeFullGift = 1;
                         showTransFullGift();
-                        tGiftShow = SdkUtil.systemCurrentMiliseconds();
+                        tGiftShow = GameHelper.CurrentTimeMilisReal();
                         tShowAdsCheckContinue = tGiftShow;
                         re = true;
                         FIRhelper.logEvent("show_ads_reward");

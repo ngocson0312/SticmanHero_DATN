@@ -111,7 +111,8 @@ const char* const MyAdmobMyBridge_NAME = "AdsAdmobMyBridge";
         self.bannerView.rootViewController = vcon;
         self.bannerView.delegate = self;
         self.bannerView.paidEventHandler = ^(GADAdValue * _Nonnull value) {
-            NSString* paidParam = [NSString stringWithFormat:@"%ld, %@, %lld", [value precision], [value currencyCode], [[value value] longLongValue]];
+            long lva = [[value value] doubleValue] * 1000000000;
+            NSString* paidParam = [NSString stringWithFormat:@"%ld;%@;%ld", [value precision], [value currencyCode], lva];
             UnitySendMessage(MyAdmobMyBridge_NAME, "iOSCBBannerPaid", [paidParam UTF8String]);
         };
         self.bannerView.hidden = NO;
@@ -218,7 +219,8 @@ const char* const MyAdmobMyBridge_NAME = "AdsAdmobMyBridge";
                 self.interstitial.fullScreenContentDelegate = self;
                 UnitySendMessage(MyAdmobMyBridge_NAME, "iOSCBFullLoaded", "");
                 self.interstitial.paidEventHandler = ^(GADAdValue * _Nonnull value) {
-                    NSString* paidParam = [NSString stringWithFormat:@"%ld, %@, %lld", [value precision], [value currencyCode], [[value value] longLongValue]];
+                    long lva = [[value value] doubleValue] * 1000000000;
+                    NSString* paidParam = [NSString stringWithFormat:@"%ld;%@;%ld", [value precision], [value currencyCode], lva];
                     UnitySendMessage(MyAdmobMyBridge_NAME, "iOSCBFullPaid", [paidParam UTF8String]);
                 };
             }
@@ -261,7 +263,8 @@ const char* const MyAdmobMyBridge_NAME = "AdsAdmobMyBridge";
                 self.rewardedAd.fullScreenContentDelegate = self;
                 UnitySendMessage(MyAdmobMyBridge_NAME, "iOSCBGiftLoaded", "");
                 self.rewardedAd.paidEventHandler = ^(GADAdValue * _Nonnull value) {
-                    NSString* paidParam = [NSString stringWithFormat:@"%ld, %@, %lld", [value precision], [value currencyCode], [[value value] longLongValue]];
+                    long lva = [[value value] doubleValue] * 1000000000;
+                    NSString* paidParam = [NSString stringWithFormat:@"%ld;%@;%ld", [value precision], [value currencyCode], lva];
                     UnitySendMessage(MyAdmobMyBridge_NAME, "iOSCBGiftPaid", [paidParam UTF8String]);
                 };
             }
@@ -442,3 +445,5 @@ bool showGiftNative() {
 }
 
 @end
+
+

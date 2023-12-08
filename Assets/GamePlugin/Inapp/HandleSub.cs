@@ -44,7 +44,7 @@ public class HandleSub : MonoBehaviour
                 {
                     Debug.Log($"mysdk: inapp HandleSub handleFirstSub: RCV {item.Value.skuId}");
                     item.Value.countRcv = 1;
-                    item.Value.dayDailyRcv = SdkUtil.systemCurrentMiliseconds() / 1000;
+                    item.Value.dayDailyRcv = GameHelper.CurrentTimeMilisReal() / 1000;
                     InappHelper.Instance.handleSub(item.Value.skuId, 1);
                 }
                 item.Value.saveData();
@@ -61,7 +61,7 @@ public class HandleSub : MonoBehaviour
                 if (isRcvSubOfDay(item.Value.dayDailyRcv) && item.Value.countRcv < item.Value.objInapp.periodSub)
                 {
                     item.Value.countRcv++;
-                    item.Value.dayDailyRcv = SdkUtil.systemCurrentMiliseconds() / 1000;
+                    item.Value.dayDailyRcv = GameHelper.CurrentTimeMilisReal() / 1000;
                     Debug.Log($"mysdk: inapp HandleSub handleDailySub: RCV {item.Value.skuId} dayDailyRcv={item.Value.dayDailyRcv}");
                     if (item.Value.countRcv >= item.Value.objInapp.periodSub)
                     {
@@ -97,7 +97,7 @@ public class HandleSub : MonoBehaviour
         reSub.statusSub = 1;
         reSub.countRcv = 0;
         reSub.dayDailyRcv = 0;
-        reSub.purchaseDate = SdkUtil.systemCurrentMiliseconds() / 1000;
+        reSub.purchaseDate = GameHelper.CurrentTimeMilisReal() / 1000;
         reSub.purchaseExpire = reSub.purchaseDate + obinapp.periodSub * 24 * 3600;
         Debug.Log($"mysdk: inapp HandleSub onBuySubSuccess dayDailyRcv={reSub.dayDailyRcv}, purchaseDate={reSub.purchaseDate}, reSub.purchaseExpire={reSub.purchaseExpire}, periodSub={obinapp.periodSub}");
         reSub.saveData();
@@ -121,11 +121,11 @@ public class HandleSub : MonoBehaviour
             reSub.statusSub = 1;
             reSub.countRcv = -1;
             reSub.dayDailyRcv = 0;
-            reSub.purchaseDate = SdkUtil.systemCurrentMiliseconds() / 1000;
+            reSub.purchaseDate = GameHelper.CurrentTimeMilisReal() / 1000;
             listSubs.Add(obinapp.id, reSub);
         }
-        reSub.purchaseDate = SdkUtil.TimeStampFromDateTime(subinfo.getPurchaseDate());
-        reSub.purchaseExpire = SdkUtil.TimeStampFromDateTime(subinfo.getExpireDate());
+        reSub.purchaseDate = SdkUtil.toTimestamp(subinfo.getPurchaseDate());
+        reSub.purchaseExpire = SdkUtil.toTimestamp(subinfo.getExpireDate());
         if (subinfo.isExpired() == Result.True)
         {
             Debug.Log($"mysdk: inapp ReceiveSubscriptionProduct:{obinapp.id} isExpired");
@@ -139,7 +139,7 @@ public class HandleSub : MonoBehaviour
         {
             if (reSub.countRcv == -1)
             {
-                long tnow = SdkUtil.systemCurrentMiliseconds() / 1000;
+                long tnow = GameHelper.CurrentTimeMilisReal() / 1000;
                 int dd = SdkUtil.SubDay(tnow, reSub.purchaseDate);
                 if (dd == 0)
                 {
@@ -152,7 +152,7 @@ public class HandleSub : MonoBehaviour
                 reSub.countRcv = dd;
                 reSub.dayDailyRcv = 0;
                 reSub.saveData();
-                Debug.Log($"mysdk: inapp ReceiveSubscriptionProduct:{obinapp.id} not handle reSub.ount={reSub.countRcv} dayDailyRcv={reSub.dayDailyRcv}-{SdkUtil.DateTimeFromTimeStamp(reSub.dayDailyRcv)}");
+                Debug.Log($"mysdk: inapp ReceiveSubscriptionProduct:{obinapp.id} not handle reSub.ount={reSub.countRcv} dayDailyRcv={reSub.dayDailyRcv}-{SdkUtil.timeStamp2DateTime(reSub.dayDailyRcv)}");
                 handleFirstSub();
                 handleDailySub();
             }
@@ -160,8 +160,8 @@ public class HandleSub : MonoBehaviour
             {
                 int dd = SdkUtil.SubDay(reSub.purchaseExpire, reSub.dayDailyRcv);
                 Debug.Log($"mysdk: inapp ReceiveSubscriptionProduct:{obinapp.id} exist del day ex vs drcv = {dd}");
-                Debug.Log($"mysdk: inapp ReceiveSubscriptionProduct purchaseExpire={reSub.purchaseExpire}-{SdkUtil.DateTimeFromTimeStamp(reSub.purchaseExpire)}");
-                Debug.Log($"mysdk: inapp ReceiveSubscriptionProduct dayDailyRcv={reSub.dayDailyRcv}-{SdkUtil.DateTimeFromTimeStamp(reSub.dayDailyRcv)}");
+                Debug.Log($"mysdk: inapp ReceiveSubscriptionProduct purchaseExpire={reSub.purchaseExpire}-{SdkUtil.timeStamp2DateTime(reSub.purchaseExpire)}");
+                Debug.Log($"mysdk: inapp ReceiveSubscriptionProduct dayDailyRcv={reSub.dayDailyRcv}-{SdkUtil.timeStamp2DateTime(reSub.dayDailyRcv)}");
                 if (dd > reSub.objInapp.periodSub)
                 {
                     Debug.Log($"mysdk: inapp ReceiveSubscriptionProduct:{obinapp.id} renew");
@@ -185,7 +185,7 @@ public class HandleSub : MonoBehaviour
     {
         bool re = false;
         DateTime dnow = DateTime.Now;
-        DateTime drcv = SdkUtil.DateTimeFromTimeStamp(tmpRcv);
+        DateTime drcv = SdkUtil.timeStamp2DateTime(tmpRcv);
         if (dnow.Year > drcv.Year)
         {
             re = true;
@@ -241,7 +241,7 @@ public class HandleSub : MonoBehaviour
             }
             else
             {
-                long dnow = SdkUtil.systemCurrentMiliseconds() / 1000;
+                long dnow = GameHelper.CurrentTimeMilisReal() / 1000;
                 long sub = dnow - listSubs[skuid].purchaseExpire;
                 if (sub >= 0)
                 {
@@ -272,14 +272,14 @@ public class SubResultOb
         skuId = sid;
         objInapp = obj;
         countRcv = 0;
-        purchaseDate = SdkUtil.systemCurrentMiliseconds() / 1000;
+        purchaseDate = GameHelper.CurrentTimeMilisReal() / 1000;
         purchaseExpire = purchaseDate;
         dayDailyRcv = purchaseDate;
     }
 
     public void checkExpire()
     {
-        long dnow = SdkUtil.systemCurrentMiliseconds() / 1000;
+        long dnow = GameHelper.CurrentTimeMilisReal() / 1000;
         long dd = dnow - purchaseExpire;
         if (dd >= 0)
         {
@@ -309,18 +309,18 @@ public class SubResultOb
             if (arrday.Length == 3)
             {
                 purchaseDate = long.Parse(arrday[0]);
-                Debug.Log($"mysdk: inapp HandleSub loadData {skuId} purchaseDate={purchaseDate}-{SdkUtil.DateTimeFromTimeStamp(purchaseDate)}");
+                Debug.Log($"mysdk: inapp HandleSub loadData {skuId} purchaseDate={purchaseDate}-{SdkUtil.timeStamp2DateTime(purchaseDate)}");
                 purchaseExpire = long.Parse(arrday[1]);
-                Debug.Log($"mysdk: inapp HandleSub loadData {skuId} purchaseExpire={purchaseExpire}-{SdkUtil.DateTimeFromTimeStamp(purchaseExpire)}");
+                Debug.Log($"mysdk: inapp HandleSub loadData {skuId} purchaseExpire={purchaseExpire}-{SdkUtil.timeStamp2DateTime(purchaseExpire)}");
                 dayDailyRcv = long.Parse(arrday[2]);
-                Debug.Log($"mysdk: inapp HandleSub loadData {skuId} dayDailyRcv={dayDailyRcv}-{SdkUtil.DateTimeFromTimeStamp(dayDailyRcv)}");
+                Debug.Log($"mysdk: inapp HandleSub loadData {skuId} dayDailyRcv={dayDailyRcv}-{SdkUtil.timeStamp2DateTime(dayDailyRcv)}");
                 checkExpire();
             }
             else
             {
                 countRcv = 0;
                 statusSub = 0;
-                purchaseDate = SdkUtil.systemCurrentMiliseconds() / 1000;
+                purchaseDate = GameHelper.CurrentTimeMilisReal() / 1000;
                 purchaseExpire = purchaseDate;
                 dayDailyRcv = purchaseDate;
                 Debug.Log($"mysdk: inapp HandleSub loadData 1 {skuId} purchaseDate={purchaseDate} purchaseExpire={purchaseExpire} dayDailyRcv={dayDailyRcv}");
@@ -330,7 +330,7 @@ public class SubResultOb
         {
             countRcv = 0;
             statusSub = 0;
-            purchaseDate = SdkUtil.systemCurrentMiliseconds() / 1000;
+            purchaseDate = GameHelper.CurrentTimeMilisReal() / 1000;
             purchaseExpire = purchaseDate;
             dayDailyRcv = purchaseDate;
             Debug.Log($"mysdk: inapp HandleSub loadData 2 {skuId} purchaseDate={purchaseDate} purchaseExpire={purchaseExpire} dayDailyRcv={dayDailyRcv}");

@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5043898225998359147}
-  - component: {fileID: 2832529172853193354}
+  - component: {fileID: 4458524055216635199}
   m_Layer: 0
-  m_Name: E_SPIDERHANGING
+  m_Name: SpiderHanging
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -27,11 +27,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 68.5, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2832529172853193354
+--- !u!114 &4458524055216635199
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,17 +41,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 70797901314805690}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 8
-  enemyStats:
-    health: 136
-    damage: 78
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 3
-  firstDelay: 1
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: SpiderHanging
+  coinReward: 0
 --- !u!1 &466475117652331584
 GameObject:
   m_ObjectHideFlags: 0
@@ -77,6 +80,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 806784156595474975}
   - {fileID: 7051119136250395836}
@@ -94,9 +98,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7640080756294728392}
-  - component: {fileID: 8725407633208408250}
+  - component: {fileID: 1451683897676996952}
   m_Layer: 0
-  m_Name: E_ENDERMAN
+  m_Name: Enderman
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -112,11 +116,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 49.08, y: -1.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8725407633208408250
+--- !u!114 &1451683897676996952
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125,17 +130,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 972570847530100700}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  enemyStats:
-    health: 312
-    damage: 58
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Enderman
+  coinReward: 0
 --- !u!1 &1025390568382941164
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,9 +152,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7799327546485669428}
-  - component: {fileID: 7965657330521876025}
+  - component: {fileID: 6747722870341632862}
   m_Layer: 0
-  m_Name: E_SPIDER
+  m_Name: Spider
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -163,11 +170,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 25.09, y: -4.88, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7965657330521876025
+--- !u!114 &6747722870341632862
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -176,17 +184,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1025390568382941164}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
-  enemyStats:
-    health: 234
-    damage: 78
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Spider
+  coinReward: 0
 --- !u!1 &1530451605893539634
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,6 +223,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 25.54, y: -5.38, z: 3}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 10
@@ -226,9 +237,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 561181211959415251}
-  - component: {fileID: 7483234000537643695}
+  - component: {fileID: 4344888680385596239}
   m_Layer: 0
-  m_Name: E_ENDERMAN
+  m_Name: Enderman
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -244,11 +255,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 39.68, y: -1.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7483234000537643695
+--- !u!114 &4344888680385596239
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -257,17 +269,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1641290286663067431}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  enemyStats:
-    health: 312
-    damage: 58
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Enderman
+  coinReward: 0
 --- !u!1 &2048161069048339095
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,6 +310,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -21.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3016840096561287592}
   m_RootOrder: 1
@@ -3095,6 +3110,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -3158,6 +3174,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -1.99, z: 26.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8823625760774611390}
   - {fileID: 4898439067210487416}
@@ -3173,7 +3190,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7051119136250395836}
-  - component: {fileID: 3905754305861880149}
   m_Layer: 0
   m_Name: SavePoint (1)
   m_TagString: Untagged
@@ -3191,23 +3207,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 96.5, y: 1.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4607863181406058346}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3905754305861880149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2840935697078326901}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac8ed5dc458cf204e97fd5920561f778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 0
 --- !u!1 &2882175133202754882
 GameObject:
   m_ObjectHideFlags: 0
@@ -3217,9 +3221,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4520350350878012612}
-  - component: {fileID: 7429065645969280964}
+  - component: {fileID: 2907686295562217474}
   m_Layer: 0
-  m_Name: E_SPIDER
+  m_Name: Spider
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3235,11 +3239,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 88.21, y: -2.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7429065645969280964
+--- !u!114 &2907686295562217474
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3248,17 +3253,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 2882175133202754882}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
-  enemyStats:
-    health: 234
-    damage: 78
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Spider
+  coinReward: 0
 --- !u!1 &2895408208807033591
 GameObject:
   m_ObjectHideFlags: 0
@@ -3285,6 +3292,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 2.6, y: -4.15, z: 3}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 9
@@ -3315,6 +3323,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 0
@@ -3328,9 +3337,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7834407259165225802}
-  - component: {fileID: 6556987872454995324}
+  - component: {fileID: 6571335401821505758}
   m_Layer: 0
-  m_Name: E_ENDERMAN
+  m_Name: Blazer
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3346,11 +3355,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 107.64, y: -3.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6556987872454995324
+--- !u!114 &6571335401821505758
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3359,17 +3369,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 3635683266817148348}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  enemyStats:
-    health: 312
-    damage: 58
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Blazer
+  coinReward: 0
 --- !u!1 &3668632382630210474
 GameObject:
   m_ObjectHideFlags: 0
@@ -3379,7 +3391,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 806784156595474975}
-  - component: {fileID: 437782140907052442}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -3397,23 +3408,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 196, y: -6.95, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4607863181406058346}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &437782140907052442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3668632382630210474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac8ed5dc458cf204e97fd5920561f778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 4
 --- !u!1 &3723510136719770874
 GameObject:
   m_ObjectHideFlags: 0
@@ -3423,9 +3422,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 461464027653914824}
-  - component: {fileID: 4868535855833962316}
+  - component: {fileID: 3140849796178397612}
   m_Layer: 0
-  m_Name: E_SPIDERHANGING
+  m_Name: SpiderHanging
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3441,11 +3440,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 55.5, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4868535855833962316
+--- !u!114 &3140849796178397612
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3454,17 +3454,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 3723510136719770874}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 8
-  enemyStats:
-    health: 136
-    damage: 78
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 3
-  firstDelay: 0.8
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: SpiderHanging
+  coinReward: 0
 --- !u!1 &4070582294920661156
 GameObject:
   m_ObjectHideFlags: 0
@@ -3493,6 +3495,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 3
@@ -3598,6 +3601,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -3644,9 +3648,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1213277300428346634}
-  - component: {fileID: 214151889452535408}
+  - component: {fileID: 8432200350480480727}
   m_Layer: 0
-  m_Name: E_ENDERMANLASER
+  m_Name: Enderman
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3662,11 +3666,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 133.1, y: -3.27, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &214151889452535408
+--- !u!114 &8432200350480480727
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3675,17 +3680,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 4219386554859425813}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 15
-  enemyStats:
-    health: 214
-    damage: 78
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Enderman
+  coinReward: 0
 --- !u!1 &4360164059490420425
 GameObject:
   m_ObjectHideFlags: 0
@@ -3712,6 +3719,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 57.93, y: -1.28, z: 3}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 11
@@ -3742,6 +3750,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 107.73, y: -4.95, z: 3}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 12
@@ -3755,9 +3764,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6352091915329596148}
-  - component: {fileID: 4948428280426316213}
+  - component: {fileID: 5939199355906779610}
   m_Layer: 0
-  m_Name: E_SPIDERHANGING
+  m_Name: SpiderHanging
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3773,11 +3782,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 13.48, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4948428280426316213
+--- !u!114 &5939199355906779610
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3786,17 +3796,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 4425082639855365568}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 8
-  enemyStats:
-    health: 136
-    damage: 78
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 3
-  firstDelay: 1
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: SpiderHanging
+  coinReward: 0
 --- !u!1 &4626016023983866553
 GameObject:
   m_ObjectHideFlags: 0
@@ -3806,9 +3818,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8771722154017888701}
-  - component: {fileID: 5009138107522469266}
+  - component: {fileID: 1908545684370844956}
   m_Layer: 0
-  m_Name: E_SPIDERHANGING
+  m_Name: SpiderHanging
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3824,11 +3836,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 16.5, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5009138107522469266
+--- !u!114 &1908545684370844956
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3837,17 +3850,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 4626016023983866553}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 8
-  enemyStats:
-    health: 136
-    damage: 78
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 3
-  firstDelay: 1.5
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: SpiderHanging
+  coinReward: 0
 --- !u!1 &4804084547799919357
 GameObject:
   m_ObjectHideFlags: 0
@@ -3857,9 +3872,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3516643289232670921}
-  - component: {fileID: 1587361320888822217}
+  - component: {fileID: 8906981780145146206}
   m_Layer: 0
-  m_Name: E_SPIDERHANGING
+  m_Name: SpiderHanging
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3875,11 +3890,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 65.56, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1587361320888822217
+--- !u!114 &8906981780145146206
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3888,17 +3904,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 4804084547799919357}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 8
-  enemyStats:
-    health: 136
-    damage: 78
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 3
-  firstDelay: 1.5
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: SpiderHanging
+  coinReward: 0
 --- !u!1 &5732591550803286426
 GameObject:
   m_ObjectHideFlags: 0
@@ -3930,6 +3948,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 1
@@ -60857,6 +60876,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -61619,6 +61639,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 2.23}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 2
@@ -71670,6 +71691,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -71717,7 +71739,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5732591552421084465}
   - component: {fileID: 5732591552421084464}
-  - component: {fileID: 2470538631793914950}
+  - component: {fileID: -6242240977563812665}
   m_Layer: 0
   m_Name: Level 29
   m_TagString: Untagged
@@ -71735,6 +71757,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8391883043269399981}
   - {fileID: 5732591550803286427}
@@ -71764,7 +71787,7 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!114 &2470538631793914950
+--- !u!114 &-6242240977563812665
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -71773,44 +71796,41 @@ MonoBehaviour:
   m_GameObject: {fileID: 5732591552421084467}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72ba555d689d6e54b892cb9c99e5274c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4923af3629e30674f926a50600f2c596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelIndex: 29
-  playerPoint: {fileID: 8391883043269399981}
-  typeThemes: 3
-  isLevelBoss: 0
-  bossFightArena: {fileID: 0}
-  listEnemies:
-  - {fileID: 8929719709056760959}
-  - {fileID: 4948428280426316213}
-  - {fileID: 4868535855833962316}
-  - {fileID: 5009138107522469266}
-  - {fileID: 2832529172853193354}
-  - {fileID: 1587361320888822217}
-  - {fileID: 2046449000581925223}
-  - {fileID: 3758178583777097692}
-  - {fileID: 6031933445653325719}
-  - {fileID: 8725407633208408250}
-  - {fileID: 5468689164196919385}
-  - {fileID: 6290204555872223286}
-  - {fileID: 4761411831886562719}
-  - {fileID: 7429065645969280964}
-  - {fileID: 6556987872454995324}
-  - {fileID: 7483234000537643695}
-  - {fileID: 4297634561603797431}
-  - {fileID: 214151889452535408}
-  - {fileID: 7965657330521876025}
-  listItems:
-  - {fileID: 437782140907052442}
-  - {fileID: 3905754305861880149}
-  - {fileID: 2962364305885942013}
-  - {fileID: 6277115781251897758}
-  listPosAdmix:
+  spawnPoint: {fileID: 8391883043269399981}
+  minX: -50
+  maxX: 50
+  minY: -50
+  maxY: 50
+  enemySpawners:
+  - {fileID: 7148173712387003170}
+  - {fileID: 5939199355906779610}
+  - {fileID: 3140849796178397612}
+  - {fileID: 1908545684370844956}
+  - {fileID: 4458524055216635199}
+  - {fileID: 8906981780145146206}
+  - {fileID: 2382825070499233438}
+  - {fileID: 4979371598608010898}
+  - {fileID: 7025244249828939859}
+  - {fileID: 1451683897676996952}
+  - {fileID: 6028325507597539962}
+  - {fileID: 2957600071878594048}
+  - {fileID: 8327913179454140459}
+  - {fileID: 2907686295562217474}
+  - {fileID: 6571335401821505758}
+  - {fileID: 4344888680385596239}
+  - {fileID: 4977506598667523173}
+  - {fileID: 8432200350480480727}
+  - {fileID: 6747722870341632862}
+  bossFightArena: []
+  admixAnchors:
   - {fileID: 5028952690302708501}
   - {fileID: 7892480772396618644}
   - {fileID: 4055050118233852854}
   - {fileID: 1093513748833807133}
+  doorAnchor: {fileID: 806784156595474975}
 --- !u!1 &5788821110177774378
 GameObject:
   m_ObjectHideFlags: 0
@@ -71820,9 +71840,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4162165881170548353}
-  - component: {fileID: 8929719709056760959}
+  - component: {fileID: 7148173712387003170}
   m_Layer: 0
-  m_Name: E_CREEPER
+  m_Name: Creeper
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -71838,11 +71858,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 60.29, y: 0.20000005, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8929719709056760959
+--- !u!114 &7148173712387003170
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -71851,17 +71872,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 5788821110177774378}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
-  enemyStats:
-    health: 390
-    damage: 78
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Creeper
+  coinReward: 0
 --- !u!1 &6360351176388527920
 GameObject:
   m_ObjectHideFlags: 0
@@ -71871,9 +71894,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 543454337592062347}
-  - component: {fileID: 5468689164196919385}
+  - component: {fileID: 6028325507597539962}
   m_Layer: 0
-  m_Name: E_ENDERMAN
+  m_Name: Enderman
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -71889,11 +71912,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 111.53, y: -3.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5468689164196919385
+--- !u!114 &6028325507597539962
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -71902,17 +71926,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 6360351176388527920}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  enemyStats:
-    health: 312
-    damage: 58
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Enderman
+  coinReward: 0
 --- !u!1 &6531595596565106309
 GameObject:
   m_ObjectHideFlags: 0
@@ -71922,9 +71948,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3306486762652587401}
-  - component: {fileID: 6031933445653325719}
+  - component: {fileID: 7025244249828939859}
   m_Layer: 0
-  m_Name: E_SPIDER
+  m_Name: Spider
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -71940,11 +71966,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 8.06, y: -1.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6031933445653325719
+--- !u!114 &7025244249828939859
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -71953,17 +71980,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 6531595596565106309}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
-  enemyStats:
-    health: 234
-    damage: 78
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Spider
+  coinReward: 0
 --- !u!1 &6591059226789570111
 GameObject:
   m_ObjectHideFlags: 0
@@ -71992,6 +72021,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3016840096561287592}
   m_RootOrder: 0
@@ -82087,6 +82117,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -82152,6 +82183,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8427110371045513107}
   m_RootOrder: 0
@@ -141647,6 +141679,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -141693,9 +141726,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1125607303807728184}
-  - component: {fileID: 2046449000581925223}
+  - component: {fileID: 2382825070499233438}
   m_Layer: 0
-  m_Name: E_SPIDERHANGING
+  m_Name: SpiderHanging
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -141711,11 +141744,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 24.51, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2046449000581925223
+--- !u!114 &2382825070499233438
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -141724,17 +141758,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 7574821799234458446}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 8
-  enemyStats:
-    health: 136
-    damage: 78
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 3
-  firstDelay: 1.2
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: SpiderHanging
+  coinReward: 0
 --- !u!1 &7654714571216279567
 GameObject:
   m_ObjectHideFlags: 0
@@ -141761,6 +141797,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 26.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4871209685634680201}
   m_Father: {fileID: 5732591552421084465}
@@ -141775,7 +141812,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4469070071493362459}
-  - component: {fileID: 2962364305885942013}
   m_Layer: 0
   m_Name: Health (1)
   m_TagString: Untagged
@@ -141793,23 +141829,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 76.61, y: -1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4607863181406058346}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2962364305885942013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7831863587036992983}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac8ed5dc458cf204e97fd5920561f778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 2
 --- !u!1 &7932145955725735438
 GameObject:
   m_ObjectHideFlags: 0
@@ -141819,9 +141843,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8663644683452922404}
-  - component: {fileID: 4761411831886562719}
+  - component: {fileID: 8327913179454140459}
   m_Layer: 0
-  m_Name: E_SPIDER
+  m_Name: Spider
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -141837,11 +141861,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 83.66, y: -2.73, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4761411831886562719
+--- !u!114 &8327913179454140459
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -141850,17 +141875,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 7932145955725735438}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
-  enemyStats:
-    health: 234
-    damage: 78
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Spider
+  coinReward: 0
 --- !u!1 &8170475086607454759
 GameObject:
   m_ObjectHideFlags: 0
@@ -141887,6 +141914,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4162165881170548353}
   - {fileID: 6352091915329596148}
@@ -141936,6 +141964,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4749912420557004149}
   - {fileID: 2235749055423274364}
@@ -141963,9 +141992,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 389446905696353730}
-  - component: {fileID: 6290204555872223286}
+  - component: {fileID: 2957600071878594048}
   m_Layer: 0
-  m_Name: E_ENDERMAN
+  m_Name: Piglet
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -141981,11 +142010,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 45.13, y: -1.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6290204555872223286
+--- !u!114 &2957600071878594048
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -141994,17 +142024,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8508207940163192414}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  enemyStats:
-    health: 312
-    damage: 58
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Piglet
+  coinReward: 0
 --- !u!1 &8609474331608020648
 GameObject:
   m_ObjectHideFlags: 0
@@ -142014,9 +142046,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6277190296652771144}
-  - component: {fileID: 4297634561603797431}
+  - component: {fileID: 4977506598667523173}
   m_Layer: 0
-  m_Name: E_GOLEM
+  m_Name: Golem
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -142032,11 +142064,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 176, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4297634561603797431
+--- !u!114 &4977506598667523173
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142045,17 +142078,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8609474331608020648}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 7
-  enemyStats:
-    health: 468
-    damage: 58
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: Golem
+  coinReward: 0
 --- !u!1 &8820938891241929440
 GameObject:
   m_ObjectHideFlags: 0
@@ -142065,9 +142100,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 160616214539589129}
-  - component: {fileID: 3758178583777097692}
+  - component: {fileID: 4979371598608010898}
   m_Layer: 0
-  m_Name: E_SPIDERHANGING
+  m_Name: SpiderHanging
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -142083,11 +142118,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 27.52, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3758178583777097692
+--- !u!114 &4979371598608010898
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142096,17 +142132,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8820938891241929440}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b217156725d6fd48bd7b605ee57870d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 8
-  enemyStats:
-    health: 136
-    damage: 78
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 3
-  firstDelay: 1.6
+  characterStats:
+    health: 0
+    damage: 0
+    armor: 0
+    critRate: 0
+    critDamage: 0
+    lifeSteal: 0
+    exp: 0
+  enemyName: SpiderHanging
+  coinReward: 0
 --- !u!1 &8871510092509230162
 GameObject:
   m_ObjectHideFlags: 0
@@ -142116,7 +142154,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4807267362664227356}
-  - component: {fileID: 6277115781251897758}
   m_Layer: 0
   m_Name: SwordItem
   m_TagString: Untagged
@@ -142134,23 +142171,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 33, y: -2.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4607863181406058346}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6277115781251897758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8871510092509230162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac8ed5dc458cf204e97fd5920561f778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 1
 --- !u!1001 &112183143717734108
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -142236,11 +142261,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -4.5
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101302109520108884, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 4.5
       objectReference: {fileID: 0}
@@ -142314,11 +142351,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -4.5
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101302109520108884, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 4.5
       objectReference: {fileID: 0}
@@ -142536,11 +142585,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -4.5
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101302109520108884, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 4.5
       objectReference: {fileID: 0}
@@ -142614,11 +142675,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -4.5
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101302109520108884, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 4.5
       objectReference: {fileID: 0}
@@ -142770,6 +142843,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 6.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -6.5
@@ -142779,6 +142856,14 @@ PrefabInstance:
       value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101302109520108884, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 6.5
       objectReference: {fileID: 0}
@@ -142856,11 +142941,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -4.5
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101302109520108884, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 4.5
       objectReference: {fileID: 0}
@@ -143004,11 +143101,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -4.5
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101302109520108884, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 4.5
       objectReference: {fileID: 0}
@@ -143082,11 +143191,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -4.5
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101302109520108884, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 4.5
       objectReference: {fileID: 0}
@@ -143160,11 +143281,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeUp (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 2443963434823265930, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2969095752004411044, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: m_LocalPosition.y
       value: -4.5
       objectReference: {fileID: 0}
     - target: {fileID: 4173530421537385017, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776939394843896324, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
+      propertyPath: distance
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101302109520108884, guid: 3dab660e3f999974e84a2b8e2134df7f, type: 3}
       propertyPath: distance
       value: 4.5
       objectReference: {fileID: 0}

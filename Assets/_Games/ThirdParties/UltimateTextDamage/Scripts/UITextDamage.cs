@@ -90,6 +90,7 @@ namespace SuperFight
         {
             if( UsedLabel != null )
                 UsedLabel.text = text;
+
             Offset = 0;
             toFollow = transform;
             firstTime = true;

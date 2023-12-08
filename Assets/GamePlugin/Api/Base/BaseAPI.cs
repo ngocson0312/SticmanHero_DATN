@@ -6,9 +6,9 @@ namespace Myapi
 {
     public abstract class BaseApi
     {
-        private bool isLogContent = true;
+        private const bool isLogContent = false;
 
-        public void GetRequest(long idRequest, string url)
+        public void GetRequest(long idRequest, string url, int timeout = -1, bool isgetCache = false, bool isCache = false)
         {
             ApiManager.Instance.getRequest(url, (b, s) =>
             {
@@ -23,12 +23,12 @@ namespace Myapi
 
                 if (isLogContent)
                 {
-                    Debug.Log("mysdk: apicontent=" + s);
+                    Debug.Log("mysdk: BaseApi apicontent=" + s);
                 }
-            });
+            }, timeout, isgetCache, isCache);
         }
 
-        public void PostRequest(long idRequest, string url)
+        public void PostRequest(long idRequest, string url, int timeout = -1, bool isgetCache = false, bool isCache = false)
         {
             ApiManager.Instance.postRequest(url, (b, s) =>
             {
@@ -43,12 +43,12 @@ namespace Myapi
 
                 if (isLogContent)
                 {
-                    Debug.Log("mysdk: apicontent=" + s);
+                    Debug.Log("mysdk: BaseApi apicontent=" + s);
                 }
-            });
+            }, timeout, isgetCache, isCache);
         }
 
-        public void PostRequest(long idRequest, string url, string data)
+        public void PostRequest(long idRequest, string url, string data, int timeout = -1, bool isgetCache = false, bool isCache = false)
         {
             ApiManager.Instance.postRequest(url, data, (b, s) =>
             {
@@ -63,12 +63,12 @@ namespace Myapi
 
                 if (isLogContent)
                 {
-                    Debug.Log("mysdk: apicontent=" + s);
+                    Debug.Log("mysdk: BaseApi apicontent=" + s);
                 }
-            });
+            }, timeout, isgetCache, isCache);
         }
 
-        public void PostRequest(long idRequest, string url, byte[] bytes)
+        public void PostRequest(long idRequest, string url, byte[] bytes, int timeout = -1, bool isgetCache = false, bool isCache = false)
         {
             ApiManager.Instance.postRequest(url, bytes, (b, s) =>
             {
@@ -84,12 +84,12 @@ namespace Myapi
 
                 if (isLogContent)
                 {
-                    Debug.Log("mysdk: apicontent=" + s);
+                    Debug.Log("mysdk: BaseApi apicontent=" + s);
                 }
-            });
+            }, timeout, isgetCache, isCache);
         }
 
-        public void PostRequest(long idRequest, string url, Dictionary<string, string> field = null, Dictionary<string, string> dicfiles = null)
+        public void PostRequest(long idRequest, string url, Dictionary<string, string> field, Dictionary<string, string> dicfiles = null, int timeout = -1, bool isgetCache = false, bool isCache = false)
         {
             ApiManager.Instance.postRequest(url, field, dicfiles, (b, s) =>
             {
@@ -104,9 +104,9 @@ namespace Myapi
 
                 if (isLogContent)
                 {
-                    Debug.Log("mysdk: apicontent=" + s);
+                    Debug.Log("mysdk: BaseApi apicontent=" + s);
                 }
-            });
+            }, timeout, isgetCache, isCache);
         }
 
         protected abstract void onLoadOk(long idRequest, string data);

@@ -46,6 +46,7 @@ public class SettingBuildAndroid : Editor
             DefineSymbolAdd = getMemSetting("key_mem_define_sb_a", "");
             memDefineSymbolAdd = DefineSymbolAdd;
         }
+        addSDKUpdate();
     }
 
     public override void OnInspectorGUI()
@@ -108,8 +109,10 @@ public class SettingBuildAndroid : Editor
             getGroupControl(target);
 #if UNITY_ANDROID
             setSpslashLoading("Android");
+            setMyopenAds("Android/mipmap-hdpi");
 #elif UNITY_IOS || UNITY_IPHONE
             setSpslashLoading("iOS");
+            setMyopenAds("iOS");
 #endif
 
             AssetDatabase.Refresh();
@@ -218,6 +221,15 @@ public class SettingBuildAndroid : Editor
         }
     }
 
+    void addSDKUpdate()
+    {
+        getGroupControl(target);
+        if (groupControl.transform.GetComponent<SDKUpdate>() == null)
+        {
+            groupControl.gameObject.AddComponent<SDKUpdate>();
+        }
+    }
+
     private static void getGroupControl(UnityEngine.Object ob)
     {
         if (groupControl == null)
@@ -302,7 +314,9 @@ public class SettingBuildAndroid : Editor
             "C2C39E20-8B14-5CE2-95C9-3206C611AE67",
             "9C1D7D4D-4727-5CA8-82E9-18D67A4D2317",
             "868E6C2A-FF96-5913-97B2-3342DDE97787",
-            "DA664010-0E4B-530A-8C5C-69B44662FB20"
+            "DA664010-0E4B-530A-8C5C-69B44662FB20",
+            "361640e93b2c09180d6bf25e858798a5cde9f9c4",
+            "43E8B34B-44AA-5C0C-A64B-B48B29EF79FF"
         };
 
         if (!istest)
@@ -535,6 +549,172 @@ public class SettingBuildAndroid : Editor
         catch (Exception ex)
         {
             Debug.LogError("mysdk: setSpslashLoading ex=" + ex.ToString());
+        }
+    }
+
+    private void setMyopenAds(string platformName)
+    {
+        try
+        {
+            string pathGetNameSplash = Application.dataPath + $"/IconSplash{GameName}/{platformName}";
+            string nameFolderICSplash;
+            if (!Directory.Exists(pathGetNameSplash))
+            {
+                nameFolderICSplash = "IconSplash";
+                pathGetNameSplash = Application.dataPath + $"/IconSplash/{platformName}";
+            }
+            else
+            {
+                nameFolderICSplash = $"IconSplash{GameName}";
+            }
+            string[] listFileinSplash = Directory.GetFiles(pathGetNameSplash);
+            string iconName = "";
+            int count = 0;
+            foreach (var item in listFileinSplash)
+            {
+                if (!item.Contains(".meta") && (item.ToLower().Contains("app_icon") || item.ToLower().Contains("icon_ios")))
+                {
+                    if (item.ToLower().Contains(".png") || item.ToLower().Contains(".jpg"))
+                    {
+                        iconName = Path.GetFileName(item);
+                        string pasd = "Assets" + $"/{nameFolderICSplash}/{platformName}/{iconName}";
+                        TextureImporter importer = AssetImporter.GetAtPath(pasd) as TextureImporter;
+                        importer.textureType = TextureImporterType.Sprite;
+                        importer.isReadable = true;
+                        AssetDatabase.ImportAsset(pasd, ImportAssetOptions.ForceUpdate);
+                        break;
+                    }
+                }
+            }
+
+            string iconNameGuiid = "";
+            string pathMetaSplash = Application.dataPath + $"/{nameFolderICSplash}/{platformName}/{iconName}.meta";
+            string[] allLinesMeta = File.ReadAllLines(pathMetaSplash);
+            foreach (var line in allLinesMeta)
+            {
+                if (line.Contains("guid:"))
+                {
+                    iconNameGuiid = line.Substring(6);
+                    break;
+                }
+            }
+
+            string pathPrefab = Application.dataPath + "/GamePlugin/Resources/Popup/PopupMyopenAds.prefab";
+            string[] allLines = File.ReadAllLines(pathPrefab);
+            bool flaggetdata = false;
+            GameOb4Addrf obdata = new GameOb4Addrf();
+            int countrf = 0;
+            int flagAddRf = 0;
+            int subflagAddRf = 0;
+            for (int p = 0; p < allLines.Length; p++)
+            {
+                string line = allLines[p];
+                if (flaggetdata)
+                {
+                    if (line.StartsWith("  m_Name:"))
+                    {
+                        flaggetdata = false;
+                        subflagAddRf = 0;
+                        string fileid = getValueMeta(line, "m_Name", "");
+                        if (fileid.Equals("IconGame"))
+                        {
+                            countrf++;
+                            flagAddRf = 1;
+                        }
+                        else if (fileid.Equals("TxtNameGame"))
+                        {
+                            countrf++;
+                            flagAddRf = 2;
+                        }
+                    }
+                    else if (line.Contains("component"))
+                    {
+                        string fileid = getValueMeta(line, "component", "fileID");
+                        obdata.listComponent.Add(fileid);
+                    }
+                }
+                else
+                {
+                    if (line.StartsWith("  m_Component:"))
+                    {
+                        flaggetdata = true;
+                        obdata.listComponent.Clear();
+                    }
+                    else
+                    {
+                        if (flagAddRf == 1)
+                        {
+                            if (line.StartsWith("--- !u!114 &"))
+                            {
+                                for (int i = 0; i < obdata.listComponent.Count; i++)
+                                {
+                                    if (line.Contains(obdata.listComponent[i]))
+                                    {
+                                        subflagAddRf = 1;
+                                        break;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (subflagAddRf == 1)
+                                {
+                                    if (line.Contains("m_Sprite:"))
+                                    {
+                                        string grid = getValueMeta(line, "m_Sprite", "guid");
+                                        allLines[p] = allLines[p].Replace(grid, iconNameGuiid);
+                                        Debug.Log("aaab=" + allLines[p]);
+                                        subflagAddRf = 0;
+                                        flagAddRf = 0;
+                                        if (countrf >= 2)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (flagAddRf == 2)
+                        {
+                            if (line.StartsWith("--- !u!114 &"))
+                            {
+                                for (int i = 0; i < obdata.listComponent.Count; i++)
+                                {
+                                    if (line.Contains(obdata.listComponent[i]))
+                                    {
+                                        subflagAddRf = 1;
+                                        break;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (subflagAddRf == 1)
+                                {
+                                    if (line.Contains("m_Text:"))
+                                    {
+                                        string grid = getValueMeta(line, "m_Text", "");
+                                        allLines[p] = allLines[p].Replace(grid, $"'{PlayerSettings.productName}'");
+                                        Debug.Log("aaab=" + PlayerSettings.productName);
+                                        subflagAddRf = 0;
+                                        flagAddRf = 0;
+                                        if (countrf >= 2)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            File.WriteAllLines(pathPrefab, allLines);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("mysdk: setMyopenAds ex=" + ex.ToString());
         }
     }
 
@@ -1159,6 +1339,10 @@ public class SettingBuildAndroid : Editor
 #if UNITY_IOS || UNITY_IPHONE
                     SetAppCf("public const string appid", $"\"{(string)item.Value}\"");
                     FlyerHelper.appID = (string)item.Value;
+                    if (FlyerHelper.appID == null || FlyerHelper.appID.Length < 3)
+                    {
+                        Debug.LogError("mysdk: config FlyerHelper errrrrrrrrrr Gameid not match");
+                    }
                     EditorUtility.SetDirty(FlyerHelper);
 #endif
                 }
@@ -1241,6 +1425,14 @@ public class SettingBuildAndroid : Editor
                                     adshelper.adsApplovinMax.ios_full_id = (string)net.Value;
 #else
                                     adshelper.adsApplovinMax.android_full_id = (string)net.Value;
+#endif
+                                }
+                                else if (net.Key.Equals("full2"))
+                                {
+#if UNITY_IOS || UNITY_IPHONE
+                                    adshelper.adsApplovinMaxLow.ios_full_id = (string)net.Value;
+#else
+                                    adshelper.adsApplovinMaxLow.android_full_id = (string)net.Value;
 #endif
                                 }
                                 else if (net.Key.Equals("gift"))
@@ -1482,6 +1674,7 @@ public class SettingBuildAndroid : Editor
                     {
                         if (acf.Key.Equals("apikey"))
                         {
+                            apikey = (string)acf.Value;
                         }
                         else if (acf.Key.Equals("placements"))
                         {
@@ -1498,6 +1691,35 @@ public class SettingBuildAndroid : Editor
                         if (acf.Key.Equals("apikey"))
                         {
                             setupAdverty((string)acf.Value);
+                        }
+                    }
+                }
+                else if (item.Key.Equals("bidstack"))
+                {
+                    IDictionary<string, object> adcanvas = (IDictionary<string, object>)item.Value;
+                    string apikey = "";
+                    IDictionary<string, object> listplm = null;
+                    foreach (KeyValuePair<string, object> acf in adcanvas)
+                    {
+                        if (acf.Key.Equals("apikey"))
+                        {
+                            apikey = (string)acf.Value;
+                        }
+                        else if (acf.Key.Equals("placements"))
+                        {
+                            listplm = (IDictionary<string, object>)acf.Value;
+                        }
+                    }
+                    setupBidstack(apikey, listplm);
+                }
+                else if (item.Key.Equals("edeeo"))
+                {
+                    IDictionary<string, object> adcanvas = (IDictionary<string, object>)item.Value;
+                    foreach (KeyValuePair<string, object> acf in adcanvas)
+                    {
+                        if (acf.Key.Equals("apikey"))
+                        {
+                            setupAdEdeeo((string)acf.Value);
                         }
                     }
                 }
@@ -1635,7 +1857,7 @@ public class SettingBuildAndroid : Editor
             }
 #if UNITY_IOS || UNITY_IPHONE
             SetAppCf("public const int verapp", PlayerSettings.iOS.buildNumber);
-            SetPropertyFile("Assets/GamePlugin/GameHelper/GameHelper.cs", "private const long Day_len_Luc", "" + (mygame.sdk.SdkUtil.systemCurrentMiliseconds() / 1000));
+            SetPropertyFile("Assets/GamePlugin/GameHelper/GameHelper.cs", "private const long Day_len_Luc", "" + (mygame.sdk.SdkUtil.CurrentTimeMilis() / 1000));
 #else
             SetAppCf("public const int verapp", PlayerSettings.Android.bundleVersionCode.ToString());
 #endif
@@ -2212,9 +2434,7 @@ public class SettingBuildAndroid : Editor
 
     private void setupGadsme(string apikey, List<object> placemants)
     {
-        // string passet = Application.dataPath + "/Gadsme/Resources/GadsmePreferences.asset";
-        string passet = Application.dataPath + "/GamePlugin/AdCanvasHelper/AdCanvasHelper.prefab";
-        if (File.Exists(passet) && placemants != null && placemants.Count > 0)
+        if (placemants != null && placemants.Count > 0)
         {
             AdCanvasHelper adCanvasHelper = GadsmeObject.FindObjectOfType<AdCanvasHelper>();
             if (adCanvasHelper != null)
@@ -2268,37 +2488,6 @@ public class SettingBuildAndroid : Editor
                     EditorUtility.SetDirty(gads);
                     EditorUtility.SetDirty(adCanvasHelper);
                 }
-            }
-            bool isw = false;
-            var appCf = File.ReadAllLines(passet);
-            List<string> allines = new List<string>();
-            for (int i = 0; i < appCf.Length; i++)
-            {
-                allines.Add(appCf[i]);
-                if (appCf[i].Contains("listPlacements:"))
-                {
-                    for (int kk = 0; kk < placemants.Count; kk++)
-                    {
-                        int cn = kk + 1;
-                        allines.Add($"    - placementId: {(string)placemants[kk]}");
-                        allines.Add($"      channel: {cn}");
-                    }
-                    i++;
-                    isw = true;
-                    for (int kk = i; kk < (i + 50); kk++)
-                    {
-                        if (appCf[kk].Contains("idx:"))
-                        {
-                            i = kk;
-                            allines.Add(appCf[i]);
-                            break;
-                        }
-                    }
-                }
-            }
-            if (isw)
-            {
-                File.WriteAllLines(passet, allines);
             }
         }
     }
@@ -2370,6 +2559,86 @@ public class SettingBuildAndroid : Editor
         }
     }
 
+    private void setupBidstack(string apikey, IDictionary<string, object> placemants)
+    {
+        string passet = Application.dataPath + "/GamePlugin/AdCanvasHelper/AdBidstack/BidstackInGameAdSystemSettings.asset";
+        if (File.Exists(passet) && apikey != null && apikey.Length > 5)
+        {
+            bool isw = false;
+            var appCf = File.ReadAllLines(passet);
+            for (int i = 0; i < appCf.Length; i++)
+            {
+                if (appCf[i].Contains("authKey:"))
+                {
+                    if (!appCf[i].Contains(apikey))
+                    {
+                        isw = true;
+                        string ss = appCf[i].Substring(0, 11);
+                        appCf[i] = ss + apikey;
+                    }
+                }
+            }
+            if (isw)
+            {
+                File.WriteAllLines(passet, appCf);
+            }
+        }
+        if (placemants != null && placemants.Count > 0)
+        {
+            AdCanvasHelper adCanvasHelper = GadsmeObject.FindObjectOfType<AdCanvasHelper>();
+            if (adCanvasHelper != null)
+            {
+                Transform tfgads = adCanvasHelper.transform.Find("BidstackGroup");
+                if (tfgads != null)
+                {
+                    BidstackHelper gads = tfgads.GetComponent<BidstackHelper>();
+                    gads.listPlacementsWithType.Clear();
+                    foreach (KeyValuePair<string, object> arrpm in placemants)
+                    {
+                        List<object> listplm = (List<object>)arrpm.Value;
+                        BidstackPlacementType btype = (BidstackPlacementType)Enum.Parse(typeof(BidstackPlacementType), arrpm.Key);
+                        BidstackPlacementIdWithType item = new BidstackPlacementIdWithType();
+                        for(int i = 0; i < listplm.Count; i++)
+                        {
+                            item.listPlacements.Add((string)listplm[i]);
+                        }
+                        item.type = btype;
+
+                        gads.listPlacementsWithType.Add(item);
+                    }
+                    EditorUtility.SetDirty(tfgads);
+                    EditorUtility.SetDirty(adCanvasHelper);
+                }
+            }
+        }
+    }
+
+    private void setupAdEdeeo(string apikey)
+    {
+        string passet = Application.dataPath + "/GamePlugin/AdAudio/OdeeoAd.cs";
+        if (File.Exists(passet) && apikey != null && apikey.Length > 5)
+        {
+            bool isw = false;
+            var appCf = File.ReadAllLines(passet);
+            for (int i = 0; i < appCf.Length; i++)
+            {
+                if (appCf[i].Contains("PlayOnSDK.Initialize(\""))
+                {
+                    if (!appCf[i].Contains(apikey))
+                    {
+                        isw = true;
+                        appCf[i] = $"        PlayOnSDK.Initialize(\"{apikey}\", AppConfig.appid);";
+                    }
+                    break;
+                }
+            }
+            if (isw)
+            {
+                File.WriteAllLines(passet, appCf);
+            }
+        }
+    }
+
     public void SetAppCf(string key, string newValue)
     {
         String platf = "asdfasdfadfa";
@@ -2403,7 +2672,7 @@ public class SettingBuildAndroid : Editor
                             if (long.TryParse(stm, out ltm))
                             {
                                 Debug.Log("mysdk: setup ios TimeSubmitReview=" + ltm);
-                                long tcu = mygame.sdk.SdkUtil.systemCurrentMiliseconds() / 1000;
+                                long tcu = mygame.sdk.SdkUtil.CurrentTimeMilis() / 1000;
                                 if ((tcu - ltm) <= 4 * 60 * 60)
                                 {
                                     isallow = false;
@@ -2448,7 +2717,7 @@ public class SettingBuildAndroid : Editor
                             if (long.TryParse(stm, out ltm))
                             {
                                 Debug.Log("mysdk: setup ios TimeSubmitReview=" + ltm);
-                                long tcu = mygame.sdk.SdkUtil.systemCurrentMiliseconds() / 1000;
+                                long tcu = mygame.sdk.SdkUtil.CurrentTimeMilis() / 1000;
                                 if ((tcu - ltm) <= 4 * 60 * 60)
                                 {
                                     isallow = false;
@@ -2807,16 +3076,18 @@ public class SdkSetup
         setAdCanvasSandbox(sdkManager.isAdCanvasSandbox);
 #if UNITY_ANDROID
         doSettingAppOpenAdAndroid(sdkManager, adsHelper);
+        ads.myeditor.BigoAdsUtil.addRemoveAds(sdkManager.BigoAdsAndroi);
         doAddGradle(sdkManager.typeApplication, sdkManager.isAddandroidgms, adsHelper);
 #endif
 #if UNITY_IOS || UNITY_IPHONE
         doSettingiOS(sdkManager, adsHelper);
+        ads.myeditor.BigoAdsUtil.addRemoveAds(sdkManager.BigoAdsiOS);
 #endif
     }
 
     private static void setAdCanvasSandbox(bool isSanbox)
     {
-        string passet = Application.dataPath + "/Gadsme/Resources/GadsmePreferences.asset";
+        string passet = Application.dataPath + "/Resources/GadsmePreferences.asset";
         if (File.Exists(passet))
         {
             bool isw = false;
@@ -3046,6 +3317,7 @@ public class SdkSetup
             int idxAdd4Amazon = -1;
             int has4amazon = 0;
             int flagExport = 0;
+            int flagAddPFLASHLIGHT = 1;
             for (int i = 0; i < lines.Length; i++)
             {
                 if (!lines[i].Contains("</application>"))
@@ -3084,6 +3356,13 @@ public class SdkSetup
                                 has4amazon |= 1;
                             }
                         }
+                        else if (lines[i].Contains("<permission"))
+                        {
+                            if (lines[i].Contains("android.permission.FLASHLIGHT"))
+                            {
+                                flagAddPFLASHLIGHT = 0;
+                            }
+                        }
                         else if (lines[i].Contains("<activity")
                             || lines[i].Contains("<receiver")
                             || lines[i].Contains("<service")
@@ -3111,6 +3390,15 @@ public class SdkSetup
                             {
                                 flagExport = 1;
                             }
+                        }
+                        else if (lines[i].Contains("</manifest>"))
+                        {
+                            #if ENABLE_Permission_flash
+                            if (flagAddPFLASHLIGHT == 1)
+                            {
+                                allline.Insert(idxaddAD_ID, $"    <permission android:name=\"android.permission.FLASHLIGHT\" android:protectionLevel=\"normal\" />");
+                            }
+                            #endif
                         }
                         if (flagExport == 1)
                         {
@@ -3167,11 +3455,11 @@ public class SdkSetup
             {
                 if ((has4amazon & 2) == 0)
                 {
-                    allline.Insert(idxAdd4Amazon, $"  <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />");
+                    //allline.Insert(idxAdd4Amazon, $"  <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />");
                 }
                 if ((has4amazon & 1) == 0)
                 {
-                    allline.Insert(idxAdd4Amazon, $"  <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />");
+                    //allline.Insert(idxAdd4Amazon, $"  <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />");
                 }
             }
 #endif
@@ -3179,7 +3467,7 @@ public class SdkSetup
             System.IO.File.WriteAllLines(path, allline);
             allline.Clear();
 
-            addOrRemvoeAdFly(sdkManager.isAddAdFly, sdkManager.AdFlyAdapterVersion);
+            addOrRemvoeAdFly(sdkManager.AdFlyState);
         }
         catch (Exception ex)
         {
@@ -3191,12 +3479,20 @@ public class SdkSetup
 #endif
     }
 
-    private static void addOrRemvoeAdFly(bool isAdd, string ver)
+    private static void addOrRemvoeAdFly(string stateAds)
     {
         try
         {
+            string[] arrsss = stateAds.Split(';');
+            int isAdd = 0;
+            string ver = "";
+            if (arrsss.Length == 2)
+            {
+                isAdd = int.Parse(arrsss[0]);
+                ver = arrsss[1];
+            }
             string pathdir = Application.dataPath + "/MaxSdk/Mediation/AdFly/Editor";
-            if (isAdd)
+            if (isAdd == 1)
             {
                 string pathmax = Application.dataPath + "/MaxSdk/AppLovin.meta";
                 if (File.Exists(pathmax))
@@ -3262,13 +3558,17 @@ public class SdkSetup
         int idx = line.IndexOf("android:name=");
         if (idx < 0)
         {
-            string appre = "<application android:name=" + nameapp;
+            string appre = "<application android:name=" + nameapp + " android:usesCleartextTraffic=\"true\"";
             re = line.Replace("<application", appre);
         }
         else
         {
             int idx1 = line.IndexOf("\"", (idx + 16));
             string sreed = line.Substring(idx, (idx1 - idx + 1));
+            if (!line.Contains("android:usesCleartextTraffic"))
+            {
+                nameapp += " android:usesCleartextTraffic=\"true\"";
+            }
             string appre = "android:name=" + nameapp;
             re = line.Replace(sreed, appre);
         }
@@ -3636,7 +3936,7 @@ public class SdkSetup
                             if (statusAddPlaycore == 0)
                             {
                                 allline.Add(" ");
-                                allline.Add($"    implementation 'com.google.android.play:core:1.9.0'");
+                                allline.Add($"    implementation 'com.google.android.play:core:1.10.3'");
                             }
 
                             if (statusAddNativeCmp == 0 && SettingBuildAndroid.isAdcanvas)
@@ -3663,7 +3963,7 @@ public class SdkSetup
                             if (!ishaslifecycle)
                             {
                                 allline.Add("  ");
-                                allline.Add("    def lifecycle_version = \"2.2.0\"");
+                                allline.Add("    def lifecycle_version = \"2.5.1\"");
                                 allline.Add("    implementation \"androidx.lifecycle:lifecycle-extensions:$lifecycle_version\"");
                                 allline.Add("    implementation \"androidx.lifecycle:lifecycle-runtime:$lifecycle_version\"");
                                 allline.Add("    annotationProcessor \"androidx.lifecycle:lifecycle-compiler:$lifecycle_version\"");
@@ -3962,7 +4262,7 @@ public class SdkSetup
         }
         catch (Exception ex)
         {
-            Debug.LogError("mysdk: doAddGradle ex=" + ex.ToString());
+            Debug.Log("mysdk: compareVersion!!!!!!!!! ex=" + ex.ToString());
             return 0;
         }
     }
@@ -3972,4 +4272,82 @@ public class SdkSetup
 public class GameOb4Addrf
 {
     public List<string> listComponent = new List<string>();
+}
+
+[CustomEditor(typeof(SDKUpdate)), CanEditMultipleObjects]
+public class UpdateSdk : Editor
+{
+    public static SDKUpdate groupControl = null;
+    public override void OnInspectorGUI()
+    {
+        GUILayout.BeginVertical();
+        
+        if (GUILayout.Button("UpdateSdk"))
+        {
+            doUpdate();
+            AssetDatabase.Refresh();
+        }
+        GUILayout.EndVertical();
+
+        try
+        {
+            base.OnInspectorGUI();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("mysdk: OnInspectorGUI ex=" + ex.ToString());
+        }
+    }
+
+    public void doUpdate()
+    {
+        groupControl = (SDKUpdate)target;
+
+        if (groupControl.pathSDK != null && groupControl.pathSDK.Length > 5 && Directory.Exists(groupControl.pathSDK))
+        {
+            string GamePlugin = Application.dataPath + "/GamePlugin";
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/AdAudio", GamePlugin + "/AdAudio", 1);
+            if (groupControl.AdCanvasFolder)
+            {
+                SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/AdCanvasHelper", GamePlugin + "/AdCanvasHelper", 1);
+            }
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/Ads", GamePlugin + "/Ads", 1);
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/Analytic", GamePlugin + "/Analytic", 1);
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/AppFlyerHelper", GamePlugin + "/AppFlyerHelper", 1);
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/Editor", GamePlugin + "/Editor", 1);
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/Fonts", GamePlugin + "/Fonts", 1);
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/FirHelper", GamePlugin + "/FirHelper", 1);
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/GameHelper", GamePlugin + "/GameHelper", 1);
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/GameManager", GamePlugin + "/GameManager", 1);
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/ImageLoader", GamePlugin + "/ImageLoader", 1);
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/Inapp", GamePlugin + "/Inapp", 1);
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/OtherGame", GamePlugin + "/OtherGame", 1);
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/Platforms", GamePlugin + "/Platforms", 1);
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/Plugins", GamePlugin + "/Plugins", 1);
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/Script", GamePlugin + "/Script", 1);
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/Sptires", GamePlugin + "/Sptires", 1);
+            SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/Utils", GamePlugin + "/Utils", 1);
+            if (groupControl.AdCanvasTTDefault)
+            {
+                SettingBuildAndroid.coppyFileNormal(groupControl.pathSDK + "/ttDefault.jpg", GamePlugin + "/AdCanvasHelper/Res");
+                SettingBuildAndroid.coppyFileNormal(groupControl.pathSDK + "/ttDefault.jpg.meta", GamePlugin + "/AdCanvasHelper/Res");
+            }
+            if (groupControl.AdCanvasPrefab)
+            {
+                SettingBuildAndroid.coppyFileNormal(groupControl.pathSDK + "/AdCanvasHelper.prefab", GamePlugin + "/AdCanvasHelper");
+            }
+            if (groupControl.ApiAdd)
+            {
+                SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/Api", GamePlugin + "/Api", 1);
+            }
+            if (groupControl.GamepluginPreb)
+            {
+                SettingBuildAndroid.coppyFileNormal(groupControl.pathSDK + "/GamePlugin.prefab", GamePlugin + "/GameManager");
+            }
+            if (groupControl.GameResAdd)
+            {
+                SettingBuildAndroid.coppyFolder(groupControl.pathSDK + "/GameRes", GamePlugin + "/GameRes", 1);
+            }
+        }
+    }
 }

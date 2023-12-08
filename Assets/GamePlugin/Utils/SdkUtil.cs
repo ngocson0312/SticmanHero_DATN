@@ -1,4 +1,4 @@
-﻿//#define ENABLE_MYLOG
+//#define ENABLE_MYLOG
 
 using System;
 using System.Collections;
@@ -19,10 +19,24 @@ namespace mygame.sdk
         public static int screenHight = -1;
 
         private static int verSdk = 0;
-        public static long systemCurrentMiliseconds()
+
+        public static long CurrentTimeMilis()
         {
-            var re = (DateTime.UtcNow.Ticks - 621355968000000000) / 10000;
+            var re = toTimestamp(DateTime.UtcNow);
             return re;
+        }
+
+        public static long toTimestamp(DateTime datetime)
+        {
+            var re = (datetime.Ticks - 621355968000000000) / 10000;
+            return re;
+        }
+
+        public static DateTime timeStamp2DateTime(long secondsUTC)
+        {
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dateTime = dateTime.AddSeconds(secondsUTC);
+            return dateTime;
         }
 
         public static bool isDevicesStrong()
@@ -189,7 +203,7 @@ namespace mygame.sdk
             var name = PlayerPrefs.GetString("mem_name_player", "");
             if (name.Length == 0)
             {
-                var t = systemCurrentMiliseconds();
+                var t = GameHelper.CurrentTimeMilisReal();
                 t = t / 1000;
                 t = t % 10000;
                 var idxch1 = Random.Range(0, 26);
@@ -212,23 +226,6 @@ namespace mygame.sdk
             re = string.Format("{0}:{1:d2}:{2:d2}", h, m, s);
 
             return re;
-        }
-
-        public static DateTime DateTimeFromTimeStamp(long tsp)
-        {
-            if (tsp < 0)
-            {
-                tsp = 0;
-            }
-            DateTime re = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            re = re.AddSeconds(tsp).ToLocalTime();
-            return re;
-        }
-
-        public static long TimeStampFromDateTime(DateTime tsp)
-        {
-            DateTimeOffset dof = new DateTimeOffset(tsp);
-            return dof.ToUnixTimeSeconds();
         }
 
         public static int SubDay(long from, long to)

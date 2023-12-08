@@ -187,8 +187,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      yasuo_wind_blow_01_redraw_0: -5527563791005292126
       yasuo_wind_blow_01_redraw_1: -2951093454646395415
+      yasuo_wind_blow_01_redraw_0: -5527563791005292126
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

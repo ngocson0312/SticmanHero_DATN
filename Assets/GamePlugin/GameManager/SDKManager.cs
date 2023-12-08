@@ -60,8 +60,12 @@ namespace mygame.sdk
         public App_Open_ad_Orien OpenAdOrientation;
 #endif
         [SerializeField] private bool isShowSplashLoading;
-        public bool isAddAdFly = false;
-        public string AdFlyAdapterVersion = "0.14.5.2";
+        public string AdFlyState = "0;0.14.5.2";
+#if UNITY_ANDROID
+        public string BigoAdsAndroi = "1;6;2.9.0.0";
+#else
+        public string BigoAdsiOS = "1;6;2.2.0";
+#endif
         public bool isAdCanvasSandbox = false;
         public bool isDisableLog = false;
 
@@ -84,8 +88,6 @@ namespace mygame.sdk
         public static SDKManager Instance { get; private set; }
 
         public List<MoreGameOb> listMoreGame = new List<MoreGameOb>();
-        public MyOpenAdsOb myAdsOpen = new MyOpenAdsOb();
-        private bool isMyAdsOpenLoaded = false;
         float tcheckFirstShow = 0;
         bool isAdsShowFirsted = false;
         float tpreCheck = -1;
@@ -97,15 +99,21 @@ namespace mygame.sdk
         int stateShowFirstAds = 0;
         float timeCount4ShowFirstAds = 0;
         public bool deviceIsRooted { get; set; }
+        [HideInInspector] public int totalTimePlayGame = 0;
+        [HideInInspector] public int counSessionGame = 0;
 
         [HideInInspector] public MediaSourceType mediaType = MediaSourceType.UnKnown;
         [HideInInspector] public string mediaCampain = "";
 
         public Font fontReplace;
         public float fontSize = 1;
+        public float lineSpacing = 1;
 
         public int timeWhenGetOnline { get; set; }
         public int timeOnline { get; set; }//minus
+
+        private int statusCheckFollowPlay = 0;
+        private float duarationPlayLv = 0;
 
         private void Awake()
         {
@@ -129,10 +137,10 @@ namespace mygame.sdk
             if (Instance == null)
             {
                 Instance = this;
-                int countAppOpen = PlayerPrefs.GetInt("mem_gl_count_play", 0);
-                countAppOpen++;
-                PlayerPrefs.SetInt("mem_gl_count_play", countAppOpen);
-                if (countAppOpen == 1)
+                counSessionGame = PlayerPrefs.GetInt("mem_gl_count_play", 0);
+                counSessionGame++;
+                PlayerPrefs.SetInt("mem_gl_count_play", counSessionGame);
+                if (counSessionGame == 1)
                 {
                     PlayerPrefs.SetInt("mem_ver_app_ins", AppConfig.verapp);
                     Debug.Log("mysdk: ver app install=" + PlayerPrefs.GetInt("mem_ver_app_ins", -1));
@@ -143,6 +151,7 @@ namespace mygame.sdk
                 }
                 mediaType = (MediaSourceType)PlayerPrefsBase.Instance().getInt("mem_mediatype", (int)MediaSourceType.UnKnown);
                 mediaCampain = PlayerPrefsBase.Instance().getString("mem_mediacampain", "");
+                totalTimePlayGame = PlayerPrefsBase.Instance().getInt("mem_tot_tim_gpla", 0);
                 GameRes.transLevelOld2New();
                 updateGameController = null;
                 flagTimeScale = 0;
@@ -155,6 +164,7 @@ namespace mygame.sdk
                 timeWhenGetOnline = -1;
                 timeOnline = -1;
                 flagNewDay = isNewDay();
+                statusCheckFollowPlay = PlayerPrefs.GetInt("mem_status_play", 0);
 
                 DontDestroyOnLoad(gameObject);
             }
@@ -167,10 +177,11 @@ namespace mygame.sdk
         private void Start()
         {
             Debug.Log($"mysdk: sdkmanager Start deviceUniqueIdentifier={SystemInfo.deviceUniqueIdentifier}");
+            //GameHelper.ScreenInfo();
             if (AdsHelper.isRemoveAds == 1)
             {
                 Debug.Log("mysdk: sdkmanager removeads not show first");
-                tcheckFirstShow = 1000;
+                tcheckFirstShow = 10000;
             }
             else
             {
@@ -178,7 +189,7 @@ namespace mygame.sdk
                 if (ss == 0 || ss == 1)
                 {
                     Debug.Log($"mysdk: sdkmanager isshowopen={ss}");
-                    tcheckFirstShow = 1000;
+                    tcheckFirstShow = 10000;
                 }
             }
             if (isShowSplashLoading)
@@ -202,8 +213,6 @@ namespace mygame.sdk
             StartCoroutine(wait4loginLog());
             loadMoreGame();
             downMoreGame();
-            addCbMyOpenAds();
-            loadMyOpenAds();
 
             if (flagNewDay && !isLogRetenrion)
             {
@@ -211,6 +220,8 @@ namespace mygame.sdk
                 isLogRetenrion = true;
                 AdjustHelper.LogEvent(AdjustEventName.Retention, null);
             }
+
+            StartCoroutine(initNotify());
 
 #if UNITY_EDITOR
             Debug.Log("mysdk: path game=" + Application.persistentDataPath);
@@ -243,15 +254,72 @@ namespace mygame.sdk
             if (isInstall || (!isInstall && rsesss != 101 && rsesss != 103))
             {
                 Debug.Log($"mysdk: sdkmanager bira 1");
-                mygame.plugin.Android.GameHelperAndroid.checkPiraCheck();
+                int flagccc = PlayerPrefsBase.Instance().getInt("mem_flag_check_bira", 1);
+                mygame.plugin.Android.GameHelperAndroid.checkPiraCheck(flagccc);
             }
 #endif
+            if (statusCheckFollowPlay == 1)
+            {
+                onEndGame(Myapi.LevelPassStatus.EndOther, "terminate");
+            }
         }
 
         private void OnApplicationPause(bool pauseStatus)
         {
             Debug.Log($"mysdk: sdkmanager OnApplicationPause={pauseStatus}");
             closeWaitShowFull();
+        }
+
+        private IEnumerator initNotify()
+        {
+            yield return new WaitForSeconds(10);
+            int memvernoti = PlayerPrefs.GetInt("mem_ver_data_noti", 0);
+#if UNITY_ANDROID && !UNITY_EDITOR
+            mygame.plugin.Android.GameHelperAndroid.setupEnviromentNotify();
+            TextAsset txtnoti = Resources.Load<TextAsset>("LocalNotify/Android/dataNotify");
+            if (txtnoti != null)
+            {
+                NotifyObject dataNoti = JsonUtility.FromJson<NotifyObject>(txtnoti.text);
+                if (dataNoti.ver > memvernoti)
+                {
+                    PlayerPrefs.SetInt("mem_ver_data_noti", dataNoti.ver);
+                    if (dataNoti.data.Count > 0)
+                    {
+                        mygame.plugin.Android.GameHelperAndroid.setupLocalNotifyNotify(dataNoti.data2String());
+                    }
+                }
+            }
+#elif (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
+            TextAsset txtnoti = Resources.Load<TextAsset>("LocalNotify/iOS/dataNotify");
+            if (txtnoti != null)
+            {
+                NotifyObject dataNoti = JsonUtility.FromJson<NotifyObject>(txtnoti.text);
+                if (dataNoti.ver > memvernoti)
+                {
+                    PlayerPrefs.SetInt("mem_ver_data_noti", dataNoti.ver);
+                    GameHelperIos.clearAllNoti();
+                    if (dataNoti.data.Count > 0)
+                    {
+                        foreach (NotiData item in dataNoti.data)
+                        {
+                            bool isrepeat = false;
+                            for (int j = 0; j < item.repeat.Length; j++)
+                            {
+                                if (item.repeat[j] == '1')
+                                {
+                                    isrepeat = true;
+                                    GameHelperIos.localNotify(item.titleNoti, item.msgNoti, item.hour, item.minus, j + 1);
+                                }
+                            }
+                            if (!isrepeat)
+                            {
+                                GameHelperIos.localNotify(item.titleNoti, item.msgNoti, item.hour, item.minus, -1);
+                            }
+                        }
+                    }
+                }
+            }
+#endif
         }
 
         private void OnLowMemory()
@@ -267,6 +335,7 @@ namespace mygame.sdk
 #if UNITY_ANDROID
             string[] ldt = { "2c125e8002112db06bfa5e087059f3fd"
             ,"c2331d0694479013d1fcc5574b52af1f"
+            ,"656ff28dd6e9d017a61a889b9887b063"
              };
 #else//ios
             string[] ldt = { "F1D48B06-6ED7-452F-A7C1-4B85C4DBE4A4" };
@@ -305,6 +374,7 @@ namespace mygame.sdk
                 CBFinishloadDing();
             }
 #if UNITY_IOS || UNITY_IPHONE
+            AdsHelper.Instance.initAds();
             if (GameHelper.checkLvXaDu())
             {
                 doShowFirst();
@@ -318,6 +388,92 @@ namespace mygame.sdk
                 {
                     isAllowShowFirstOpen = false;
                 }
+            }
+        }
+
+        public void onPlayGame(int lv, Myapi.LevelPassStatus statusplay, string where = "", string mode = "", Myapi.TypeDif type = Myapi.TypeDif.Normal)
+        {
+            duarationPlayLv = 0;
+            if (statusCheckFollowPlay != 0)
+            {
+                Debug.LogError("mysdk: Follow Play game is wrong, let double check end game!!!!!!!!!!!!");
+            }
+            statusCheckFollowPlay = 1;
+            PlayerPrefs.SetInt("mem_status_play", 1);
+            PlayerPrefs.SetInt("mem_lv_play_4_log", lv);
+            PlayerPrefs.SetString("mem_mode_play_4_log", mode);
+            PlayerPrefs.SetInt("mem_dif_play_4_log", ((int)type));
+            string sm = "";
+            if (mode != null && mode.Length > 0)
+            {
+                sm = mode + "_";
+            }
+            FIRhelper.logEvent($"level_{sm}{lv:000}_play");
+            if (statusplay == Myapi.LevelPassStatus.PlayAgain)
+            {
+                FIRhelper.logEvent($"level_{sm}{lv:000}_playagain");
+            }
+            else if (statusplay == Myapi.LevelPassStatus.PlayRe)
+            {
+                FIRhelper.logEvent($"level_{sm}{lv:000}_playre");
+            }
+            Myapi.LogEventApi.Instance().logLevel(lv, mode, type, statusplay, 0, where);
+        }
+
+        public void onEndGame(Myapi.LevelPassStatus stateEnd, string where = "")
+        {
+            if (statusCheckFollowPlay != 1)
+            {
+                Debug.LogError("mysdk: Follow Play game is wrong, let double check play game!!!!!!!!!!!!");
+            }
+            int lv = PlayerPrefs.GetInt("mem_lv_play_4_log", 1);
+            string mode = PlayerPrefs.GetString("mem_mode_play_4_log", "");
+            int idif = PlayerPrefs.GetInt("mem_dif_play_4_log", 1);
+            Myapi.TypeDif type = (Myapi.TypeDif)idif;
+            PlayerPrefs.SetInt("mem_status_play", 0);
+            statusCheckFollowPlay = 0;
+            totalTimePlayGame += (int)duarationPlayLv;
+            PlayerPrefsBase.Instance().setInt("mem_tot_tim_gpla", totalTimePlayGame);
+            string send = "";
+            string subSen = "";
+            if (stateEnd == Myapi.LevelPassStatus.Win || stateEnd == Myapi.LevelPassStatus.WinAgain)
+            {
+                send = "win";
+                if (stateEnd == Myapi.LevelPassStatus.WinAgain)
+                {
+                    subSen = "winagain";
+                }
+            }
+            else if (stateEnd == Myapi.LevelPassStatus.Lose || stateEnd == Myapi.LevelPassStatus.LoseAgain)
+            {
+                send = "lose";
+                if (stateEnd == Myapi.LevelPassStatus.LoseAgain)
+                {
+                    subSen = "loseagain";
+                }
+            }
+            else if (stateEnd == Myapi.LevelPassStatus.Skip)
+            {
+                send = "skip";
+            }
+            else
+            {
+                send = "endother";
+            }
+            string sm = "";
+            if (mode != null && mode.Length > 0)
+            {
+                sm = mode + "_";
+            }
+            FIRhelper.logEvent($"level_{sm}{lv:000}_{send}");
+            if (subSen.Length > 3)
+            {
+                FIRhelper.logEvent($"level_{sm}{lv:000}_{subSen}");
+            }
+            Myapi.LogEventApi.Instance().logLevel(lv, mode, type, stateEnd, (int)duarationPlayLv, where);
+            if (duarationPlayLv > 10)
+            {
+                AdsHelper.Instance.checkChangeSpecialCon();
             }
         }
 
@@ -396,10 +552,15 @@ namespace mygame.sdk
 
         public bool showRate()
         {
+            Debug.Log("aaaaa showRate0");
             if (PlayerPrefs.GetInt("is_show_rate", 0) == 1)
             {
                 return false;
             }
+            Debug.Log("aaaaa showRate1");
+#if UNITY_IOS || UNITY_IPHONE
+            GameHelper.Instance.rate();
+#else
             if (ratePopControl == null)
             {
                 var prefab = Resources.Load<PopupRateCtl>("Popup/PopupRate");
@@ -416,6 +577,7 @@ namespace mygame.sdk
             rc.sizeDelta = new Vector2(0, 0);
             rc.anchoredPosition = Vector2.zero;
             rc.anchoredPosition3D = Vector3.zero;
+#endif
             return true;
         }
 
@@ -478,13 +640,24 @@ namespace mygame.sdk
 
         private void Update()
         {
-            if (GameRes.timeStartGame > 0)
+            if (statusCheckFollowPlay == 1)
             {
-                GameRes.duarationPlayLv += Time.deltaTime;
+                if (Time.timeScale >= 0.00001f)
+                {
+                    duarationPlayLv += Time.unscaledDeltaTime;
+                }
             }
             if (tcheckFirstShow < AdsHelper.Instance.currConfig.OpenAdTimeWaitShowFirst)
             {
-                tcheckFirstShow += Time.deltaTime;
+                if (Time.timeScale <= 0.00001f)
+                {
+                    tcheckFirstShow += Time.unscaledDeltaTime;
+                }
+                else
+                {
+                    tcheckFirstShow += Time.deltaTime;
+                }
+
                 if (AdsHelper.Instance != null && !AdsHelper.Instance.isShowFulled)
                 {
                     if (tcheckFirstShow - tpreCheck >= 0.5f || tcheckFirstShow >= AdsHelper.Instance.currConfig.OpenAdTimeWaitShowFirst)
@@ -610,6 +783,7 @@ namespace mygame.sdk
                 if (re)
                 {
                     Debug.Log($"mysdk: doShowFirst show");
+                    tcheckFirstShow = 10000;
                     flagTimeScale = 1;
                     Time.timeScale = 0;
                     if (CBPauseGame != null)
@@ -693,121 +867,6 @@ namespace mygame.sdk
                 updateGameController = Instantiate(prefab, Vector3.zero, Quaternion.identity, canvasUpdate);
             }
             updateGameController.showUpdate(verup, status, gameid, link, title, des);
-        }
-
-        public void downMyopenAds()
-        {
-            Debug.Log("mysdk: Sdkmanager downMyopenAds");
-            if (myAdsOpen.linkAds.Length > 10)
-            {
-                if (myAdsOpen.isStatic == 1)
-                {
-                    DownLoadUtil.downloadImg(myAdsOpen.linkAds, "");
-                }
-                else
-                {
-                    DownLoadUtil.downloadText(myAdsOpen.linkAds, "", (statedown) =>
-                            {
-                                if (statedown == 1)
-                                {
-                                    string namef = ImageLoader.url2nameData(myAdsOpen.linkAds, 0);
-                                    string path = DownLoadUtil.pathCache() + "/" + namef;
-                                    MyAdsOpenBridge.Instance.load(path, true);
-                                }
-                            });
-                }
-            }
-            if (myAdsOpen.btNo.Length > 10)
-            {
-                DownLoadUtil.downloadImg(myAdsOpen.btNo, "");
-            }
-        }
-
-        private void addCbMyOpenAds()
-        {
-            MyAdsOpenBridge.onLoaded += onMyAdsOpenLoaded;
-            MyAdsOpenBridge.onLoadFail += onMyAdsOpenLoadFail;
-            MyAdsOpenBridge.onOpen += onMyAdsOpenOpen;
-            MyAdsOpenBridge.onClose += onMyAdsOpenClose;
-        }
-
-        private void loadMyOpenAds()
-        {
-            string data = PlayerPrefs.GetString("my_open_ads_data_mem", "");
-            myAdsOpen.fromString(data);
-            int countshow = PlayerPrefs.GetInt("my_open_ads_show_count_mem", 0);
-            Debug.Log("mysdk: Sdkmanager loadMyOpenAds data=" + data + ", countshow=" + countshow);
-            if (countshow > 0)
-            {
-                if (myAdsOpen.status > 0 && myAdsOpen.linkAds != null && myAdsOpen.linkAds.Length > 10)
-                {
-                    if (myAdsOpen.isStatic == 1)
-                    {
-                        DownLoadUtil.downloadImg(myAdsOpen.linkAds, "");
-                    }
-                    else
-                    {
-                        string namef = ImageLoader.url2nameData(myAdsOpen.linkAds, 0);
-                        string path = DownLoadUtil.pathCache() + "/" + namef;
-                        if (File.Exists(path))
-                        {
-                            MyAdsOpenBridge.Instance.load(path, true);
-                        }
-                        else
-                        {
-                            DownLoadUtil.downloadText(myAdsOpen.linkAds, "", (statedown) =>
-                            {
-                                if (statedown == 1)
-                                {
-                                    MyAdsOpenBridge.Instance.load(path, true);
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-        }
-
-        public bool showMyOpenAds()
-        {
-            Debug.Log("mysdk: Sdkmanager showMyOpenAds");
-            if (myAdsOpen != null)
-            {
-                int countshow = PlayerPrefs.GetInt("my_open_ads_show_count_mem", 0);
-                Debug.Log("mysdk: Sdkmanager showMyOpenAds countshow=" + countshow);
-                if (countshow > 0)
-                {
-                    countshow--;
-                    PlayerPrefs.SetInt("my_open_ads_show_count_mem", countshow);
-                    if (myAdsOpen.status > 0 && myAdsOpen.linkAds != null && myAdsOpen.linkAds.Length > 10)
-                    {
-                        Debug.Log("mysdk: Sdkmanager showMyOpenAds isStatic=" + myAdsOpen.isStatic + ", isload=" + isMyAdsOpenLoaded);
-                        if (myAdsOpen.isStatic == 1)
-                        {
-                            MyOpenAdsStaticCtrl.Instance.Show();
-                            MyOpenAdsStaticCtrl.Instance.initAds(myAdsOpen.status == 1, myAdsOpen.linkAds, myAdsOpen.linkStore);
-                            return true;
-                        }
-                        else
-                        {
-                            if (isMyAdsOpenLoaded)
-                            {
-                                string namef = ImageLoader.url2nameData(myAdsOpen.linkAds, 0);
-                                string path = DownLoadUtil.pathCache() + "/" + namef;
-                                int flagbtno = 1;
-                                if (myAdsOpen.status == 2)
-                                {
-                                    flagbtno = 0;
-                                }
-                                MyAdsOpenBridge.Instance.show(path, flagbtno, 0);
-                                return true;
-                            }
-                        }
-
-                    }
-                }
-            }
-            return false;
         }
 
         public void saveMoreGame()
@@ -898,25 +957,5 @@ namespace mygame.sdk
             rc.anchoredPosition3D = Vector3.zero;
         }
         //==========================================================================================
-        public void onMyAdsOpenLoaded()
-        {
-            Debug.Log("mysdk: Sdkmanager onMyAdsOpenLoaded");
-            isMyAdsOpenLoaded = true;
-        }
-
-        public void onMyAdsOpenLoadFail(string err)
-        {
-            Debug.Log("mysdk: Sdkmanager onMyAdsOpenLoadFail");
-        }
-
-        public void onMyAdsOpenOpen()
-        {
-            Debug.Log("mysdk: Sdkmanager onMyAdsOpenOpen");
-        }
-
-        public void onMyAdsOpenClose()
-        {
-            Debug.Log("mysdk: Sdkmanager onMyAdsOpenClose");
-        }
     }
 }

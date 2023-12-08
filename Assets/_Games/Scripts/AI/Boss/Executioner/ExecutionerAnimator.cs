@@ -11,6 +11,10 @@ namespace SuperFight
         public Vector2 groundSlashPoint;
         public Vector2 slashPoint;
         public Vector2 slashSize;
+        public ParticleSystem groundSlamFX;
+        public AudioClip iceExplosionSfx;
+        public AudioClip axeSwoosh;
+        public AudioClip flySwoosh;
         private Executioner executioner;
         public override void Initialize(Controller controller)
         {
@@ -21,6 +25,11 @@ namespace SuperFight
                 axes[i].CatchAxe();
             }
         }
+        void FlyUp()
+        {
+            AudioManager.Instance.PlayOneShot(flySwoosh, 0.8f);
+        }
+
         void ThrowAxes()
         {
             for (int i = 0; i < realAxes.Length; i++)
@@ -29,9 +38,9 @@ namespace SuperFight
             }
             Vector3 direction = new Vector3(controller.core.movement.facingDirection, 0);
             DamageInfo damageInfo = new DamageInfo();
-            damageInfo.damage = controller.stats.damage / 2;
+            damageInfo.damage = controller.runtimeStats.damage / 2;
             damageInfo.idSender = controller.core.combat.getColliderInstanceID;
-            damageInfo.hitDirection = (int)direction.x;
+            damageInfo.hitDirection = controller.core.movement.facingDirection;
             for (int i = 0; i < axes.Length; i++)
             {
                 axes[i].ThrowAxe(damageInfo);
@@ -50,52 +59,65 @@ namespace SuperFight
         }
         void GroundSlash()
         {
+            CameraController.Instance.ShakeCamera(.5f, 1f, 10, 90, true);
+            AudioManager.Instance.PlayOneShot(iceExplosionSfx, 0.8f);
+            groundSlamFX.Play();
             Vector3 direction = new Vector3(controller.core.movement.facingDirection, 0);
             Vector3 point = controller.transform.position + new Vector3(groundSlashPoint.x * direction.x, groundSlashPoint.y, 0);
-            var colls = new Collider2D[3];
-            Physics2D.OverlapBoxNonAlloc(point, groundSlashSize, 0, colls, executioner.layerTarget);
-
+            Collider2D[] coll = Physics2D.OverlapBoxAll(point, groundSlashSize, 0, executioner.layerTarget);
             DamageInfo damageInfo = new DamageInfo();
-            damageInfo.damage = controller.stats.damage;
+            damageInfo.damage = controller.runtimeStats.damage;
             damageInfo.idSender = controller.core.combat.getColliderInstanceID;
-            damageInfo.hitDirection = (int)direction.x;
+            damageInfo.hitDirection = controller.core.movement.facingDirection;
+            damageInfo.stunForce = new Vector2(7f, 0);
             damageInfo.stunTime = 0.3f;
-            for (int i = 0; i < colls.Length; i++)
+            for (int i = 0; i < coll.Length; i++)
             {
-                if (colls[i] != null && !controller.core.combat.IsSelfCollider(colls[i]))
+                if (coll[i].GetComponent<IDamage>() != null && !controller.core.combat.IsSelfCollider(coll[i]))
                 {
-                    colls[i].GetComponent<IDamage>()?.TakeDamage(damageInfo);
+                    coll[i].GetComponent<IDamage>().TakeDamage(damageInfo);
                 }
             }
-            CameraController.Instance.ShakeCamera(.5f, 1f, 10, 90, true);
         }
+        void GroundSlashWall()
+        {
 
+        }
+        void EnableRotate()
+        {
+            executioner.rotateWhenAction = true;
+        }
+        void DeactiveRotate()
+        {
+            executioner.rotateWhenAction = false;
+        }
+        void ActiveAxe()
+        {
+            AudioManager.Instance.PlayOneShot(axeSwoosh, 0.8f);
+        }
         void Slash()
         {
             Vector3 direction = new Vector3(controller.core.movement.facingDirection, 0);
             Vector3 point = controller.transform.position + new Vector3(slashPoint.x * direction.x, slashPoint.y, 0);
-            var colls = new Collider2D[3];
-            Physics2D.OverlapBoxNonAlloc(point, slashSize, 0, colls, executioner.layerTarget);
-
+            Collider2D[] coll = Physics2D.OverlapBoxAll(point, slashSize, 0, executioner.layerTarget);
             DamageInfo damageInfo = new DamageInfo();
-            damageInfo.damage = controller.stats.damage / 2;
+            damageInfo.damage = controller.runtimeStats.damage / 2;
             damageInfo.idSender = controller.core.combat.getColliderInstanceID;
-            damageInfo.hitDirection = (int)direction.x;
+            damageInfo.hitDirection = controller.core.movement.facingDirection;
+            damageInfo.stunForce = new Vector2(3f, 0);
             damageInfo.stunTime = 0.3f;
-            for (int i = 0; i < colls.Length; i++)
+            for (int i = 0; i < coll.Length; i++)
             {
-                if (colls[i] != null && !controller.core.combat.IsSelfCollider(colls[i]))
+                if (coll[i].GetComponent<IDamage>() != null && !controller.core.combat.IsSelfCollider(coll[i]))
                 {
-                    colls[i].GetComponent<IDamage>()?.TakeDamage(damageInfo);
+                    coll[i].GetComponent<IDamage>().TakeDamage(damageInfo);
                 }
             }
         }
 
         public override void ResetAnimator()
         {
-            gameObject.SetActive(true);
-            ResumeAnimator();
-            animator.Rebind();
+
         }
         private void OnDrawGizmos()
         {

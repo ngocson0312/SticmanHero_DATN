@@ -26,6 +26,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 806784156595474975}
   - {fileID: 7051119136250395836}
@@ -43,7 +44,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6159651683300761347}
-  - component: {fileID: 7098818771725562849}
   m_Layer: 0
   m_Name: E_SPIDER
   m_TagString: Untagged
@@ -61,30 +61,11 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 9.81, y: -3.53, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7098818771725562849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 729148351602576811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 2
-  enemyStats:
-    health: 522
-    damage: 174
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
 --- !u!1 &1151089747118826953
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,7 +75,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 36690465746130972}
-  - component: {fileID: 413283856621377769}
   m_Layer: 0
   m_Name: E_SKELETON
   m_TagString: Untagged
@@ -112,30 +92,11 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 49.64, y: 12.09, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &413283856621377769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1151089747118826953}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 6
-  enemyStats:
-    health: 522
-    damage: 130
-  overrideBaseStats: 1
-  attackSpeed: 2
-  moveRange: 0
-  firstDelay: 0
 --- !u!1 &2048161069048339095
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,6 +125,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -21.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3016840096561287592}
   m_RootOrder: 1
@@ -4523,6 +4485,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -4586,6 +4549,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -1.99, z: 26.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8823625760774611390}
   - {fileID: 4898439067210487416}
@@ -4601,7 +4565,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 588681179694215907}
-  - component: {fileID: 4257774781432197458}
   m_Layer: 0
   m_Name: E_SPIDERHANGING
   m_TagString: Untagged
@@ -4619,30 +4582,11 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 30.42, y: -0.975, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4257774781432197458
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2669771681046127059}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 8
-  enemyStats:
-    health: 304
-    damage: 174
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 3
-  firstDelay: 2
 --- !u!1 &2840935697078326901
 GameObject:
   m_ObjectHideFlags: 0
@@ -4652,7 +4596,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7051119136250395836}
-  - component: {fileID: 3905754305861880149}
   m_Layer: 0
   m_Name: SavePoint (1)
   m_TagString: Untagged
@@ -4670,23 +4613,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 52.18, y: 13.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4607863181406058346}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3905754305861880149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2840935697078326901}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac8ed5dc458cf204e97fd5920561f778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 0
 --- !u!1 &3369011312692584946
 GameObject:
   m_ObjectHideFlags: 0
@@ -4713,6 +4644,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -10.63, y: 0.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 0
@@ -4726,7 +4658,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2210434676423061036}
-  - component: {fileID: 2046542008090923656}
   m_Layer: 0
   m_Name: E_SPIDER
   m_TagString: Untagged
@@ -4744,30 +4675,11 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 48.46, y: -1.76, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2046542008090923656
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3588036370494442123}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 2
-  enemyStats:
-    health: 522
-    damage: 174
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
 --- !u!1 &3668632382630210474
 GameObject:
   m_ObjectHideFlags: 0
@@ -4777,7 +4689,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 806784156595474975}
-  - component: {fileID: 437782140907052442}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -4795,23 +4706,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -8.98, y: 16.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4607863181406058346}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &437782140907052442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3668632382630210474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac8ed5dc458cf204e97fd5920561f778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 4
 --- !u!1 &4070582294920661156
 GameObject:
   m_ObjectHideFlags: 0
@@ -4840,6 +4739,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 3
@@ -4945,6 +4845,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -4991,7 +4892,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2340303049834552940}
-  - component: {fileID: 2610307625810639805}
   m_Layer: 0
   m_Name: E_CREEPER
   m_TagString: Untagged
@@ -5009,30 +4909,11 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 3.36, y: -3.53, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2610307625810639805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4878224316005359385}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 4
-  enemyStats:
-    health: 870
-    damage: 174
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
 --- !u!1 &5476494707243828523
 GameObject:
   m_ObjectHideFlags: 0
@@ -5042,7 +4923,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4932504591993564349}
-  - component: {fileID: 3844409679016736673}
   m_Layer: 0
   m_Name: E_GOLEM
   m_TagString: Untagged
@@ -5060,30 +4940,11 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 7.46, y: 15.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3844409679016736673
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5476494707243828523}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 7
-  enemyStats:
-    health: 1044
-    damage: 130
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
 --- !u!1 &5732591550803286426
 GameObject:
   m_ObjectHideFlags: 0
@@ -5115,6 +4976,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 1
@@ -53682,6 +53544,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -54120,6 +53983,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 2.23}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 2
@@ -57465,6 +57329,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -57512,7 +57377,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5732591552421084465}
   - component: {fileID: 5732591552421084464}
-  - component: {fileID: 2470538631793914950}
+  - component: {fileID: -812599640947885507}
   m_Layer: 0
   m_Name: Level 77
   m_TagString: Untagged
@@ -57530,6 +57395,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8391883043269399981}
   - {fileID: 5732591550803286427}
@@ -57559,7 +57425,7 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!114 &2470538631793914950
+--- !u!114 &-812599640947885507
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -57568,39 +57434,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 5732591552421084467}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72ba555d689d6e54b892cb9c99e5274c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4923af3629e30674f926a50600f2c596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelIndex: 77
-  playerPoint: {fileID: 8391883043269399981}
-  typeThemes: 3
-  isLevelBoss: 0
-  bossFightArena: {fileID: 0}
-  listEnemies:
-  - {fileID: 8929719709056760959}
-  - {fileID: 8373486152515667299}
-  - {fileID: 7098818771725562849}
-  - {fileID: 2610307625810639805}
-  - {fileID: 2215808983772312677}
-  - {fileID: 6843170452239473341}
-  - {fileID: 4257774781432197458}
-  - {fileID: 7578960878684255628}
-  - {fileID: 2046542008090923656}
-  - {fileID: 413283856621377769}
-  - {fileID: 4330262939815797746}
-  - {fileID: 8796459514248317003}
-  - {fileID: 3844409679016736673}
-  - {fileID: 8839225906185289351}
-  listItems:
-  - {fileID: 437782140907052442}
-  - {fileID: 3905754305861880149}
-  - {fileID: 2962364305885942013}
-  - {fileID: 6277115781251897758}
-  listPosAdmix:
-  - {fileID: 1604404790280455726}
-  - {fileID: 766132518278272379}
-  - {fileID: 6450554900148346375}
-  - {fileID: 290847614015878589}
+  spawnPoint: {fileID: 8391883043269399981}
+  minX: -50
+  maxX: 50
+  minY: -50
+  maxY: 50
+  enemySpawners: []
+  bossFightArena: []
+  admixAnchors: []
+  doorAnchor: {fileID: 806784156595474975}
 --- !u!1 &5788821110177774378
 GameObject:
   m_ObjectHideFlags: 0
@@ -57610,7 +57455,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4162165881170548353}
-  - component: {fileID: 8929719709056760959}
   m_Layer: 0
   m_Name: E_SPIDERHANGING
   m_TagString: Untagged
@@ -57628,30 +57472,11 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 24.54, y: -0.975, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8929719709056760959
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5788821110177774378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 8
-  enemyStats:
-    health: 304
-    damage: 174
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 3
-  firstDelay: 1
 --- !u!1 &5808713463657945307
 GameObject:
   m_ObjectHideFlags: 0
@@ -57661,7 +57486,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3580237101643995883}
-  - component: {fileID: 8796459514248317003}
   m_Layer: 0
   m_Name: E_SKELETON
   m_TagString: Untagged
@@ -57679,30 +57503,11 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 23.34, y: 9.26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8796459514248317003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5808713463657945307}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 6
-  enemyStats:
-    health: 522
-    damage: 130
-  overrideBaseStats: 1
-  attackSpeed: 2
-  moveRange: 0
-  firstDelay: 0
 --- !u!1 &5963440898255375495
 GameObject:
   m_ObjectHideFlags: 0
@@ -57712,7 +57517,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6810082813187429106}
-  - component: {fileID: 8839225906185289351}
   m_Layer: 0
   m_Name: E_GOLEM
   m_TagString: Untagged
@@ -57730,30 +57534,11 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -2.26, y: 15.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8839225906185289351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5963440898255375495}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 7
-  enemyStats:
-    health: 1044
-    damage: 130
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
 --- !u!1 &6591059226789570111
 GameObject:
   m_ObjectHideFlags: 0
@@ -57782,6 +57567,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3016840096561287592}
   m_RootOrder: 0
@@ -66591,6 +66377,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -66637,7 +66424,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5076246575860294220}
-  - component: {fileID: 2215808983772312677}
   m_Layer: 0
   m_Name: E_SKELETON
   m_TagString: Untagged
@@ -66655,30 +66441,11 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 16.71, y: -1.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2215808983772312677
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6708997440977089224}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 6
-  enemyStats:
-    health: 522
-    damage: 130
-  overrideBaseStats: 1
-  attackSpeed: 2
-  moveRange: 0
-  firstDelay: 0
 --- !u!1 &7250918400758755892
 GameObject:
   m_ObjectHideFlags: 0
@@ -66688,7 +66455,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5831684188634256701}
-  - component: {fileID: 6843170452239473341}
   m_Layer: 0
   m_Name: E_SPIDERHANGING
   m_TagString: Untagged
@@ -66706,30 +66472,11 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 27.54, y: -0.975, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6843170452239473341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7250918400758755892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 8
-  enemyStats:
-    health: 304
-    damage: 174
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 3
-  firstDelay: 0.8
 --- !u!1 &7473273521383460981
 GameObject:
   m_ObjectHideFlags: 0
@@ -66758,6 +66505,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8427110371045513107}
   m_RootOrder: 0
@@ -112183,6 +111931,7 @@ TilemapRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -112244,8 +111993,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7489938570163652088}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.16, y: -3.93, z: 0}
+  m_LocalPosition: {x: -0.16, y: -3.93, z: 3}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 9
@@ -112274,8 +112024,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7532684219918252346}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 35.52, y: 8.03, z: 0}
+  m_LocalPosition: {x: 35.52, y: 8.03, z: 3}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 11
@@ -112289,7 +112040,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4686532045510593556}
-  - component: {fileID: 8373486152515667299}
   m_Layer: 0
   m_Name: E_SPIDER
   m_TagString: Untagged
@@ -112307,30 +112057,11 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -3.06, y: -3.53, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8373486152515667299
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7558928548416085872}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 2
-  enemyStats:
-    health: 522
-    damage: 174
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
 --- !u!1 &7654714571216279567
 GameObject:
   m_ObjectHideFlags: 0
@@ -112357,6 +112088,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 26.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4871209685634680201}
   m_Father: {fileID: 5732591552421084465}
@@ -112386,8 +112118,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7735819958009383442}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 39.54, y: -1.92, z: 0}
+  m_LocalPosition: {x: 39.54, y: -1.92, z: 3}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 10
@@ -112401,7 +112134,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4469070071493362459}
-  - component: {fileID: 2962364305885942013}
   m_Layer: 0
   m_Name: Health (1)
   m_TagString: Untagged
@@ -112419,23 +112151,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 35.36, y: -2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4607863181406058346}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2962364305885942013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7831863587036992983}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac8ed5dc458cf204e97fd5920561f778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 2
 --- !u!1 &8072178276730482276
 GameObject:
   m_ObjectHideFlags: 0
@@ -112445,7 +112165,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5241269153875112537}
-  - component: {fileID: 7578960878684255628}
   m_Layer: 0
   m_Name: E_SPIDER
   m_TagString: Untagged
@@ -112463,30 +112182,11 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 41.56, y: -1.76, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7578960878684255628
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8072178276730482276}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 2
-  enemyStats:
-    health: 522
-    damage: 174
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
 --- !u!1 &8076781981821565562
 GameObject:
   m_ObjectHideFlags: 0
@@ -112511,8 +112211,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8076781981821565562}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 13.83, y: 14.04, z: 0}
+  m_LocalPosition: {x: 13.83, y: 14.04, z: 3}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 12
@@ -112543,6 +112244,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4162165881170548353}
   - {fileID: 4686532045510593556}
@@ -112570,7 +112272,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3047457078368351033}
-  - component: {fileID: 4330262939815797746}
   m_Layer: 0
   m_Name: E_SPIDER
   m_TagString: Untagged
@@ -112588,30 +112289,11 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 37.93, y: 8.17, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1493098003682374861}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4330262939815797746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8388806742687160984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf8a969f23b2d2145abe06417954f37e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 2
-  enemyStats:
-    health: 522
-    damage: 174
-  overrideBaseStats: 1
-  attackSpeed: 0
-  moveRange: 0
-  firstDelay: 0
 --- !u!1 &8484855443442441040
 GameObject:
   m_ObjectHideFlags: 0
@@ -112638,6 +112320,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732591552421084465}
   m_RootOrder: 8
@@ -112651,7 +112334,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4807267362664227356}
-  - component: {fileID: 6277115781251897758}
   m_Layer: 0
   m_Name: SwordItem
   m_TagString: Untagged
@@ -112669,20 +112351,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 8, y: 2.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4607863181406058346}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6277115781251897758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8871510092509230162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac8ed5dc458cf204e97fd5920561f778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 1

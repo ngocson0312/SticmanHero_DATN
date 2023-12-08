@@ -332,12 +332,12 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       rainDrop_0: -3696665515696150500
-      rainDrop_1: 2659560784082124743
-      rainDrop_2: -2620588100714345032
-      rainDrop_3: 1152957303815938518
-      rainDrop_4: 8101309327878329132
-      rainDrop_5: 8628207680258952375
       rainDrop_6: 7356797802005840479
+      rainDrop_2: -2620588100714345032
+      rainDrop_4: 8101309327878329132
+      rainDrop_1: 2659560784082124743
+      rainDrop_3: 1152957303815938518
+      rainDrop_5: 8628207680258952375
       rainDrop_7: 9098385625802974323
   spritePackingTag: 
   pSDRemoveMatte: 0

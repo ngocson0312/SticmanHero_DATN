@@ -5,19 +5,25 @@ namespace SuperFight
 {
     public class Creeper : GroundEnemy
     {
-        // private void Awake()
-        // {
-        //     TypeEnemy = TYPE_ENEMY.E_CREEPER;
-        // }
         public Renderer rendererCharacter;
+        public CreeperExplodeState creeperExplodeState;
+        public CreeperPatrolState creeperPatrol;
+        public CreeperChaseState creeperChaseState;
+        public ParticleSystem VfXExpolision;
+        public AudioClip countDownSfx;
+        public AudioClip explosionSfx;
         public override void Initialize()
         {
             base.Initialize();
-            attackState = new CreeperExplodeState(this, "explode");
+            creeperPatrol = new CreeperPatrolState(this, "");
+            creeperChaseState = new CreeperChaseState(this, "");
+            creeperExplodeState = new CreeperExplodeState(this, "explode");
+
         }
-        public override void ResetStatEnemy(CharacterStats overrideStats)
+        public override void ResetController()
         {
-            base.ResetStatEnemy(overrideStats);
+            base.ResetController();
+            SwitchState(creeperPatrol);
             rendererCharacter.material.color = Color.white;
         }
         public override void Die(bool deactiveCharacter)
@@ -25,19 +31,9 @@ namespace SuperFight
             if (!isActive) return;
             base.Die(deactiveCharacter);
             healthBar.Deactive();
-            GetComponent<Collider2D>().enabled = false;
-      
         }
 
-        public override void DetectPlayer()
-        {
-            base.DetectPlayer();
-            if (delayTimePlaySoundFx <= 0)
-            {
-                delayTimePlaySoundFx = 5f;
-                SoundManager.Instance.playSoundFx(SoundManager.Instance.effCreeper);
-            }
-        }
+
     }
 }
 

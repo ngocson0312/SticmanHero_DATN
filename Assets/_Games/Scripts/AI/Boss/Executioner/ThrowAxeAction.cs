@@ -22,7 +22,7 @@ namespace SuperFight
 
         public override void OnActionEnter()
         {
-            Vector3 direction = (target.position - executioner.transform.position).normalized;
+            Vector3 direction = (target.position - executioner.transform.position);
             Vector3 targetPostion = target.position;
             int currentDirection = executioner.core.movement.facingDirection;
             if (direction.x < 0)
@@ -53,6 +53,14 @@ namespace SuperFight
             }
             executioner.animatorHandle.PlayAnimation("ThrowAxes", 0.1f, 1, true);
             actionTimer = 1.3f;
+        }
+
+        public override void OnPause()
+        {
+        }
+
+        public override void OnResume()
+        {
         }
 
         public override void UpdateLogic(float deltaTime)

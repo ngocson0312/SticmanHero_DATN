@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90bd872860d8f564390f2c0d54235f1f, type: 3}
+  m_Name: KnightRing
+  m_EditorClassIdentifier: 
+  id: 18
+  icon: {fileID: 21300000, guid: 8ac4fb2d324330544a30b085f2528a2a, type: 3}
+  itemType: 0
+  itemName: Blessing Ring
+  description: 
+  prefab: {fileID: 4920996110690471290, guid: 5617efabc43f97f43808bb1661261d8d, type: 3}
+  equipmentType: 4
+  gradeSkillDesc:
+  - <color=#4dff3a>+50</color> HP
+  - <color=#4dff3a>+5%</color> HP
+  - <color=#4dff3a>+5% Life Steal</color>
+  - <color=#4dff3a>+5%</color> HP

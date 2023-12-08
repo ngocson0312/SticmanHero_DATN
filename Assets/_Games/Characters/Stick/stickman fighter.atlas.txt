@@ -1,0 +1,1059 @@
+stickman fighter.png
+size:5993,5959
+filter:Linear,Linear
+pma:true
+stickman/AmongUs/chan_ phai
+bounds:1979,1345,300,608
+rotate:90
+stickman/AmongUs/chan_ trai
+bounds:1802,4161,261,621
+rotate:90
+stickman/AmongUs/tay_ trai
+bounds:3654,4905,251,497
+rotate:90
+stickman/AmongUs/tay_phai
+bounds:5420,3293,275,487
+rotate:90
+stickman/AmongUs/than
+bounds:2033,5874,83,465
+rotate:90
+stickman/Ashe/chan_ phai
+bounds:3655,942,310,618
+rotate:90
+stickman/Ashe/chan_ trai
+bounds:491,3134,270,635
+rotate:90
+stickman/Ashe/tay_ trai
+bounds:1973,4424,261,507
+rotate:90
+stickman/Ashe/tay_phai
+bounds:5409,2444,285,497
+rotate:90
+stickman/Ashe/than
+bounds:2512,5779,93,475
+rotate:90
+stickman/BaseSkin/chan_ phai
+bounds:2,769,310,618
+rotate:90
+stickman/BaseSkin/chan_ trai
+bounds:4784,3223,271,631
+rotate:90
+stickman/BaseSkin/dau
+bounds:5626,4180,312,303
+offsets:6,6,324,315
+stickman/BaseSkin/tay_ trai
+bounds:3103,4397,261,507
+rotate:90
+stickman/BaseSkin/tay_phai
+bounds:4276,2430,285,497
+rotate:90
+stickman/BaseSkin/than
+bounds:2989,5779,93,475
+rotate:90
+stickman/Batman/chan_ phai
+bounds:622,753,310,618
+rotate:90
+stickman/Batman/chan_ trai
+bounds:1128,3095,271,631
+rotate:90
+stickman/Batman/dau
+bounds:2482,700,336,407
+offsets:6,6,348,419
+rotate:90
+stickman/Batman/tay_ trai
+bounds:3612,4381,261,507
+rotate:90
+stickman/Batman/tay_phai
+bounds:4775,2390,285,497
+rotate:90
+stickman/Batman/than
+bounds:3466,5779,93,475
+rotate:90
+stickman/Boss/chan_ phai
+bounds:1242,730,310,618
+rotate:90
+stickman/Boss/chan_ trai
+bounds:1761,3068,271,631
+rotate:90
+stickman/Boss/dau
+bounds:5593,3875,312,303
+offsets:6,6,324,315
+stickman/Boss/tay_ trai
+bounds:4121,4365,261,507
+rotate:90
+stickman/Boss/tay_phai
+bounds:2,2301,285,497
+rotate:90
+stickman/Boss/than
+bounds:3943,5779,93,475
+rotate:90
+stickman/Captain/Khien
+bounds:5650,4789,301,301
+offsets:6,6,313,313
+stickman/Captain/chan_ phai
+bounds:1862,726,310,618
+rotate:90
+stickman/Captain/chan_ trai
+bounds:2394,3066,271,631
+rotate:90
+stickman/Captain/tay_ trai
+bounds:4630,4349,261,507
+rotate:90
+stickman/Captain/tay_phai
+bounds:501,2272,285,497
+rotate:90
+stickman/Captain/than
+bounds:4420,5779,93,475
+rotate:90
+stickman/Death/chan_ phai
+bounds:2589,1342,300,608
+rotate:90
+stickman/Death/chan_ trai
+bounds:2425,4136,261,621
+rotate:90
+stickman/Death/tay_ trai
+bounds:4153,4889,251,497
+rotate:90
+stickman/Death/tay_phai
+bounds:3806,3287,275,487
+rotate:90
+stickman/Death/than
+bounds:2500,5874,83,465
+rotate:90
+stickman/HarryPotter/chan_ phai
+bounds:2891,655,310,618
+rotate:90
+stickman/HarryPotter/chan_ trai
+bounds:3027,3048,271,631
+rotate:90
+stickman/HarryPotter/tay_ trai
+bounds:3048,4134,261,507
+rotate:90
+stickman/HarryPotter/tay_phai
+bounds:3548,2177,285,497
+rotate:90
+stickman/HarryPotter/than
+bounds:4897,5779,93,475
+rotate:90
+stickman/Hellboy/chan_ phai
+bounds:4724,655,310,618
+rotate:90
+stickman/Hellboy/chan_ trai
+bounds:3660,3014,271,631
+rotate:90
+stickman/Hellboy/tay_ trai
+bounds:3557,4118,261,507
+rotate:90
+stickman/Hellboy/tay_phai
+bounds:2993,1644,292,497
+rotate:90
+stickman/Hellboy/than
+bounds:5374,5778,93,475
+rotate:90
+stickman/Ironman/chan_ phai
+bounds:3511,630,310,618
+rotate:90
+stickman/Ironman/chan_ trai
+bounds:4782,2950,271,631
+rotate:90
+stickman/Ironman/dau
+bounds:5548,3570,312,303
+offsets:6,6,324,315
+stickman/Ironman/tay_ trai
+bounds:4066,4102,261,507
+rotate:90
+stickman/Ironman/tay_phai
+bounds:5274,2157,285,497
+rotate:90
+stickman/Ironman/than
+bounds:331,5701,93,475
+rotate:90
+stickman/Joker/chan_ phai
+bounds:2482,27,314,622
+rotate:90
+stickman/Joker/chan_ trai
+bounds:3639,2464,275,635
+rotate:90
+stickman/Joker/tay_ trai
+bounds:4394,3556,265,511
+rotate:90
+stickman/Joker/tay_phai
+bounds:501,1694,289,501
+rotate:90
+stickman/Joker/than
+bounds:808,5691,93,475
+rotate:90
+stickman/Kaisa/Da tay trai
+bounds:5562,5668,108,170
+offsets:0,0,108,171
+rotate:90
+stickman/Kaisa/ao
+bounds:5516,5535,110,437
+offsets:0,0,186,437
+rotate:90
+stickman/Kaisa/chan_ phai1
+bounds:3039,967,306,614
+rotate:90
+stickman/Kaisa/chan_ trai1
+bounds:3175,3321,269,629
+rotate:90
+stickman/Kaisa/co ao
+bounds:5734,5647,151,112
+stickman/Kaisa/da nguc
+bounds:335,5895,62,93
+rotate:90
+stickman/Kaisa/tay_ trai1
+bounds:3625,4644,259,506
+rotate:90
+stickman/Kaisa/tay_phai1
+bounds:5415,2731,283,495
+rotate:90
+stickman/Kaisa/than1
+bounds:1285,5689,93,471
+rotate:90
+stickman/King/chan_ phai
+bounds:5344,581,310,618
+rotate:90
+stickman/King/chan_ trai
+bounds:2,2861,271,631
+rotate:90
+stickman/King/dau
+bounds:5382,893,329,531
+offsets:6,6,341,543
+rotate:90
+stickman/King/tay_ trai
+bounds:4575,4086,261,507
+rotate:90
+stickman/King/tay_phai
+bounds:4047,2143,285,497
+rotate:90
+stickman/King/than
+bounds:1758,5685,93,475
+rotate:90
+stickman/Kratos/chan_ phai
+bounds:4459,27,314,622
+rotate:90
+stickman/Kratos/chan_ trai
+bounds:1000,2272,275,635
+rotate:90
+stickman/Kratos/tay_ trai
+bounds:4907,3496,265,511
+rotate:90
+stickman/Kratos/tay_phai
+bounds:1484,1667,289,501
+rotate:90
+stickman/Kratos/than
+bounds:4421,5585,97,479
+rotate:90
+stickman/Logan/chan_ phai
+bounds:2,457,310,618
+rotate:90
+stickman/Logan/chan_ trai
+bounds:1124,2822,271,631
+rotate:90
+stickman/Logan/dau
+bounds:4131,479,394,339
+offsets:6,6,406,351
+stickman/Logan/tay_ trai
+bounds:5084,4026,261,507
+rotate:90
+stickman/Logan/tay_phai
+bounds:4546,2103,285,497
+rotate:90
+stickman/Logan/than
+bounds:2235,5684,93,475
+rotate:90
+stickman/Loki/chan_ phai
+bounds:622,441,310,618
+rotate:90
+stickman/Loki/chan_ trai
+bounds:1757,2795,271,631
+rotate:90
+stickman/Loki/tay_ trai
+bounds:2,3945,261,507
+rotate:90
+stickman/Loki/tay_phai
+bounds:2,2014,285,497
+rotate:90
+stickman/Loki/than
+bounds:3189,5684,93,475
+rotate:90
+stickman/Loki2/chan_ phai
+bounds:3106,2,314,622
+rotate:90
+stickman/Loki2/chan_ trai
+bounds:1637,2245,275,635
+rotate:90
+stickman/Loki2/tay_ trai
+bounds:2,3415,265,511
+rotate:90
+stickman/Loki2/tay_phai
+bounds:1987,1665,289,501
+rotate:90
+stickman/Loki2/than
+bounds:2712,5684,93,475
+rotate:90
+stickman/Luffy/chan_ phai
+bounds:3199,1275,300,608
+rotate:90
+stickman/Luffy/chan_ trai
+bounds:511,3945,261,621
+rotate:90
+stickman/Luffy/tay_ trai
+bounds:4652,4874,251,497
+rotate:90
+stickman/Luffy/tay_phai
+bounds:4295,3279,275,487
+rotate:90
+stickman/Luffy/than
+bounds:2967,5874,83,465
+rotate:90
+stickman/Mario/chan_ phai
+bounds:4773,1275,300,608
+rotate:90
+stickman/Mario/chan_ trai
+bounds:1134,3936,261,621
+rotate:90
+stickman/Mario/tay_ trai
+bounds:5151,4839,251,497
+rotate:90
+stickman/Mario/tay_phai
+bounds:2,3138,275,487
+rotate:90
+stickman/Mario/than
+bounds:3434,5874,83,465
+rotate:90
+stickman/Mummy/chan_ phai
+bounds:1242,418,310,618
+rotate:90
+stickman/Mummy/chan_ trai
+bounds:2390,2793,271,631
+rotate:90
+stickman/Mummy/tay_ trai
+bounds:1757,3898,261,507
+rotate:90
+stickman/Mummy/tay_phai
+bounds:501,1985,285,497
+rotate:90
+stickman/Mummy/than
+bounds:3666,5684,93,475
+rotate:90
+stickman/Naruto/chan_ phai
+bounds:1862,414,310,618
+rotate:90
+stickman/Naruto/chan_ trai
+bounds:3023,2775,271,631
+rotate:90
+stickman/Naruto/tay_ trai
+bounds:4133,4628,259,512
+rotate:90
+stickman/Naruto/tay_phai
+bounds:1000,1985,285,497
+rotate:90
+stickman/Naruto/than
+bounds:4143,5684,93,475
+rotate:90
+stickman/PUPG/chan_ phai
+bounds:2848,343,310,618
+rotate:90
+stickman/PUPG/chan_ trai
+bounds:341,5227,212,646
+rotate:90
+stickman/PUPG/tay_ trai
+bounds:2266,3873,261,507
+rotate:90
+stickman/PUPG/tay_phai
+bounds:1499,1958,285,497
+rotate:90
+stickman/PUPG/than
+bounds:4620,5684,93,475
+rotate:90
+stickman/PeaceMaker/chan_ trai
+bounds:2031,3341,267,627
+rotate:90
+stickman/PeaceMaker/tay_ trai
+bounds:2660,3339,267,513
+rotate:90
+stickman/PeaceMaker/tay_phai
+bounds:4992,1577,291,503
+rotate:90
+stickman/PeaceMaker/than
+bounds:4902,5577,104,471
+rotate:90
+stickman/Phu thuy mat trang/chan vay
+bounds:2,5459,222,145
+offsets:0,1,222,146
+stickman/Phu thuy mat trang/chan_ phai1
+bounds:3814,1556,298,606
+rotate:90
+stickman/Phu thuy mat trang/chan_ trai1
+bounds:2482,4399,259,619
+rotate:90
+stickman/Phu thuy mat trang/dau
+bounds:4088,117,369,360
+offsets:1,7,399,380
+stickman/Phu thuy mat trang/gay_phep
+bounds:2,1402,290,759
+offsets:7,12,304,784
+rotate:90
+stickman/Phu thuy mat trang/no
+bounds:5375,5562,139,119
+stickman/Phu thuy mat trang/tay_ trai1
+bounds:2163,4940,249,495
+rotate:90
+stickman/Phu thuy mat trang/tay_phai1
+bounds:5151,4564,273,485
+rotate:90
+stickman/Phu thuy mat trang/than1
+bounds:5097,5683,93,463
+rotate:90
+stickman/Phu thuy mat trang/toc_phai
+bounds:5375,5323,210,568
+rotate:90
+stickman/Phu thuy mat trang/toc_trai
+bounds:3818,5588,94,601
+rotate:90
+stickman/Poppy/chan_ phai
+bounds:4766,967,306,614
+rotate:90
+stickman/Poppy/chan_ trai
+bounds:2274,2243,275,635
+rotate:90
+stickman/Poppy/tay_ trai
+bounds:1005,3406,265,511
+rotate:90
+stickman/Poppy/tay_phai
+bounds:1998,1956,285,497
+rotate:90
+stickman/Poppy/than
+bounds:2,5606,93,475
+rotate:90
+stickman/Qiyana/chan_phai1
+bounds:763,1383,298,606
+rotate:90
+stickman/Qiyana/chan_trai1
+bounds:2,4208,259,619
+rotate:90
+stickman/Qiyana/tay_phai1
+bounds:5139,4289,273,485
+rotate:90
+stickman/Qiyana/tay_trai1
+bounds:2660,4914,249,495
+rotate:90
+stickman/Qiyana/than1
+bounds:1192,5876,81,463
+rotate:90
+stickman/Qiyana/toc phai
+bounds:3355,5395,192,377
+rotate:90
+stickman/Qiyana/toc trai
+bounds:3734,5391,195,410
+rotate:90
+stickman/Riven/Dau
+bounds:5544,1846,316,309
+offsets:0,0,324,315
+stickman/Riven/Vai Phai
+bounds:5851,5761,115,110
+stickman/Riven/Vai_trai
+bounds:4801,5366,351,209
+stickman/Riven/chan_ phai_1
+bounds:4527,343,310,618
+rotate:90
+stickman/Riven/chan_trai_1
+bounds:3656,2741,271,629
+rotate:90
+stickman/Riven/tay_phai_1
+bounds:2497,1938,285,497
+rotate:90
+stickman/Riven/tay_trai_1
+bounds:2775,3871,261,507
+rotate:90
+stickman/Riven/than_1
+bounds:1468,5784,89,471
+rotate:90
+stickman/Riven/toc giua
+bounds:1524,5431,157,225
+rotate:90
+stickman/Riven/toc phai
+bounds:1751,5431,156,392
+rotate:90
+stickman/Riven/toc sau 1
+bounds:1021,5880,169,77
+stickman/Riven/toc sau 2
+bounds:226,5455,163,149
+stickman/Riven/toc sau 3
+bounds:430,5890,67,136
+rotate:90
+stickman/Riven/toc trai
+bounds:635,2559,296,470
+rotate:90
+stickman/Robin/chan_ phai
+bounds:3809,1254,300,608
+rotate:90
+stickman/Robin/chan_ trai
+bounds:3284,3855,261,621
+rotate:90
+stickman/Robin/tay_ trai
+bounds:2,4743,251,497
+rotate:90
+stickman/Robin/tay_phai
+bounds:5417,3016,275,487
+rotate:90
+stickman/Robin/than
+bounds:3901,5874,83,465
+rotate:90
+stickman/RocketTeam1/chan_ phai
+bounds:3468,318,310,618
+rotate:90
+stickman/RocketTeam1/chan_ trai
+bounds:4776,2677,271,631
+rotate:90
+stickman/RocketTeam1/tay_ trai
+bounds:3907,3839,261,507
+rotate:90
+stickman/RocketTeam1/tay_phai
+bounds:2996,1938,285,497
+rotate:90
+stickman/RocketTeam1/than
+bounds:479,5596,93,475
+rotate:90
+stickman/RocketTeam2/chan_ phai
+bounds:5147,269,310,618
+rotate:90
+stickman/RocketTeam2/chan_ trai
+bounds:2,2588,271,631
+rotate:90
+stickman/RocketTeam2/tay_ trai
+bounds:4416,3823,261,507
+rotate:90
+stickman/RocketTeam2/tay_phai
+bounds:3495,1890,285,497
+rotate:90
+stickman/RocketTeam2/than
+bounds:956,5594,93,475
+rotate:90
+stickman/Sasuke/chan_ phai
+bounds:5383,1224,300,608
+rotate:90
+stickman/Sasuke/chan_ trai
+bounds:4925,3763,261,621
+rotate:90
+stickman/Sasuke/tay_ trai
+bounds:501,4725,251,497
+rotate:90
+stickman/Sasuke/tay_phai
+bounds:4293,3002,275,487
+rotate:90
+stickman/Sasuke/than
+bounds:4368,5874,83,465
+rotate:90
+stickman/Songoku/chan_ phai
+bounds:2,145,310,618
+rotate:90
+stickman/Songoku/chan_ trai
+bounds:1107,2549,271,631
+rotate:90
+stickman/Songoku/tay_ trai
+bounds:2,3682,261,507
+rotate:90
+stickman/Songoku/tay_phai
+bounds:5045,1870,285,497
+rotate:90
+stickman/Songoku/than
+bounds:1433,5590,93,475
+rotate:90
+stickman/Sonic/chan_ phai
+bounds:622,129,310,618
+rotate:90
+stickman/Sonic/chan_ trai
+bounds:1740,2522,271,631
+rotate:90
+stickman/Sonic/tay_ trai
+bounds:511,3682,261,507
+rotate:90
+stickman/Sonic/tay_phai
+bounds:3994,1856,285,497
+rotate:90
+stickman/Sonic/than
+bounds:1910,5589,93,475
+rotate:90
+stickman/SpiderGwen/chan_ phai
+bounds:612,1081,300,608
+rotate:90
+stickman/SpiderGwen/chan_ trai
+bounds:1643,3635,261,621
+rotate:90
+stickman/SpiderGwen/tay_ trai
+bounds:1499,4718,251,497
+rotate:90
+stickman/SpiderGwen/tay_phai
+bounds:1998,4687,251,497
+rotate:90
+stickman/SpiderGwen/than
+bounds:5302,5874,83,465
+rotate:90
+stickman/SpiderGwen2/chan_ phai
+bounds:2,1100,300,608
+rotate:90
+stickman/SpiderGwen2/chan_ trai
+bounds:1020,3673,261,621
+rotate:90
+stickman/SpiderGwen2/tay_ trai
+bounds:1000,4718,251,497
+rotate:90
+stickman/SpiderGwen2/tay_phai
+bounds:1004,1683,300,478
+rotate:90
+stickman/SpiderGwen2/than
+bounds:4835,5874,83,465
+rotate:90
+stickman/SquidGame1/chan_ phai
+bounds:1242,106,310,618
+rotate:90
+stickman/SquidGame1/chan_ trai
+bounds:2373,2520,271,631
+rotate:90
+stickman/SquidGame1/dau
+bounds:5497,1526,366,318
+offsets:6,18,378,342
+stickman/SquidGame1/tay_ trai
+bounds:2266,3610,261,507
+rotate:90
+stickman/SquidGame1/tay_phai
+bounds:4493,1816,285,497
+rotate:90
+stickman/SquidGame1/than
+bounds:2387,5589,93,475
+rotate:90
+stickman/SquidGame2/chan_ phai
+bounds:1862,102,310,618
+rotate:90
+stickman/SquidGame2/chan_ trai
+bounds:3006,2502,271,631
+rotate:90
+stickman/SquidGame2/dau
+bounds:4419,1155,345,336
+offsets:6,6,357,348
+stickman/SquidGame2/tay_ trai
+bounds:2775,3608,261,507
+rotate:90
+stickman/SquidGame2/tay_phai
+bounds:2,1727,285,497
+rotate:90
+stickman/SquidGame2/than
+bounds:2864,5589,93,475
+rotate:90
+stickman/Vegeta/chan_ phai
+bounds:1222,1065,300,608
+rotate:90
+stickman/Vegeta/chan_ trai
+bounds:3284,3592,261,621
+rotate:90
+stickman/Vegeta/tay_ trai
+bounds:2497,4661,251,497
+rotate:90
+stickman/Vegeta/tay_phai
+bounds:635,2857,275,487
+rotate:90
+stickman/Vegeta/than
+bounds:430,5796,83,465
+rotate:90
+stickman/Venom/chan_ trai
+bounds:2911,2225,275,635
+rotate:90
+stickman/Venom/dau
+bounds:3492,1577,320,311
+offsets:4,4,328,319
+stickman/Venom/tay_ trai
+bounds:1518,3368,265,511
+rotate:90
+stickman/Venom/tay_phai
+bounds:2490,1647,289,501
+rotate:90
+stickman/Venom/than
+bounds:3341,5589,93,475
+rotate:90
+stickman/Wonder Woman/chan_phai
+bounds:1371,1367,298,606
+rotate:90
+stickman/Wonder Woman/chan_trai
+bounds:623,4208,259,619
+rotate:90
+stickman/Wonder Woman/dau
+bounds:2482,345,353,364
+rotate:90
+stickman/Wonder Woman/kiếm
+bounds:2,4469,247,1338
+rotate:90
+stickman/Wonder Woman/tay_phai
+bounds:3907,3564,273,485
+rotate:90
+stickman/Wonder Woman/tay_trai
+bounds:3157,4914,249,495
+rotate:90
+stickman/Wonder Woman/than
+bounds:1002,5786,88,464
+rotate:90
+stickman/Yasuo/chan_phai1
+bounds:1832,1042,301,607
+rotate:90
+stickman/Yasuo/chan_trai1
+bounds:2996,4660,252,627
+rotate:90
+stickman/Yasuo/dau1
+bounds:4422,1493,349,321
+stickman/Yasuo/day3
+bounds:2,5706,95,327
+rotate:90
+stickman/Yasuo/day_1
+bounds:1554,5210,219,414
+rotate:90
+stickman/Yasuo/day_2
+bounds:391,5443,151,436
+rotate:90
+stickman/Yasuo/day_tren
+bounds:1836,5875,195,82
+offsets:1,0,196,82
+stickman/Yasuo/khan_co
+bounds:4146,5388,334,195
+stickman/Yasuo/tay_phai1
+bounds:4287,2717,283,487
+rotate:90
+stickman/Yasuo/tay_trai1
+bounds:4647,4612,260,502
+rotate:90
+stickman/Yasuo/than1
+bounds:1941,5780,92,466
+rotate:90
+stickman/Yasuo/toc_mai_1
+bounds:2596,5416,171,285
+rotate:90
+stickman/Yasuo/vai
+bounds:4275,820,333,447
+rotate:90
+vfx/Slash1/Elements - Energy 020 Slash1 Ray Right noCT noRSZ_00002
+bounds:5154,5358,217,219
+offsets:18,313,1000,1000
+rotate:90
+vfx/Slash1/Elements - Energy 020 Slash1 Ray Right noCT noRSZ_00003
+bounds:5638,4485,302,309
+offsets:3,319,1000,1000
+rotate:90
+vfx/Slash1/Elements - Energy 020 Slash1 Ray Right noCT noRSZ_00012
+bounds:2441,1038,596,302
+offsets:309,343,1000,1000
+vfx/Slash1/Elements - Energy 020 Slash1 Ray Right noCT noRSZ_00013
+bounds:1244,4199,556,259
+offsets:336,343,1000,1000
+vfx/Slash2/Elements - Energy 030 Slash Right noCT noRSZ_00012
+bounds:515,3407,273,488
+offsets:475,0,1000,1000
+rotate:90
+vfx/Slash3/Elements - Energy 029 Slash Right noCT noRSZ_00000
+bounds:989,5223,216,223
+offsets:47,408,1000,1000
+rotate:90
+vfx/Slash3/Elements - Energy 029 Slash Right noCT noRSZ_00001
+bounds:2739,5187,348,225
+offsets:57,407,1000,1000
+vfx/Slash3/Elements - Energy 029 Slash Right noCT noRSZ_00002
+bounds:4743,5127,549,229
+offsets:53,404,1000,1000
+vfx/Slash3/Elements - Energy 029 Slash Right noCT noRSZ_00003
+bounds:5294,5092,686,229
+offsets:52,403,1000,1000
+vfx/Slash3/Elements - Energy 029 Slash Right noCT noRSZ_00004
+bounds:2,4996,772,229
+offsets:89,399,1000,1000
+vfx/Slash3/Elements - Energy 029 Slash Right noCT noRSZ_00005
+bounds:3726,5158,703,228
+offsets:176,399,1000,1000
+vfx/Slash3/Elements - Energy 029 Slash Right noCT noRSZ_00006
+bounds:776,4978,711,232
+offsets:191,397,1000,1000
+vfx/Slash3/Elements - Energy 029 Slash Right noCT noRSZ_00007
+bounds:3089,5165,635,228
+offsets:276,397,1000,1000
+vfx/Slash3/Elements - Energy 029 Slash Right noCT noRSZ_00008
+bounds:2326,5191,411,223
+offsets:511,399,1000,1000
+vfx/Slash3/Elements - Energy 029 Slash Right noCT noRSZ_00009
+bounds:1970,5205,354,219
+offsets:583,401,1000,1000
+vfx/Slash3/Elements - Energy 029 Slash Right noCT noRSZ_00010
+bounds:1214,5212,338,217
+offsets:601,403,1000,1000
+vfx/Slash3/Elements - Energy 029 Slash Right noCT noRSZ_00011
+bounds:2,5241,337,212
+offsets:606,406,1000,1000
+vfx/Slash3/Elements - Energy 029 Slash Right noCT noRSZ_00012
+bounds:4482,5380,317,203
+offsets:626,410,1000,1000
+vfx/smoke right/smoke right_00000
+bounds:2,5928,111,29
+offsets:33,160,334,334
+vfx/smoke right/smoke right_00001
+bounds:172,5903,161,54
+offsets:39,152,334,334
+vfx/smoke right/smoke right_00002
+bounds:568,5886,179,71
+offsets:46,152,334,334
+vfx/smoke right/smoke right_00003
+bounds:842,5881,177,76
+offsets:55,151,334,334
+vfx/smoke right/smoke right_00004
+bounds:1657,5876,177,81
+offsets:60,149,334,334
+vfx/smoke right/smoke right_00005
+bounds:5769,5873,177,84
+offsets:64,148,334,334
+vfx/smoke right/smoke right_00006
+bounds:98,5815,177,86
+offsets:67,147,334,334
+vfx/smoke right/smoke right_00007
+bounds:277,5803,151,90
+offsets:97,143,334,334
+vfx/smoke right/smoke right_00008
+bounds:897,5787,103,92
+offsets:148,141,334,334
+vfx/smoke right/smoke right_00009
+bounds:2409,5780,101,92
+offsets:152,140,334,334
+vfx/smoke right/smoke right_00010
+bounds:2,5840,94,86
+offsets:161,140,334,334
+vfx/smoke right/smoke right_00011
+bounds:749,5886,91,71
+offsets:164,139,334,334
+vfx/smoke right/smoke right_00012
+bounds:115,5925,32,55
+offsets:224,139,334,334
+rotate:90
+weapon/clawdown
+bounds:829,5441,465,151
+weapon/clawup
+bounds:2883,5414,470,173
+weapon/greatsword
+bounds:1342,4460,256,629
+rotate:90
+weapon/pistol
+bounds:1296,5436,226,152
+weapon/rifle
+bounds:2145,5426,449,161
+weapon/sword
+bounds:1489,4971,232,672
+rotate:90
+weapon/uzi
+bounds:4431,5142,310,236
+
+stickman fighter_2.png
+size:5821,3692
+filter:Linear,Linear
+pma:true
+stickman/AmongUs/dau
+bounds:4594,3150,342,540
+offsets:1,1,344,543
+stickman/Ashe/dau
+bounds:5397,790,422,395
+offsets:6,9,434,410
+stickman/Captain/dau
+bounds:4257,3,387,367
+offsets:6,6,399,380
+stickman/Death/dau
+bounds:4086,1177,503,436
+offsets:1,5,506,443
+rotate:90
+stickman/HarryPotter/dau
+bounds:4590,906,408,394
+offsets:6,6,420,406
+stickman/Hellboy/dau
+bounds:3170,2301,507,384
+offsets:6,7,519,397
+rotate:90
+stickman/Joker/dau
+bounds:5387,1960,424,426
+offsets:4,4,432,434
+rotate:90
+stickman/Kaisa/canh_phai
+bounds:5008,2824,488,495
+rotate:90
+stickman/Kaisa/canh_trai
+bounds:5387,2386,431,436
+stickman/Kaisa/dau1
+bounds:1842,2296,341,452
+stickman/Kaisa/toc_sau
+bounds:1960,608,446,734
+stickman/Kaisa/weapon
+bounds:3769,189,486,630
+stickman/Kratos/dau
+bounds:4257,372,356,448
+offsets:4,4,364,456
+stickman/Loki/dau
+bounds:4524,1302,482,501
+offsets:6,6,494,513
+stickman/Loki2/dau
+bounds:4606,2725,398,423
+offsets:4,4,406,431
+stickman/Luffy/dau
+bounds:5008,1187,456,346
+offsets:2,1,459,348
+stickman/Mario/dau
+bounds:4606,2308,415,429
+offsets:1,1,417,431
+rotate:90
+stickman/Mummy/dau
+bounds:5013,746,439,382
+offsets:6,6,451,394
+rotate:90
+stickman/Naruto/dau
+bounds:4229,1805,501,483
+rotate:90
+stickman/PUPG/dau
+bounds:5397,408,406,380
+offsets:6,6,418,392
+stickman/PeaceMaker/chan_ phai
+bounds:3913,1682,314,622
+stickman/PeaceMaker/dau
+bounds:4714,1822,484,447
+offsets:2,2,488,451
+rotate:90
+stickman/Poppy/dau
+bounds:5008,3314,499,376
+offsets:4,4,507,384
+stickman/Qiyana/Weapons
+bounds:1973,1379,915,909
+rotate:90
+stickman/Qiyana/dau1
+bounds:5033,2,398,374
+offsets:0,0,399,374
+stickman/Riven/Riven Dao
+bounds:424,582,384,1414
+offsets:0,0,384,1415
+stickman/Robin/dau
+bounds:5163,1535,423,459
+offsets:2,1,426,461
+rotate:90
+stickman/RocketTeam1/dau
+bounds:4615,457,447,396
+offsets:6,6,459,408
+rotate:90
+stickman/RocketTeam2/dau
+bounds:741,14,590,566
+offsets:6,6,602,578
+stickman/Sasuke/dau
+bounds:1362,2295,453,478
+offsets:1,1,455,481
+rotate:90
+stickman/Songoku/dau
+bounds:2906,72,530,548
+offsets:6,6,542,560
+stickman/Sonic/dau
+bounds:4646,8,447,385
+offsets:6,6,459,397
+rotate:90
+stickman/SpiderGwen2/dau
+bounds:5033,378,366,362
+offsets:1,1,368,364
+rotate:90
+stickman/SpiderGwen/dau
+bounds:5033,378,366,362
+offsets:1,1,368,364
+rotate:90
+stickman/Vegeta/dau
+bounds:2718,2297,450,511
+offsets:1,1,452,513
+stickman/Venom/chan_ phai
+bounds:4278,3068,314,622
+stickman/Wonder Woman/khiên
+bounds:810,590,548,563
+stickman/Wonder Woman/toc
+bounds:2185,2302,461,531
+rotate:90
+stickman/Yasuo/Group 1
+bounds:2,1998,615,1692
+stickman/Yasuo/Group 2
+bounds:2,564,420,1432
+offsets:1,0,421,1432
+stickman/Yasuo/toc_sau
+bounds:4086,822,502,353
+vfx/Slash1/Elements - Energy 020 Slash1 Ray Right noCT noRSZ_00004
+bounds:5037,2341,481,348
+offsets:1,325,1000,1000
+rotate:90
+vfx/Slash1/Elements - Energy 020 Slash1 Ray Right noCT noRSZ_00005
+bounds:3393,722,713,369
+offsets:3,325,1000,1000
+rotate:90
+vfx/Slash1/Elements - Energy 020 Slash1 Ray Right noCT noRSZ_00006
+bounds:2884,1418,877,355
+offsets:13,340,1000,1000
+rotate:90
+vfx/Slash1/Elements - Energy 020 Slash1 Ray Right noCT noRSZ_00007
+bounds:3312,2813,877,338
+offsets:26,358,1000,1000
+rotate:90
+vfx/Slash1/Elements - Energy 020 Slash1 Ray Right noCT noRSZ_00008
+bounds:3241,1437,862,334
+offsets:46,363,1000,1000
+rotate:90
+vfx/Slash1/Elements - Energy 020 Slash1 Ray Right noCT noRSZ_00009
+bounds:3577,1474,830,334
+offsets:77,359,1000,1000
+rotate:90
+vfx/Slash1/Elements - Energy 020 Slash1 Ray Right noCT noRSZ_00010
+bounds:3438,34,686,329
+offsets:222,349,1000,1000
+rotate:90
+vfx/Slash1/Elements - Energy 020 Slash1 Ray Right noCT noRSZ_00011
+bounds:3764,821,651,320
+offsets:258,346,1000,1000
+rotate:90
+vfx/Slash2/Elements - Energy 030 Slash Right noCT noRSZ_00000
+bounds:4087,2308,521,517
+offsets:68,459,1000,1000
+rotate:90
+vfx/Slash2/Elements - Energy 030 Slash Right noCT noRSZ_00001
+bounds:1362,2750,640,940
+offsets:91,19,1000,1000
+vfx/Slash2/Elements - Energy 030 Slash Right noCT noRSZ_00002
+bounds:1274,1344,697,947
+offsets:104,0,1000,1000
+vfx/Slash2/Elements - Energy 030 Slash Right noCT noRSZ_00003
+bounds:2004,2765,668,925
+offsets:135,0,1000,1000
+vfx/Slash2/Elements - Energy 030 Slash Right noCT noRSZ_00004
+bounds:2674,2810,636,880
+offsets:170,0,1000,1000
+vfx/Slash2/Elements - Energy 030 Slash Right noCT noRSZ_00005
+bounds:2076,4,602,828
+offsets:205,0,1000,1000
+rotate:90
+vfx/Slash2/Elements - Energy 030 Slash Right noCT noRSZ_00006
+bounds:3652,2831,624,859
+offsets:184,0,1000,1000
+vfx/Slash2/Elements - Energy 030 Slash Right noCT noRSZ_00007
+bounds:1360,591,598,751
+offsets:210,0,1000,1000
+vfx/Slash2/Elements - Energy 030 Slash Right noCT noRSZ_00008
+bounds:2408,622,593,755
+offsets:215,0,1000,1000
+vfx/Slash2/Elements - Energy 030 Slash Right noCT noRSZ_00009
+bounds:1333,6,582,741
+offsets:222,0,1000,1000
+rotate:90
+vfx/Slash2/Elements - Energy 030 Slash Right noCT noRSZ_00010
+bounds:2,4,558,737
+offsets:235,0,1000,1000
+rotate:90
+vfx/Slash2/Elements - Energy 030 Slash Right noCT noRSZ_00011
+bounds:3556,2306,505,529
+offsets:277,0,1000,1000
+rotate:90
+weapon/greataxe1
+bounds:810,1155,462,1136
+weapon/rapier
+bounds:3003,691,388,725
+offsets:59,0,512,725
+weapon/scythe
+bounds:619,2293,741,1397
+offsets:206,262,1080,1920

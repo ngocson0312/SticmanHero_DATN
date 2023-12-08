@@ -12,6 +12,8 @@ namespace SuperFight
         public abstract void UpdatePhysic(float fixedDeltaTime);
         public abstract void UpdateLogic(float deltaTime);
         public abstract void ExitAction();
+        public abstract void OnPause();
+        public abstract void OnResume();
     }
 }
 

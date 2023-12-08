@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90bd872860d8f564390f2c0d54235f1f, type: 3}
+  m_Name: BerserkLegging
+  m_EditorClassIdentifier: 
+  id: 11
+  icon: {fileID: 21300000, guid: 4935a46042f363241960f96163f74259, type: 3}
+  itemType: 0
+  itemName: Berserker Boots
+  description: 
+  prefab: {fileID: 4242125344926591226, guid: 411f182872d654841ae6c6f719dc4bfe, type: 3}
+  equipmentType: 2
+  gradeSkillDesc:
+  - <color=#4dff3a>+10</color> AR
+  - <color=#4dff3a>+5%</color> AR
+  - HP lower than 50% increase <color=#4dff3a>20%</color> ATK
+  - <color=#4dff3a>+5%</color> HP

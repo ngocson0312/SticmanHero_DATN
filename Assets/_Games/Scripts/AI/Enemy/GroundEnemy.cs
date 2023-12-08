@@ -7,41 +7,40 @@ namespace SuperFight
     {
         public Vector2 offsetView;
         public Vector2 viewBounds;
-        public State patrol;
-        public State chaseState;
-        public State attackState;
-        public float attackSpeed = 1;
-
-        // public bool isDead = false;
-        [HideInInspector]
-        public float attackRange
-        {
-            get;
-            private set;
-        }
+        public float attackSpeed = 2;
+        public float attackRange { get { return weapon.attackRange; } }
         public override void Initialize()
         {
-            if (isInit) return;
             base.Initialize();
-            attackRange = Mathf.Pow(animator.currentWeapon.attackRange, 2);
-            animator = (EnemyAnimator)animatorHandle;
             healthBar.UpdateBar(1);
-            patrol = new BasicPatrolState(this, "patrol");
-            chaseState = new BasicChaseState(this, "chase");
-            attackState = new BasicAttackState(this, "attack");
             core.Active();
         }
         public override Controller GetTargetInView()
         {
             Vector2 origin = (Vector2)transform.position + new Vector2(offsetView.x * core.movement.facingDirection, offsetView.y);
             Bounds bounds = new Bounds(origin, viewBounds);
-            Bounds playerBound = PlayerManager.Instance.GetBoundPlayer();
+            Bounds playerBound = PlayerManager.GetBoundPlayer();
+            Vector2 direction = playerBound.center - transform.position;
+
+            if (bounds.Intersects(playerBound))
+            {
+                if (!Physics2D.Raycast(transform.position, direction.normalized, direction.magnitude, LayerMask.GetMask("Ground")))
+                {
+                    return PlayerManager.Instance.playerController;
+                }
+            }
+            return null;
+        }
+        public override Controller GetTargetInView(Bounds bounds)
+        {
+            Bounds playerBound = PlayerManager.GetBoundPlayer();
             if (bounds.Intersects(playerBound))
             {
                 return PlayerManager.Instance.playerController;
             }
             return null;
         }
+
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.blue;
@@ -52,7 +51,7 @@ namespace SuperFight
             }
             Vector2 os = new Vector2(offsetView.x * f, offsetView.y);
             Gizmos.DrawWireCube(transform.position + (Vector3)os, viewBounds);
-            // Gizmos.DrawWireSphere(transform.position, sensorRange);
+            //Gizmos.DrawWireSphere(transform.position, sensorRange);
         }
         protected override void LogicUpdate()
         {
@@ -70,30 +69,25 @@ namespace SuperFight
                 animatorHandle.transform.localRotation = Quaternion.Lerp(animatorHandle.transform.localRotation, Quaternion.Euler(0, 240, 0), 0.2f);
             }
         }
-       
+
         public override void OnTakeDamage(DamageInfo damageInfo)
         {
             if (!isActive) return;
             base.OnTakeDamage(damageInfo);
-            stats.ApplyDamage(damageInfo.damage);
-            float normalizedHealth = stats.normalizedHealth;
-            healthBar.UpdateBar(normalizedHealth);
-            if (normalizedHealth <= 0)
+            healthBar.UpdateBar(NormalizeHealth());
+            hitFX.Play();
+            if (NormalizeHealth() <= 0)
             {
                 animatorHandle.PlayAnimation("Dead", 0.1f, 1, true);
                 core.movement.SetVelocity(new Vector2(damageInfo.hitDirection, 1), 15);
                 Die(false);
             }
+            if (NormalizeHealth() > 0 && damageInfo.stunTime > 0 && !isUnstopable)
+            {
+                animatorHandle.PlayAnimation("Stun", 0.1f, 1, true);
+            }
         }
-        public override void ResetStatEnemy(CharacterStats overrideStats)
-        {
-            base.ResetStatEnemy(overrideStats);
-            SwitchState(patrol);
-        }
-        public override void DetectPlayer()
-        {
 
-        }
     }
 }
 

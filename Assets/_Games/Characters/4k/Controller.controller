@@ -555,21 +555,21 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.28333333
-    functionName: TriggerSkill
-    data: 
+    functionName: SendEvent
+    data: TriggerDamage
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.45
-    functionName: ActiveCombo
+    functionName: SendEvent
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.6166667
-    functionName: DeactiveCombo
+    functionName: SendEvent
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -4054,22 +4054,22 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.41666666
-    functionName: TriggerSkill
-    data: 
+    functionName: SendEvent
+    data: TriggerDamage
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.5833333
-    functionName: ActiveCombo
-    data: 
+    functionName: SendEvent
+    data: ActiveCombo
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.75
-    functionName: DeactiveCombo
-    data: 
+    functionName: SendEvent
+    data: ActiveCombo
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
@@ -7024,22 +7024,22 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.25
-    functionName: TriggerSkill
-    data: 
+    functionName: SendEvent
+    data: TriggerDamage
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.41666666
-    functionName: ActiveCombo
-    data: 
+    functionName: SendEvent
+    data: ActiveCombo
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.5833333
-    functionName: DeactiveCombo
-    data: 
+    functionName: SendEvent
+    data: DeactiveCombo
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

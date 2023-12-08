@@ -16,3 +16,8 @@ MonoBehaviour:
   skinName: Base
   avatar: {fileID: 21300000, guid: 8aef1bb6f368c2a4a8a9c67320e35cc0, type: 3}
   character: {fileID: 0}
+  bonusDamage: 10
+  bonusHealth: 12
+  bonusArmor: 14
+  bonusCritical: 16
+  bonusCritdamage: 18

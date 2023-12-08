@@ -8,7 +8,9 @@ public enum AdCanvasSize
     Size6x5 = 0,
     Size_3f_6x5,
     Size32x5,
-    Size4x3Video
+    Size4x3Video,
+    Size300x600,
+    Size960x540
 }
 
 public abstract class BaseAdCanvasObject : MonoBehaviour

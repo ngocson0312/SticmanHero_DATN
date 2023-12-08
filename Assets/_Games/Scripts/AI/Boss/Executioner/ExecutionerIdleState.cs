@@ -27,7 +27,6 @@ namespace SuperFight
         public override void UpdateLogic()
         {
             idleTimer -= Time.deltaTime;
-
             if (idleTimer <= 0)
             {
                 executioner.SwitchState(executioner.attackState);
@@ -41,27 +40,16 @@ namespace SuperFight
         }
         void WalkAround()
         {
-            Collider2D[] colls = executioner.GetTargetsInView();
+            Controller target = executioner.GetTargetsInView();
             executioner.moveAmount = 0;
-            if (colls.Length == 0 || controller.isInteracting) return;
-            Vector3 direction = (colls[0].transform.position - executioner.transform.position);
-            if (Vector3.SqrMagnitude(colls[0].transform.position - controller.transform.position) <= 9 && Vector3.Dot(Vector3.right * controller.core.movement.facingDirection, direction) > 0)
+            if (!target) return;
+            Vector3 direction = (target.transform.position - executioner.transform.position);
+            if (Vector3.SqrMagnitude(target.transform.position - controller.transform.position) <= 9 && Vector3.Dot(Vector3.right * controller.core.movement.facingDirection, direction) > 0)
             {
                 return;
             }
             executioner.moveAmount = 1;
-            if (direction.x < 0)
-            {
-                currentDirection = -1;
-            }
-            if (direction.x > 0)
-            {
-                currentDirection = 1;
-            }
-            if (currentDirection != executioner.core.movement.facingDirection)
-            {
-                executioner.core.movement.Flip();
-            }
+            executioner.HandleLockTarget(target.transform, 0.5f);
             executioner.core.movement.SetVelocityX(executioner.core.movement.facingDirection * 3);
         }
     }

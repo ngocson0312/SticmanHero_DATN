@@ -38,7 +38,7 @@ namespace mygame.sdk
         private int stepAchiveSunmit = 0;
         public static SocialHelper Instance { get; private set; }
 
-        
+
         private void Awake()
         {
             if (Instance == null)
@@ -46,20 +46,14 @@ namespace mygame.sdk
                 Instance = this;
 #if ENABLE_SOCIAL
 #if UNITY_ANDROID
-    			leaderboadIdSubmit = GPGSIds.leaderboard_high_score;
+                //leaderboadIdSubmit = GPGSIds.leaderboard_high_score;
 #elif UNITY_IOS || UNITY_IPHONE
     			leaderboadIdSubmit = GameCenterIds.leaderboard_total_high_score;
 #endif
-#endif          
+#endif
 
 #if ENABLE_SOCIAL
 #if UNITY_ANDROID
-                PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
-                    //              .EnableSavedGames()//vvv
-                    .Build();
-
-                PlayGamesPlatform.InitializeInstance(config);
-                //PlayGamesPlatform.DebugLogEnabled = true;
                 PlayGamesPlatform.Activate();
 #elif UNITY_IOS || UNITY_IPHONE
                     GameCenterPlatform.ShowDefaultAchievementCompletionBanner(true);
@@ -74,7 +68,8 @@ namespace mygame.sdk
 #if UNITY_IOS || UNITY_IPHONE
             StartCoroutine(wait4Authen());
 #elif UNITY_ANDROID
-            if (checkGamePlayInstalled()) {
+            //if (checkGamePlayInstalled())
+            {
                 StartCoroutine(wait4Authen());
             }
 #endif
@@ -92,7 +87,8 @@ namespace mygame.sdk
             }
         }
 
-        public bool checkGamePlayInstalled() {
+        public bool checkGamePlayInstalled()
+        {
             Debug.Log("mysdk: checkGamePlayInstalled");
             return GameHelper.Instance.checkPackageAppIsPresent("com.google.android.play.games");
         }
@@ -102,16 +98,23 @@ namespace mygame.sdk
 #if ENABLE_SOCIAL
             stateAuthent = 2;
             Debug.Log("mysdk: authentSocial 1");
-            Social.localUser.Authenticate((bool success) =>
+#if UNITY_ANDROID
+            PlayGamesPlatform.Instance.Authenticate(signstatus =>
+            // Social.localUser.Authenticate((bool signstatus) =>
+#elif UNITY_IOS || UNITY_IPHONE
+            Social.localUser.Authenticate((bool signstatus) =>
+#endif
             {
 
-                Debug.Log("mysdk: authentSocial = " + success.ToString());
-                if (success)
+                Debug.Log("mysdk: authentSocial = " + signstatus.ToString());
+                //if (signstatus == SignInStatus.Success)
+                if (signstatus == true)
                 {
                     PlayerPrefs.SetInt("mem_login_game_user", 1);
 #if UNITY_ANDROID
                     PlayerPrefs.SetString("GameUserId", PlayGamesPlatform.Instance.localUser.id);
                     PlayerPrefs.SetString("GameUserName", PlayGamesPlatform.Instance.localUser.userName);
+                    PlayerPrefs.SetString("GameUserAva", PlayGamesPlatform.Instance.GetUserImageUrl());
                     onLoginService?.Invoke(1, PlayGamesPlatform.Instance.localUser.id, PlayGamesPlatform.Instance.localUser.userName, PlayGamesPlatform.Instance.GetUserImageUrl());
 #elif UNITY_IOS || UNITY_IPHONE
                     PlayerPrefs.SetString("GameUserId", Social.localUser.id);
@@ -156,6 +159,45 @@ namespace mygame.sdk
 #if ENABLE_HELPER
             javaAuthen();
 #endif
+        }
+
+        public string getImgUrl()
+        {
+#if ENABLE_SOCIAL
+
+#if UNITY_ANDROID
+            return PlayGamesPlatform.Instance.GetUserImageUrl();
+#else
+            return "";
+#endif
+
+#else
+return "";
+#endif
+        }
+
+        public void showAvatar(UnityEngine.UI.Image img, Action<bool> cb)
+        {
+            string urlimg = getImgUrl();
+            if (urlimg.Length > 5)
+            {
+                ImageLoader.LoadImageSprite(urlimg, 100, 100, (sp) =>
+                {
+                    if (sp != null)
+                    {
+                        img.sprite = sp;
+                        cb?.Invoke(true);
+                    }
+                    else
+                    {
+                        cb?.Invoke(false);
+                    }
+                });
+            }
+            else
+            {
+                cb?.Invoke(false);
+            }
         }
 
         public void showLeaderBoard()

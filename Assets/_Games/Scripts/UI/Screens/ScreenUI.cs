@@ -5,18 +5,18 @@ namespace SuperFight
 {
     public abstract class ScreenUI : MonoBehaviour
     {
-        public ScreenName screenName;
-        protected ScreenUIManager screenManager;
-        public virtual void Initialize(ScreenUIManager manager)
+        protected UIManager uiManager;
+        public virtual void Initialize(UIManager uiManager)
         {
-            screenManager = manager;
+            this.uiManager = uiManager;
         }
-        public abstract void Show();
-        public abstract void Hide();
-    }
-    public enum ScreenName
-    {
-        MAINSCREEN, PLAYSCREEN, LOSESCREEN, WINSCREEN
+        public virtual void Active()
+        {
+            gameObject.SetActive(true);
+        }
+        public virtual void Deactive()
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
-

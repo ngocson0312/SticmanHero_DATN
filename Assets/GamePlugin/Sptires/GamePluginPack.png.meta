@@ -129,7 +129,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: Android
+    buildTarget: Server
     maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
@@ -141,7 +141,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: Server
+    buildTarget: Android
     maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
@@ -419,17 +419,17 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Df: -7171300832424287380
+      progress: 5226244695105447951
+      progressLoadingBg: -2912064021594245126
+      updateClose: -8626403978808248963
       OtherBg: -1462698822925288362
+      progressLoading: -2573614705126078531
+      StarBG: 3185923926166113406
       OtherMask: 5363903645330569839
       Star: 5499845169743373932
-      StarBG: 3185923926166113406
+      updateButton: 5714418198507927229
       bgPopup: 9194333307953303260
       bt_ok: -1632604668922997065
-      progress: 5226244695105447951
-      progressLoading: -2573614705126078531
-      progressLoadingBg: -2912064021594245126
-      updateButton: 5714418198507927229
-      updateClose: -8626403978808248963
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

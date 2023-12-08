@@ -5,7 +5,7 @@ using DG.Tweening;
 
 namespace SuperFight
 {
-    public class ItemSawTrap : MonoBehaviour
+    public class ItemSawTrap : ItemObject
     {
         [Header("Custome")]
         public float timeRotate = 0.25f;
@@ -14,10 +14,16 @@ namespace SuperFight
         [SerializeField] Transform SawAnchor;
         [SerializeField] Transform StartAnchor;
         [SerializeField] Transform EndAnchor;
-        private void Start()
+
+        public override void Initialize()
         {
             SawAnchor.DORotate(Vector3.forward * 360, timeRotate, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart);
             TrapMove();
+
+        }
+        public override void ResetObject()
+        {
+
         }
         public void TrapMove()
         {

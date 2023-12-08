@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,13 +9,18 @@ namespace SuperFight
         protected BossFightArena arena;
         protected State currentState;
         protected Queue<AIAction> queueAction = new Queue<AIAction>();
+        public event Action<Boss> OnDisappear;
+        public ParticleSystem fadeOutFX;
+        public ParticleSystem deathExplosionFX;
+        public Shader fadeShader;
         public virtual void Initialize(BossFightArena arena)
         {
             this.arena = arena;
+            characterType = CharacterType.Boss;
             isActive = false;
             core.Initialize(this);
             animatorHandle.Initialize(this);
-            stats.ResetStats();
+            runtimeStats = new CharacterStats(originalStats);
         }
         public abstract void Active();
         private void Update()
@@ -23,12 +29,15 @@ namespace SuperFight
             core.UpdateLogicCore();
             if (currentState != null)
             {
-                Debug.Log(currentState.stateName);
                 currentState.UpdateLogic();
             }
-            if (queueAction.Count > 0 && GameplayCtrl.Instance.gameState == GAME_STATE.GS_PLAYING)
+            if (queueAction.Count > 0)
             {
                 queueAction.Peek().UpdateLogic(Time.deltaTime);
+            }
+            for (int i = 0; i < statusEffects.Count; i++)
+            {
+                statusEffects[i].UpdateEffect();
             }
             UpdateLogic();
         }
@@ -39,7 +48,7 @@ namespace SuperFight
             {
                 currentState.UpdatePhysic();
             }
-            if (queueAction.Count > 0 && GameplayCtrl.Instance.gameState == GAME_STATE.GS_PLAYING)
+            if (queueAction.Count > 0)
             {
                 queueAction.Peek().UpdatePhysic(Time.fixedDeltaTime);
             }
@@ -72,17 +81,60 @@ namespace SuperFight
         }
         public override void OnTakeDamage(DamageInfo damageInfo)
         {
-            UltimateTextDamageManager.Instance.Add(damageInfo.damage.ToString(), transform.position + Vector3.up * 2);
             arena.OnBossTakeDamage(damageInfo.damage, this);
-            stats.ApplyDamage(damageInfo.damage);
+            runtimeStats.health -= damageInfo.damage;
+            if (damageInfo.listEffect != null)
+            {
+                for (int i = 0; i < damageInfo.listEffect.Count; i++)
+                {
+                    AddStatusEffect(damageInfo.listEffect[i]);
+                }
+            }
+            base.OnTakeDamage(damageInfo);
         }
         protected abstract void UpdateLogic();
         protected abstract void UpdatePhysic();
-        
         public override void Die(bool deactiveCharacter)
         {
             base.Die(deactiveCharacter);
+            core.movement.SetVelocityZero();
             core.Deactive();
+            for (int i = 0; i < statusEffects.Count; i++)
+            {
+                statusEffects[i].OnFinishEffect();
+            }
+            GameManager.Instance.UpdateTask(QuestType.KILL_BOSS, 1);
+            StartCoroutine(IEDie());
+        }
+        IEnumerator IEDie()
+        {
+            fadeOutFX.Play();
+            SkinnedMeshRenderer[] skinnedMeshes = animatorHandle.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+            for (int i = 0; i < skinnedMeshes.Length; i++)
+            {
+                skinnedMeshes[i].material.shader = fadeShader;
+                skinnedMeshes[i].material.SetFloat("_Opacity", 1);
+            }
+            float v = 2f;
+            AudioManager.Instance.PlayOneShot("OnBossDefeat", 1);
+            while (v > 0)
+            {
+                for (int i = 0; i < skinnedMeshes.Length; i++)
+                {
+                    skinnedMeshes[i].material.SetFloat("_Opacity", v);
+                }
+                v -= Time.deltaTime / 2f;
+                yield return null;
+            }
+            AudioManager.Instance.PlayOneShot("BossDead", 1);
+            fadeOutFX.Stop();
+            deathExplosionFX.Play();
+            animatorHandle.DeactiveCharacter();
+            Disappear();
+        }
+        protected void Disappear()
+        {
+            OnDisappear?.Invoke(this);
         }
     }
 }

@@ -26,6 +26,12 @@ namespace mygame.sdk
             return getAdsIdentifyNative();
         }
 
+        [DllImport("__Internal")] private static extern long CurrentTimeMilisRealNative();
+        public static long CurrentTimeMilisReal()
+        {
+            return (CurrentTimeMilisRealNative() * 1000);
+        }
+
         [DllImport("__Internal")] private static extern string getGiftBoxNative();
         public static string GetGiftBox()
         {
@@ -100,6 +106,19 @@ namespace mygame.sdk
         public static void showCMP()
         {
             showCMPNative();
+        }
+
+        [DllImport("__Internal")] private static extern void localNotifyNative(string title, string msg, int hour, int minus, int dayrepeat);
+        public static void localNotify(string title, string msg, int hour, int minus, int dayrepeat)
+        {
+            localNotifyNative(title, msg, hour, minus, dayrepeat);
+        }
+
+        [DllImport("__Internal")]
+        private static extern void clearAllNotiNative();
+        public static void clearAllNoti()
+        {
+            clearAllNotiNative();
         }
     }
 }

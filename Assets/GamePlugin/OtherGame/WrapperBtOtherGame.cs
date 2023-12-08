@@ -37,13 +37,13 @@ public class WrapperBtOtherGame : MonoBehaviour
             if (gamePro != null)
             {
                 Debug.Log("promo: showPromoGame 100");
-                timeShoPromogame = SdkUtil.systemCurrentMiliseconds();
+                timeShoPromogame = GameHelper.CurrentTimeMilisReal();
             }
         }
         else
         {
             Debug.Log("promo: showPromoGame 11");
-            long t = SdkUtil.systemCurrentMiliseconds();
+            long t = GameHelper.CurrentTimeMilisReal();
             if ((t - timeShoPromogame) >= 90 * 1000)
             {
                 Debug.Log("promo: showPromoGame 110");

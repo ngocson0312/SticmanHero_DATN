@@ -1,338 +1,178 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using mygame.sdk;
-using System.Linq;
-using System;
 using SuperFight;
-using SuperFightData;
-
-public class DataManager : Singleton<DataManager>
+using System;
+namespace SuperFight
 {
-    public static event System.Action<int, int, float, bool> OnAddCoin = delegate { };
-    public static event System.Action<int, int, float> OnAddGem = delegate { };
-    public static event System.Action onAddPack;
-    public PlayerData data;
-    private string userPrefData
+    public class DataManager : Singleton<DataManager>
     {
-        get { return PlayerPrefs.GetString("sf_user_data", ""); }
-        set { PlayerPrefs.SetString("sf_user_data", value); }
-    }
-    [Header("Player Stats")]
-    [SerializeField] private int baseCoin = 0;
-    [SerializeField] private int baseGem = 0;
-    [SerializeField] public int baseHp = 50;
-    [SerializeField] public int baseDamage = 10;
-    [SerializeField] private int baseUpgradePrice = 300;
-
-    [Header("Shop Skin Stats")]
-    [SerializeField] public int skinPrice = 3000;
-    public SkinContainer skinContainer;
-    public SkinData skinDataPrestige;
-    public SkinData skinDataCoin;
-    public SkinData skinDataRescue;
-    public SkinData SkinDataDaily;
-    public SkinData SkinDataCard;
-    private void Start()
-    {
-        UnlockSkin("Base");
-    }
-    public int coin
-    {
-        get
+        public static event Action<int, int, float, bool> OnAddCoin;
+        public static event Action<int, int, float> OnAddDiamond;
+        public static event Action<int, int, bool> OnAddExp;
+        public static event Action OnUpgrade;
+        public static event Action OnDataSaved;
+        public static event Action OnAddKey;
+        public UserData data;
+        public EquipmentContainerSO equipmentContainer;
+        private string userPrefData
         {
-            return PlayerPrefs.GetInt("coin", baseCoin);
+            get { return PlayerPrefs.GetString("sf_data", ""); }
+            set { PlayerPrefs.SetString("sf_data", value); }
         }
-        set
+        public static int Coin
         {
-            PlayerPrefs.SetInt("coin", value);
+            get { return GameRes.getRes(RES_type.GOLD); }
         }
-    }
-
-    public int gem
-    {
-        get
+        public static int Diamond
         {
-            return PlayerPrefs.GetInt("gem", baseGem);
+            get { return GameRes.getRes(RES_type.CRYSTAL); }
         }
-        set
+        public static int Level
         {
-            PlayerPrefs.SetInt("gem", value);
+            get { return GameRes.GetLevel(Level_type.Normal); }
+            set { GameRes.SetLevel(Level_type.Normal, value); }
         }
-    }
-
-    public int spineTicket
-    {
-        get
+        public static int PlayerLevel
         {
-            return PlayerPrefs.GetInt("spineTicket", baseGem);
+            get { return PlayerPrefs.GetInt("player_level", 1); }
+            set { PlayerPrefs.SetInt("player_level", value); }
         }
-        set
+        public int silverKey
         {
-            PlayerPrefs.SetInt("spineTicket", value);
-        }
-    }
-
-    public int luckyChest
-    {
-        get
-        {
-            return PlayerPrefs.GetInt("luckyChest", baseGem);
-        }
-        set
-        {
-            PlayerPrefs.SetInt("luckyChest", value);
-        }
-    }
-
-    public int itemSword
-    {
-        get
-        {
-            return PlayerPrefs.GetInt("itemSword", baseGem);
-        }
-        set
-        {
-            PlayerPrefs.SetInt("itemSword", value);
-        }
-    }
-
-    public int itemBow
-    {
-        get
-        {
-            return PlayerPrefs.GetInt("itemBow", baseGem);
-        }
-        set
-        {
-            PlayerPrefs.SetInt("itemBow", value);
-        }
-    }
-
-    public int playerLevel
-    {
-        get
-        {
-            return PlayerPrefs.GetInt("playerLevel", 1);
-        }
-        set
-        {
-            PlayerPrefs.SetInt("playerLevel", value);
-        }
-    }
-    public int playerMaxHp
-    {
-        get
-        {
-            return PlayerPrefs.GetInt("playerMaxHp", baseHp);
-        }
-        set
-        {
-            PlayerPrefs.SetInt("playerMaxHp", value);
-        }
-    }
-
-    public int playerUpgradePrice
-    {
-        get
-        {
-            return PlayerPrefs.GetInt("playerUpgradePrice", baseUpgradePrice);
-        }
-        set
-        {
-            PlayerPrefs.SetInt("playerUpgradePrice", value);
-        }
-    }
-
-    public int playerDamage
-    {
-        get
-        {
-            return PlayerPrefs.GetInt("playerDamage", baseDamage);
-        }
-        set
-        {
-            PlayerPrefs.SetInt("playerDamage", value);
-        }
-    }
-
-    public string currentSkin
-    {
-        get
-        {
-            return PlayerPrefs.GetString("currentSkin", "Base");
-        }
-        set
-        {
-            //SkinManager.Instance.ReloadSkin(value);
-            PlayerPrefs.SetString("currentSkin", value);
-        }
-    }
-
-    public string currentTrySkin
-    {
-        get
-        {
-            return PlayerPrefs.GetString("currentTrySkin", "");
-        }
-        set
-        {
-            PlayerPrefs.SetString("currentTrySkin", value);
-        }
-    }
-    public int currentBossLevel
-    {
-        get { return PlayerPrefs.GetInt("hell_mode_level", 2); }
-        set { PlayerPrefs.SetInt("hell_mode_level", value); }
-    }
-    public int currentBossLevelSelect
-    {
-        get { return PlayerPrefs.GetInt("hell_mode_level_select", 1); }
-        set { PlayerPrefs.SetInt("hell_mode_level_select", value); }
-    }
-    public void UpgradePlayer(int hp, int damage)
-    {
-        playerLevel++;
-        playerMaxHp += hp;
-        playerDamage += damage;
-        if (playerLevel <= 5)
-        {
-            playerUpgradePrice += 35;
-        }
-        else if (playerLevel <= 10)
-        {
-            playerUpgradePrice += 170;
-        }
-        else if (playerLevel <= 15)
-        {
-            playerUpgradePrice += 400;
-        }
-        else
-        {
-            playerUpgradePrice += 600;
-        }
-       
-    }
-    public SkinObject GetSkin(string skinName)
-    {
-        SkinObject s = Array.Find(skinContainer.container, s => s.skinName == skinName);
-        return s;
-    }
-    public void AddCoin(int value, float delayTime, string where, bool showanim = true)
-    {
-        OnAddCoin(coin, coin + value, delayTime, showanim);
-        GameRes.AddRes(RES_type.GOLD, value, where, true, 0);
-        coin += value;
-    }
-    public void AddSpineTicket(int value)
-    {
-        spineTicket += value;
-    }
-
-    public void AddLuckyChest(int value)
-    {
-        luckyChest += value;
-    }
-
-    public void AddGem(int value, float delayTime, string where)
-    {
-        OnAddGem(gem, gem + value, delayTime);
-        gem += value;
-    }
-    public void AddHeart(int value, string where)
-    {
-        GameRes.AddRes(RES_type.HEART, value, where);
-    }
-    public void UnlockSkin(string skinName)
-    {
-        string pref = "Skin_" + skinName;
-        PlayerPrefs.SetInt(pref, 1);
-    }
-    public bool IsUnlockSkin(string skinName)
-    {
-        if (skinName == "Base") return true;
-        string pref = "Skin_" + skinName;
-        if (PlayerPrefs.GetInt(pref, 0) == 0)
-        {
-            return false;
-        }
-        else return true;
-    }
-    public void LoadData()
-    {
-        string pref = userPrefData;
-        if (!string.IsNullOrEmpty(pref))
-        {
-            data = JsonUtility.FromJson<PlayerData>(userPrefData);
-        }
-        else
-        {
-            data = new PlayerData();
-        }
-        Debug.Log("Load:" + pref);
-    }
-    public void SaveData()
-    {
-        string dataJson = JsonUtility.ToJson(data);
-        userPrefData = dataJson;
-        Debug.Log("Save:" + dataJson);
-    }
-    public void OnPurchasePack(InappData inappData)
-    {
-        if (data.IsContainPack(inappData.packageName))
-        {
-            data.GetPack(inappData.packageName);
-        }
-        data.AddPack(new PackInfo(inappData.packageName, inappData.packType));
-        onAddPack?.Invoke();
-        SaveData();
-    }
-    public bool SoldOut(string packName, PackType packType)
-    {
-        if (packType == PackType.CONSUM || packType == PackType.SUBSCRIPTION)
-        {
-            return false;
+            get { return PlayerPrefs.GetInt("silver_key_count", 0); }
+            set { PlayerPrefs.SetInt("silver_key_count", value); }
         }
 
-        return data.IsContainPack(packName);
+        public int goldKey
+        {
+            get { return PlayerPrefs.GetInt("gold_key_count", 0); }
+            set { PlayerPrefs.SetInt("gold_key_count", value); }
+        }
+
+        public void AddCoin(int value, float delayTime, string where, bool showAnim = true)
+        {
+            OnAddCoin(Coin, Coin + value, delayTime, showAnim);
+            GameRes.AddRes(RES_type.GOLD, value, where, true, 0);
+            if (value < 0)
+            {
+                QuestManager.Instance.UpdateTask(QuestType.SPEND_COIN, -value);
+                // ChallengeManager.Instance.UpdateTask(QuestType.SPEND_COIN, -value);
+            }
+            else
+            {
+                QuestManager.Instance.UpdateTask(QuestType.EARN_COIN, value);
+                // ChallengeManager.Instance.UpdateTask(QuestType.EARN_COIN, value);
+            }
+        }
+        public void AddDiamond(int value, float delayTime, string where)
+        {
+            OnAddDiamond(Diamond, Diamond + value, delayTime);
+            GameRes.AddRes(RES_type.CRYSTAL, value, where, true, 0);
+            if (value < 0)
+            {
+                QuestManager.Instance.UpdateTask(QuestType.SPEND_DIAMOND, -value);
+                // ChallengeManager.Instance.UpdateTask(QuestType.SPEND_DIAMOND, -value);
+            }
+            else
+            {
+                QuestManager.Instance.UpdateTask(QuestType.EARN_DIAMOND, value);
+                // ChallengeManager.Instance.UpdateTask(QuestType.EARN_DIAMOND, value);
+            }
+        }
+
+        public void AddKey(int amount, int type)
+        {
+            if (type == 0)
+            {
+                silverKey += amount;
+            }
+            else if (type == 1)
+            {
+                goldKey += amount;
+            }
+            OnAddKey?.Invoke();
+        }
+
+        public int GetKey(int type)
+        {
+            if (type == 0)
+            {
+                return silverKey;
+            }
+            else if (type == 1)
+            {
+                return goldKey;
+            }
+            return 0;
+        }
+        public void AddExp(int amount)
+        {
+            data.experience += amount;
+            int require = GetExpRequire(data.level);
+            bool levelUp = false;
+            if (data.experience >= require)
+            {
+                data.level++;
+                int expResidual = data.experience - require;
+                data.experience = expResidual;
+                levelUp = true;
+            }
+            OnAddExp?.Invoke(data.level, data.experience, levelUp);
+            SaveData();
+        }
+        public int GetCurrentExp()
+        {
+            return data.experience;
+        }
+        public int GetExpRequire(int level)
+        {
+            return (int)Mathf.Pow((level / 0.1f), 2);
+        }
+        public int GetCurrentExpRequire()
+        {
+            return (int)Mathf.Pow((data.level / 0.1f), 2);
+        }
+        public void UpgradeLevel()
+        {
+            PlayerLevel++;
+            OnUpgrade?.Invoke();
+        }
+        public void LoadData()
+        {
+            string pref = userPrefData;
+            if (!string.IsNullOrEmpty(pref))
+            {
+                data = JsonUtility.FromJson<UserData>(pref);
+            }
+            else
+            {
+                data = new UserData();
+            }
+            Inventory.Instance.LoadData(this, data);
+            Debug.Log("Load:" + pref);
+        }
+        public void SaveData()
+        {
+            string dataJson = JsonUtility.ToJson(data);
+            userPrefData = dataJson;
+            Debug.Log("Save:" + dataJson);
+            OnDataSaved?.Invoke();
+        }
     }
-}
-namespace SuperFightData
-{
     [System.Serializable]
-    public class PlayerData
+    public class UserData
     {
-        public PlayerData()
+        public UserData()
         {
-            skinOwners = new List<string>();
-            packOwner = new List<PackInfo>();
+            inventoryData = new InventoryData();
+            worldMapData = new WorldMapData();
+            experience = 0;
+            level = 1;
         }
-        public void AddPack(PackInfo packInfo)
-        {
-            packOwner.Add(packInfo);
-        }
-        public bool IsContainPack(string packName)
-        {
-            for (int i = 0; i < packOwner.Count; i++)
-            {
-                if (packOwner[i].packName == packName)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        public PackInfo GetPack(string packName)
-        {
-            for (int i = 0; i < packOwner.Count; i++)
-            {
-                if (packOwner[i].packName == packName)
-                {
-                    return packOwner[i];
-                }
-            }
-            return null;
-        }
-        public List<string> skinOwners;
-        public List<PackInfo> packOwner;
+        public int experience;
+        public int level;
+        public InventoryData inventoryData;
+        public WorldMapData worldMapData;
     }
 }

@@ -9,6 +9,7 @@
 #import <FBAudienceNetwork/FBAdSettings.h>
 #import <AppTrackingTransparency/AppTrackingTransparency.h>
 #import <AdSupport/AdSupport.h>
+#import "MyGameNativeiOS.h"
 
 bool isOpenAdLoading = false;
 bool isOpenAdShowing = false;
@@ -39,6 +40,11 @@ static MyGameAppController *MyGameAppControllerInstance = nil;
     [[NSUserDefaults standardUserDefaults] setInteger:co forKey:@"count_game_open"];
     
     [FBAdSettings setAdvertiserTrackingEnabled:YES];
+    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^{
+        [self getOnlineTime];
+    });
     
     return re;
 }
@@ -81,7 +87,58 @@ static MyGameAppController *MyGameAppControllerInstance = nil;
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     [super applicationWillEnterForeground:application];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     //[MyGameAppController mylog:@"applicationWillEnterForeground"];
+}
+
+-(void) getOnlineTime
+{
+    //    NSURL *url = [NSURL URLWithString:@"http://worldtimeapi.org/api/timezone/Asia/Bangkok"];
+    //    NSData *data = [NSData dataWithContentsOfURL:url];
+    //    NSString *ret = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    //    if(NSClassFromString(@"NSJSONSerialization"))
+    //    {
+    //        NSError *error = nil;
+    //        id object = [NSJSONSerialization
+    //                     JSONObjectWithData:[ret dataUsingEncoding:NSUTF8StringEncoding]
+    //                     options:0
+    //                     error:&error];
+    //
+    //        if(!error) {
+    //            if([object isKindOfClass:[NSDictionary class]])
+    //            {
+    //                NSDictionary *results = object;
+    //                if (results != nil)
+    //                {
+    //                    long tcurr = [[results objectForKey:@"unixtime"] longLongValue];
+    //                    synchronizeTimeNative(tcurr);
+    //                }
+    //            }
+    //        }
+    //    }
+    
+    @try {
+        NSURL *url = [NSURL URLWithString:@"https://www.google.com"];
+        NSURLRequest *request = [NSURLRequest requestWithURL: url];
+        NSHTTPURLResponse *response;
+        [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: nil];
+        if ([response respondsToSelector:@selector(allHeaderFields)]) {
+            NSDictionary *dictionary = [response allHeaderFields];
+            NSString* nsd = [dictionary objectForKey:@"Date"];
+            if (nsd != nil) {
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+                [dateFormatter setDateFormat:@"EEE, dd MMM yyyy HH:mm:ss Z"];
+                NSDate *date = [dateFormatter dateFromString:nsd];
+                long tccc = [date timeIntervalSince1970];
+                synchronizeTimeNative(tccc);
+            }
+        }
+    }
+    @catch (NSException *exception) {
+    }
+    @finally {
+    }
 }
 
 -(void) _showOpenAd
@@ -98,7 +155,7 @@ static MyGameAppController *MyGameAppControllerInstance = nil;
             [self requestOpenAd];
         }
         if (!isOpenAdLoading) {
-            UnitySendMessage(GameAdsHelper_NAME, "_showOpenAd", "");
+            UnitySendMessage(GameAdsHelper_NAME, "showOpenAd", "");
         }
     }
     isGameOpen = false;
@@ -134,6 +191,11 @@ static MyGameAppController *MyGameAppControllerInstance = nil;
             } else {
                 self.gameOpenAd = appOpenAd;
                 self.gameOpenAd.fullScreenContentDelegate = self;
+                self.gameOpenAd.paidEventHandler = ^(GADAdValue * _Nonnull value) {
+                    long lva = [[value value] doubleValue] * 1000000000;
+                    NSString* paidParam = [NSString stringWithFormat:@"%ld;%@;%ld", [value precision], [value currencyCode], lva];
+                    UnitySendMessage(GameAdsHelper_NAME, "onOpenAdPaidEvent", [paidParam UTF8String]);
+                };
                 isOpenAdLoading = false;
                 [MyGameAppController mylog:@"openad requestOpenAd ok"];
             }
@@ -218,7 +280,7 @@ static MyGameAppController *MyGameAppControllerInstance = nil;
         [[NSUserDefaults standardUserDefaults] setInteger:3 forKey:@"openad_show_at"];
         [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"openad_is_showfirst"];
         [[NSUserDefaults standardUserDefaults] setInteger:30 forKey:@"openad_deltime"];
-        [[NSUserDefaults standardUserDefaults] setObject:@"ca-app-pub-2777953690987264/8708602831" forKey:@"openad_id"];
+        [[NSUserDefaults standardUserDefaults] setObject:@"ca-app-pub-2777953690987264/1403579415" forKey:@"openad_id"];
         [MyGameAppController mylog:@"setDefaultOpenAd"];
     }
 }
@@ -286,7 +348,7 @@ static MyGameAppController *MyGameAppControllerInstance = nil;
             } else {
                 UnitySendMessage(GameAdsHelper_NAME, "requestIDFACallBack", "3");
             }
-            } else {
+        } else {
             if (@available(iOS 14, *)) {
                 [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
                     // Tracking authorization completed. Start loading ads here.
@@ -331,5 +393,3 @@ didFailToPresentFullScreenContentWithError:(nonnull NSError *)error {
 @end
 
 IMPL_APP_CONTROLLER_SUBCLASS(MyGameAppController)
-
-

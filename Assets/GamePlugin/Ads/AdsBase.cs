@@ -103,18 +103,18 @@ namespace mygame.sdk
         {
 #if UNITY_ANDROID
             appId = android_app_id;
-            bannerId = android_bn_id;
+            bannerId = PlayerPrefs.GetString($"mem_df{adsType}_bn_id", android_bn_id);
             nativeId = android_native_id;
-            splashId = android_splash_id;
-            fullId = android_full_id;
-            giftId = android_gift_id;
+            splashId = PlayerPrefs.GetString($"mem_df{adsType}_spl_id", android_splash_id);
+            fullId = PlayerPrefs.GetString($"mem_df{adsType}_full_id", android_full_id);
+            giftId = PlayerPrefs.GetString($"mem_df{adsType}_gift_id", android_gift_id);
 #elif UNITY_IOS || UNITY_IPHONE
             appId = ios_app_id;
-            bannerId = ios_bn_id;
+            bannerId = PlayerPrefs.GetString($"mem_df{adsType}_bn_id", ios_bn_id);
             nativeId = ios_native_id;
-            splashId = ios_splash_id;
-            fullId = ios_full_id;
-            giftId = ios_gift_id;
+            splashId = PlayerPrefs.GetString($"mem_df{adsType}_spl_id", ios_splash_id);
+            fullId = PlayerPrefs.GetString($"mem_df{adsType}_full_id", ios_full_id);
+            giftId = PlayerPrefs.GetString($"mem_df{adsType}_gift_id", ios_gift_id);
 #endif
             timeLoadBN = 0;
 
@@ -134,17 +134,46 @@ namespace mygame.sdk
             AdsAwake();
         }
 
+        public void setBannerId(string adid)
+        {
+            if (adid != null && adid.Length > 3) {
+                bannerId = adid;
+                PlayerPrefs.SetString($"mem_df{adsType}_bn_id", adid);
+            }
+        }
+
         public string getSplashId()
         {
             return splashId;
+        }
+        public void setSplashId(string adid)
+        {
+            if (adid != null && adid.Length > 3) {
+                splashId = adid;
+                PlayerPrefs.SetString($"mem_df{adsType}_spl_id", adid);
+            }
         }
         public string getFullId()
         {
             return fullId;
         }
+        public void setFullId(string adid)
+        {
+            if (adid != null && adid.Length > 3) {
+                fullId = adid;
+                PlayerPrefs.SetString($"mem_df{adsType}_full_id", adid);
+            }
+        }
         public string getGiftId()
         {
             return giftId;
+        }
+        public void setGiftId(string adid)
+        {
+            if (adid != null && adid.Length > 3) {
+                fullId = adid;
+                PlayerPrefs.SetString($"mem_df{adsType}_gift_id", adid);
+            }
         }
         public virtual int getFullLoaded(bool isSplashAds)
         {
@@ -168,11 +197,11 @@ namespace mygame.sdk
                 AdsProcessCB.Instance().Enqueue(() =>
                 {
 #if ENABLE_MYLOG
-                    timecall = SdkUtil.systemCurrentMiliseconds();
+                    timecall = SdkUtil.CurrentTimeMilis();
 #endif
                     advhelper.loadFull4ThisTurn(false, advhelper.levelCurr4Full, false);
 #if ENABLE_MYLOG
-                    SdkUtil.logd("ads base onFullClose1=" + (SdkUtil.systemCurrentMiliseconds() - timecall));
+                    SdkUtil.logd("ads base onFullClose1=" + (SdkUtil.CurrentTimeMilis() - timecall));
 #endif
                 }, 2.0f);
             }
@@ -185,11 +214,11 @@ namespace mygame.sdk
                 AdsProcessCB.Instance().Enqueue(() =>
                 {
 #if ENABLE_MYLOG
-                    timecall = SdkUtil.systemCurrentMiliseconds();
+                    timecall = SdkUtil.CurrentTimeMilis();
 #endif
                     advhelper.loadGift4ThisTurn(advhelper.levelCurr4Gift, null);
 #if ENABLE_MYLOG
-                    SdkUtil.logd("ads base onGiftClose1=" + (SdkUtil.systemCurrentMiliseconds() - timecall));
+                    SdkUtil.logd("ads base onGiftClose1=" + (SdkUtil.CurrentTimeMilis() - timecall));
 #endif
                 }, 2.0f);
             }

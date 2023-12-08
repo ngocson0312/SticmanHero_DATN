@@ -12,7 +12,7 @@ namespace Myapi
     {
         public void check(string code, Action<GiftCodeOb> cb)
         {
-            long idrq = mygame.sdk.SdkUtil.systemCurrentMiliseconds();
+            long idrq = mygame.sdk.GameHelper.CurrentTimeMilisReal();
             idrq = addQueueCallback(idrq, cb);
             PostRequest(idrq, "");
         }

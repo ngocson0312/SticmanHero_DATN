@@ -11,7 +11,10 @@ using com.adjust.sdk;
 #endif
 using System.Linq;
 #if ENABLE_INAPP
+using Unity.Services.Core;
+using Unity.Services.Core.Environments;
 using UnityEngine.Purchasing;
+using UnityEngine.Purchasing.Extension;
 using UnityEngine.Purchasing.Security;
 
 #endif
@@ -20,7 +23,7 @@ using UnityEngine.Purchasing.Security;
 namespace mygame.sdk
 {
 #if ENABLE_INAPP
-    public class InappHelper : MonoBehaviour, IStoreListener
+    public class InappHelper : MonoBehaviour, IDetailedStoreListener
     {
 #else
     public class InappHelper : MonoBehaviour
@@ -98,7 +101,24 @@ namespace mygame.sdk
             }
         }
 
-        private void Start()
+        async void Start()
+        {
+#if ENABLE_INAPP
+            try
+            {
+                var options = new InitializationOptions()
+                    .SetEnvironmentName("production");
+
+                await UnityServices.InitializeAsync(options);
+                initIap();
+            }
+            catch (Exception exception)
+            {
+            }
+#endif
+        }
+
+        private void initIap()
         {
 #if ENABLE_INAPP
             Debug.Log("mysdk: IAP Start1");
@@ -132,15 +152,6 @@ namespace mygame.sdk
             validator = new CrossPlatformValidator(GooglePlayTangle.Data(),
                 AppleTangle.Data(),
                 appidentifier);
-#endif
-
-#if !UNITY_EDITOR && ENABLE_AppsFlyer
-#if UNITY_ANDROID
-            //Debug.Log("mysdk: IAP Start41");
-            //AppsFlyerSDK.AppsFlyerAndroid.initInAppPurchaseValidatorListener(this);
-#elif UNITY_IOS || UNITY_IPHONE
-Debug.Log("mysdk: IAP Start42");
-#endif
 #endif
 
 #endif
@@ -211,23 +222,26 @@ Debug.Log("mysdk: IAP Start42");
 #endif
         }
 
-        #region PUBLIC METHODS
+#region PUBLIC METHODS
 
         public bool BuyPackage(string skuid, string where, Action<PurchaseCallback> cb)
         {
 #if CHECK_4INAPP
-            int ss2 = PlayerPrefsBase.Instance().getInt("mem_kt_jvpirakt", 0);
-            int ss1 = PlayerPrefsBase.Instance().getInt("mem_kt_cdtgpl", 0);
-            int rsesss = PlayerPrefsBase.Instance().getInt("mem_procinva_gema", 3);
-            if (rsesss != 1 && rsesss != 2 && rsesss != 3 && rsesss != 101 && rsesss != 102 && rsesss != 103 && rsesss != 1985)
+            if (!SDKManager.Instance.isDeviceTest())
             {
-                rsesss = 103;
-            }
-            if ((rsesss == 3 && (ss1 == 1 || ss2 == 1)) || (rsesss == 1 && ss1 == 1) || (rsesss == 2 && ss2 == 1))
-            {
-                SDKManager.Instance.showNotSupportIAP();
-                FIRhelper.logEvent($"game_invalid_iap1_{ss1}_{ss2}");
-                return false;
+                int ss2 = PlayerPrefsBase.Instance().getInt("mem_kt_jvpirakt", 0);
+                int ss1 = PlayerPrefsBase.Instance().getInt("mem_kt_cdtgpl", 0);
+                int rsesss = PlayerPrefsBase.Instance().getInt("mem_procinva_gema", 3);
+                if (rsesss != 1 && rsesss != 2 && rsesss != 3 && rsesss != 101 && rsesss != 102 && rsesss != 103 && rsesss != 1985)
+                {
+                    rsesss = 103;
+                }
+                if ((rsesss == 3 && (ss1 == 1 || ss2 == 1)) || (rsesss == 1 && ss1 == 1) || (rsesss == 2 && ss2 == 1))
+                {
+                    SDKManager.Instance.showNotSupportIAP();
+                    FIRhelper.logEvent($"game_invalid_iap1_{ss1}_{ss2}");
+                    return false;
+                }
             }
 #endif
             string realSku = "";
@@ -246,7 +260,7 @@ Debug.Log("mysdk: IAP Start42");
                 return false;
             }
 
-            long t = SdkUtil.systemCurrentMiliseconds() / 1000;
+            long t = GameHelper.CurrentTimeMilisReal() / 1000;
             if (CurrStatePurchase != 0)
             {
                 if ((t - tCurrPurchase) < 1200)
@@ -266,6 +280,7 @@ Debug.Log("mysdk: IAP Start42");
             {
                 PurchaseCallback pcb = new PurchaseCallback(1, realSku);
                 _callback(pcb);
+                _callback = null;
             }
             return true;
         } else {
@@ -334,7 +349,7 @@ Debug.Log("mysdk: IAP Start42");
                 Debug.Log("mysdk: IAP RestorePurchases started ...");
 #if ENABLE_INAPP
                 IAppleExtensions extension = m_StoreExtensionProvider.GetExtension<IAppleExtensions>();
-                extension.RestoreTransactions(delegate (bool result)
+                extension.RestoreTransactions(delegate (bool result, string msg)
                 {
                     if (result)
                     {
@@ -469,7 +484,7 @@ Debug.Log("mysdk: IAP Start42");
                             if (status)
                             {
                                 SDKManager.Instance.timeOnline = (int)(time / 60000);
-                                SDKManager.Instance.timeWhenGetOnline = (int)(SdkUtil.systemCurrentMiliseconds() / 60000);
+                                SDKManager.Instance.timeWhenGetOnline = (int)(GameHelper.CurrentTimeMilisReal() / 60000);
                                 checkFakeSub();
                             }
                             else
@@ -492,7 +507,7 @@ Debug.Log("mysdk: IAP Start42");
 
         void checkFakeSub()
         {
-            DateTime nd = SdkUtil.DateTimeFromTimeStamp((long)SDKManager.Instance.timeOnline * 60);
+            DateTime nd = SdkUtil.timeStamp2DateTime((long)SDKManager.Instance.timeOnline * 60);
             int ncday = nd.Year * 365 + nd.DayOfYear;
             Debug.Log($"mysdk: IAP checkFakeSub curr day={ncday}:{nd}");
             foreach (var skuitem in listCurr.listWithId)
@@ -565,9 +580,9 @@ Debug.Log("mysdk: IAP Start42");
             return null;
         }
 
-        #endregion
+#endregion
 
-        #region PRIVATE METHODS
+#region PRIVATE METHODS
 
         public bool IsInitialized()
         {
@@ -579,16 +594,21 @@ Debug.Log("mysdk: IAP Start42");
 #endif
         }
 
-        #endregion
+#endregion
 
 #if ENABLE_INAPP
 
-        #region IMPLEMENTION IStoreListener
+#region IMPLEMENTION IStoreListener
 
         public void OnInitializeFailed(InitializationFailureReason error)
         {
             Debug.Log("mysdk: IAP OnInitializeFailed " + error);
             //this.InitializePurchasing();
+        }
+
+        public void OnInitializeFailed(InitializationFailureReason error, string? message)
+        {
+            Debug.Log("mysdk: IAP OnInitializeFailed " + error);
         }
 
         public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
@@ -766,12 +786,19 @@ Debug.Log("mysdk: IAP Start42");
             return false;
         }
 
-        public void OnPurchaseFailed(Product i, PurchaseFailureReason p)
+        public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
+        {
+            Debug.Log(string.Format("mysdk: OnPurchaseFailed1: FAIL. Product: '{0}', PurchaseFailureReason: {1}",
+                   product.definition.storeSpecificId, failureReason));
+            handlePurchaseFaild(product, failureReason.ToString());
+        }
+        public void OnPurchaseFailed(Product product, PurchaseFailureDescription failureDescription)
         {
             Debug.Log(string.Format("mysdk: OnPurchaseFailed: FAIL. Product: '{0}', PurchaseFailureReason: {1}",
-                i.definition.storeSpecificId, p));
-            handlePurchaseFaild(i, p.ToString());
+                   product.definition.storeSpecificId, failureDescription.reason));
+            handlePurchaseFaild(product, failureDescription.ToString());
         }
+
         public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
         {
             bool validPurchase = true;
@@ -794,27 +821,62 @@ Debug.Log("mysdk: IAP Start42");
                 validPurchase = false;
             }
 #elif UNITY_EDITOR
-            mPurchaseDate = SdkUtil.DateTimeFromTimeStamp(SdkUtil.systemCurrentMiliseconds() / 1000);
+            mPurchaseDate = SdkUtil.timeStamp2DateTime(GameHelper.CurrentTimeMilisReal() / 1000);
 #endif
 
             Debug.Log("mysdk: IAP ProcessPurchase:1" + validPurchase);
             if (validPurchase)
             {
                 Debug.Log("mysdk: IAP ProcessPurchase:2" + args.purchasedProduct.definition.id);
-#if !UNITY_EDITOR && ENABLE_AppsFlyer && ENABLE_VALIDATE_IAP
+#if !UNITY_EDITOR && ENABLE_AppsFlyer
 
-#if UNITY_ANDROID
+#if AppsFlyer_IAPConnector
                 Debug.Log("mysdk: IAP Start31");
+#if UNITY_ANDROID
+                if (PlayerPrefsBase.Instance().getInt("is_vali_appsf", 1) == 1)
+                {
+                    Debug.Log("mysdk: IAP Start3111");
+                    AppsFlyerHelperScript.Instance.setIapConnectorCB((statusAppsfiap) => {
+                        if (statusAppsfiap)
+                        {
+                            handlePurchaseSuc(args.purchasedProduct);
+                        }
+                        else
+                        {
+                            handlePurchaseFaild(args.purchasedProduct, "AppsFlyer validPurchase faild");
+                        }
+                    });
+                }
+                else
+                {
+                    Debug.Log("mysdk: IAP Start3112");
+                    handlePurchaseSuc(args.purchasedProduct);
+                }
+#elif UNITY_IOS || UNITY_IPHONE
+                Debug.Log("mysdk: IAP Start312");
+                handlePurchaseSuc(args.purchasedProduct);
+#endif
+
+#elif ENABLE_VALIDATE_IAP //#if AppsFlyer_IAPConnector
+            Debug.Log("mysdk: IAP Start32");
+#if UNITY_ANDROID
+                Debug.Log("mysdk: IAP Start321");
                 productValidbyAppsflyer = args.purchasedProduct;
                 appsflyerValidateAndroid(args.purchasedProduct.receipt, args.purchasedProduct.metadata.localizedPriceString, args.purchasedProduct.metadata.isoCurrencyCode);
 #elif UNITY_IOS || UNITY_IPHONE
-                Debug.Log("mysdk: IAP Start32");
+                Debug.Log("mysdk: IAP Start322");
                 handlePurchaseSuc(args.purchasedProduct);
 #endif
 
-#else
+#else //#if AppsFlyer_IAPConnector
+               Debug.Log("mysdk: IAP Start33");
+               handlePurchaseSuc(args.purchasedProduct);
+#endif //#if AppsFlyer_IAPConnector
+
+#else //#if !UNITY_EDITOR && ENABLE_AppsFlyer
+                Debug.Log("mysdk: IAP Start34");
                 handlePurchaseSuc(args.purchasedProduct);
-#endif
+#endif //#if !UNITY_EDITOR && ENABLE_AppsFlyer
             }
             else
             {
@@ -865,8 +927,8 @@ Debug.Log("mysdk: IAP Start42");
                             }
                         }
                     }
-                    AppsFlyerSDK.AppsFlyerAndroid.validateAndSendInAppPurchase(pkey, psig, pdata, price, currency, null, this);
-                    //AppsFlyerSDK.AppsFlyer.validateAndSendInAppPurchase(pkey, psig, pdata, price, currency, null, this);
+                    //AppsFlyerSDK.AppsFlyerAndroid.validateAndSendInAppPurchase(pkey, psig, pdata, price, currency, null, this);
+                    AppsFlyerSDK.AppsFlyer.validateAndSendInAppPurchase(pkey, psig, pdata, price, currency, null, this);
                     return true;
                 }
                 else
@@ -915,6 +977,7 @@ Debug.Log("mysdk: IAP Start42");
             {
                 PurchaseCallback pcb = new PurchaseCallback(0, p.definition.id);
                 _callback(pcb);
+                _callback = null;
             }
         }
 
@@ -922,37 +985,31 @@ Debug.Log("mysdk: IAP Start42");
         {
             SDKManager.Instance.PopupShowFirstAds.gameObject.SetActive(false);
 #if CHECK_4INAPP
-            int ss2 = PlayerPrefsBase.Instance().getInt("mem_kt_jvpirakt", 0);
-            int ss1 = PlayerPrefsBase.Instance().getInt("mem_kt_cdtgpl", 0);
-            int rsesss = PlayerPrefsBase.Instance().getInt("mem_procinva_gema", 3);
-            if (rsesss != 1 && rsesss != 2 && rsesss != 3 && rsesss != 101 && rsesss != 102 && rsesss != 103 && rsesss != 1985)
+            if (!SDKManager.Instance.isDeviceTest())
             {
-                rsesss = 103;
-            }
-            if ((rsesss == 3 && (ss1 == 1 || ss2 == 1)) || (rsesss == 1 && ss1 == 1) || (rsesss == 2 && ss2 == 1))
-            {
-                SDKManager.Instance.showNotSupportIAP();
-                if (CurrStatePurchase == 1)
+                int ss2 = PlayerPrefsBase.Instance().getInt("mem_kt_jvpirakt", 0);
+                int ss1 = PlayerPrefsBase.Instance().getInt("mem_kt_cdtgpl", 0);
+                int rsesss = PlayerPrefsBase.Instance().getInt("mem_procinva_gema", 3);
+                if (rsesss != 1 && rsesss != 2 && rsesss != 3 && rsesss != 101 && rsesss != 102 && rsesss != 103 && rsesss != 1985)
                 {
-                    FIRhelper.logEvent($"game_invalid_iap2_{ss1}_{ss2}");
+                    rsesss = 103;
                 }
-                CurrStatePurchase = 0;
-                return;
+                if ((rsesss == 3 && (ss1 == 1 || ss2 == 1)) || (rsesss == 1 && ss1 == 1) || (rsesss == 2 && ss2 == 1))
+                {
+                    SDKManager.Instance.showNotSupportIAP();
+                    if (CurrStatePurchase == 1)
+                    {
+                        FIRhelper.logEvent($"game_invalid_iap2_{ss1}_{ss2}");
+                    }
+                    CurrStatePurchase = 0;
+                    return;
+                }
             }
 #endif
             if (!SDKManager.Instance.isDeviceTest())
             {
                 if (CurrStatePurchase == 1)
                 {
-#if FIRBASE_ENABLE && UNITY_ANDROID && !UNITY_EDITOR
-                    Dictionary<string, object> iapAndParam = new Dictionary<string, object>();
-                    iapAndParam.Add("product_id", p.definition.id);
-                    iapAndParam.Add("quantity", p.definition.id);
-                    iapAndParam.Add("price", (double)p.metadata.localizedPrice);
-                    iapAndParam.Add("currency", p.metadata.isoCurrencyCode);
-                    iapAndParam.Add("value", (double)p.metadata.localizedPrice);
-                    FIRhelper.logEvent("in_app_purchase" , iapAndParam);
-#endif
                     Dictionary<string, object> iapParam = new Dictionary<string, object>();
                     iapParam.Add("product_id", p.definition.id);
                     iapParam.Add("quantity", p.definition.id);
@@ -971,8 +1028,9 @@ Debug.Log("mysdk: IAP Start42");
                     {
                         FIRhelper.logEvent($"IAP_suc_fb_{skulog}");
                     }
-
+#if (!AppsFlyer_IAPConnector && UNITY_ANDROID) || UNITY_IOS || UNITY_IPHONE
                     AppsFlyerHelperScript.logPurchase(p.definition.id, p.metadata.localizedPrice.ToString(), p.metadata.isoCurrencyCode);
+#endif
                     Myapi.LogEventApi.Instance().logInApp(p.definition.id, p.transactionID, "", p.metadata.isoCurrencyCode, (float)p.metadata.localizedPrice, buyWhere);
                     Dictionary<string, string> dicparam = new Dictionary<string, string>();
                     dicparam.Add("producId", p.definition.id);
@@ -986,6 +1044,7 @@ Debug.Log("mysdk: IAP Start42");
             {
                 PurchaseCallback pcb = new PurchaseCallback(1, p.definition.id);
                 _callback(pcb);
+                _callback = null;
             }
         }
 
@@ -1086,7 +1145,7 @@ Debug.Log("mysdk: IAP Start42");
             return re;
         }
 
-        #endregion
+#endregion
 
 #endif
     }

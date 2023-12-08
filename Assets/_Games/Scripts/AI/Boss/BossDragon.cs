@@ -24,12 +24,6 @@ namespace SuperFight
         // public AICharacter[] prefabEnemys;
         int turnCount;
         float spawnTimer;
-        [Header("Stars")]
-        public Transform[] posStars;
-        public StarKick starPrefab;
-        float starSpawnTimer;
-        int currentPos;
-        public ParticleSystem explosionFX;
         List<Collider2D> collider2Ds;
         public override void Initialize(BossFightArena bossFightArena)
         {
@@ -38,28 +32,8 @@ namespace SuperFight
             state = 0;
             roamingTimer = roamingTime;
             roamingCount = Random.Range(2, 3);
-            starSpawnTimer = 2f;
         }
-
-        void HandleStarItem()
-        {
-            if (starSpawnTimer > 0)
-            {
-                starSpawnTimer -= Time.deltaTime;
-                if (starSpawnTimer <= 0)
-                {
-                    starSpawnTimer = Random.Range(3f, 5f);
-                    StarKick s = Instantiate(starPrefab, arena.transform);
-                    s.transform.position = posStars[currentPos].position;
-                    s.Initialize();
-                    currentPos++;
-                    if (currentPos >= posStars.Length)
-                    {
-                        currentPos = 0;
-                    }
-                }
-            }
-        }
+    
         void HandleFlyAround()
         {
             if (roamingTimer > 0)
@@ -130,7 +104,7 @@ namespace SuperFight
             if (targets.Count > 0 && !collider2Ds.Contains(targets[0]))
             {
                 DamageInfo damageInfo = new DamageInfo();
-                damageInfo.damage = stats.damage;
+                damageInfo.damage = runtimeStats.damage;
                 damageInfo.isKnockBack = true;
                 damageInfo.hitDirection = direction;
                 damageInfo.stunTime = 1f;
@@ -178,15 +152,6 @@ namespace SuperFight
             Gizmos.color = Color.red;
             Gizmos.DrawRay(flamePosition.position, flamePosition.forward * rayLenght);
         }
-        public override void Die(bool deactiveCharacter)
-        {
-            base.Die(deactiveCharacter);
-            explosionFX.Play();
-            isActive = false;
-            animatorHandle.PlayAnimation("Die", 0.1f, 1, true);
-            SoundManager.Instance.playSoundFx(SoundManager.Instance.effBossDie);
-            GameplayCtrl.Instance.CreateCoinOnKillBoss(transform.position, 20, 40);
-        }
         public override void Resume()
         {
             base.Resume();
@@ -196,13 +161,13 @@ namespace SuperFight
         {
             if (!isActive) return;
             base.OnTakeDamage(damageInfo);
-            if (stats.currHealth <= 0)
+            if (runtimeStats.health <= 0)
             {
                 Die(true);
             }
             else
             {
-                SoundManager.Instance.playRandFx(TYPE_RAND_FX.FX_TAKE_DAMAGE);
+                //SoundManager.Instance.playRandFx(TYPE_RAND_FX.FX_TAKE_DAMAGE);
             }
         }
         public override void Active()
@@ -221,7 +186,6 @@ namespace SuperFight
             {
                 SpawnEnemyState();
             }
-            HandleStarItem();
         }
 
         protected override void UpdatePhysic()

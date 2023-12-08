@@ -32,7 +32,7 @@ namespace mygame.sdk
         public string AdsIdentify { get; set; }
         public bool isAlowShowOpen { get; set; }
 
-        private const long Day_len_Luc = 1649819784;
+        private const long Day_len_Luc = 1684459920;
         private const int So_nga_xem = 2;
         static bool isShowCMP = false;
 
@@ -155,7 +155,17 @@ namespace mygame.sdk
             //             gotoStore(AppConfig.appid);
             // #endif      
         }
-
+        
+        public static int getFreeDisk()
+        {
+#if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
+            return 10000;
+#else
+            // return mygame.plugin.Android.GameHelperAndroid.getFreeDisk();
+#endif
+            return 10000;
+        }
+        
         public void gotoStore(string idapp)
         {
 #if UNITY_ANDROID
@@ -220,11 +230,6 @@ namespace mygame.sdk
 #else
             return true;
 #endif
-        }
-
-        public void pushLocalNotify(NotifyObject notify)
-        {
-
         }
 
         /*
@@ -348,63 +353,123 @@ namespace mygame.sdk
             if (isAlowShowOpen && AdsHelper.Instance != null && AdsHelper.Instance.isShowOpenAds(true) > 0)
             {
 #if UNITY_EDITOR
-                Debug.Log("showAppOpenAd not impl");
-                return false;
-#elif UNITY_ANDROID
                 int openadhowtype = PlayerPrefs.GetInt("cf_open_ad_type", 0);
-                if (openadhowtype == 0 || openadhowtype == 2 || openadhowtype == 4) {
-                    mygame.plugin.Android.GameHelperAndroid.showAppOpenAd(true);
-                    return false;
-                } else {
-                    bool re = AdsHelper.Instance.showFull(true, 99, false, true, "OpenAds_first", false, false, (satead) =>
+                if (openadhowtype != 0 && openadhowtype != 2)
+                {
+                    bool isshow = AdsHelper.Instance.showOpenAd((statusShow) =>
                     {
-                        if (satead == AD_State.AD_SHOW)
-                        {
-                            SDKManager.Instance.PopupShowFirstAds.gameObject.SetActive(false);
-                        }
-                        if (satead == AD_State.AD_CLOSE || satead == AD_State.AD_SHOW_FAIL)
+                        if (statusShow == AD_State.AD_CLOSE)
                         {
                             SDKManager.Instance.PopupShowFirstAds.gameObject.SetActive(false);
                             SDKManager.Instance.flagTimeScale = 0;
                             Time.timeScale = 1;
-                            if (SDKManager.Instance.CBPauseGame != null) {
+                            if (SDKManager.Instance.CBPauseGame != null)
+                            {
                                 SDKManager.Instance.CBPauseGame.Invoke(false);
                             }
                         }
                     });
-                    if (!re && openadhowtype == 3)
+                    return isshow;
+                }
+                else
+                {
+                    return false;
+                }
+#elif UNITY_ANDROID
+                int openadhowtype = PlayerPrefs.GetInt("cf_open_ad_type", 0);
+                if (openadhowtype == 0 || openadhowtype == 2 || openadhowtype == 4)
+                {
+                    mygame.plugin.Android.GameHelperAndroid.showAppOpenAd(true);
+                    return false;
+                }
+                else
+                {
+                    bool isshow = AdsHelper.Instance.showOpenAd((statusShow) =>
+                    {
+                        if (statusShow == AD_State.AD_CLOSE)
+                        {
+                            SDKManager.Instance.PopupShowFirstAds.gameObject.SetActive(false);
+                            SDKManager.Instance.flagTimeScale = 0;
+                            Time.timeScale = 1;
+                            if (SDKManager.Instance.CBPauseGame != null)
+                            {
+                                SDKManager.Instance.CBPauseGame.Invoke(false);
+                            }
+                        }
+                    });
+                    if (!isshow)
+                    {
+                        isshow = AdsHelper.Instance.showFull(true, 99, false, true, "OpenAds_first", false, false, (satead) =>
+                        {
+                            if (satead == AD_State.AD_SHOW)
+                            {
+                                SDKManager.Instance.PopupShowFirstAds.gameObject.SetActive(false);
+                            }
+                            if (satead == AD_State.AD_CLOSE || satead == AD_State.AD_SHOW_FAIL)
+                            {
+                                SDKManager.Instance.PopupShowFirstAds.gameObject.SetActive(false);
+                                SDKManager.Instance.flagTimeScale = 0;
+                                Time.timeScale = 1;
+                                if (SDKManager.Instance.CBPauseGame != null)
+                                {
+                                    SDKManager.Instance.CBPauseGame.Invoke(false);
+                                }
+                            }
+                        });
+                    }
+                    if (!isshow && openadhowtype == 3)
                     {
                         mygame.plugin.Android.GameHelperAndroid.showAppOpenAd(true);
                     }
-                    return re;
+                    return isshow;
                 }
 #elif UNITY_IOS || UNITY_IPHONE
                 int openadhowtype = PlayerPrefs.GetInt("cf_open_ad_type", 0);
-                if (openadhowtype == 0 || openadhowtype == 2 || openadhowtype == 4) {
+                if (openadhowtype == 0 || openadhowtype == 2 || openadhowtype == 4)
+                {
                     GameHelperIos.showOpenAds(true);
                     return false;
-                } else {
-                    bool re = AdsHelper.Instance.showFull(true, 99, false, true, "OpenAds_first", false, false, (satead) =>
+                }
+                else
+                {
+                    bool isshow = AdsHelper.Instance.showOpenAd((statusShow) =>
                     {
-                        if (satead == AD_State.AD_SHOW)
-                        {
-                            SDKManager.Instance.PopupShowFirstAds.gameObject.SetActive(false);
-                        }
-                        if (satead == AD_State.AD_CLOSE || satead == AD_State.AD_SHOW_FAIL)
+                        if (statusShow == AD_State.AD_CLOSE)
                         {
                             SDKManager.Instance.PopupShowFirstAds.gameObject.SetActive(false);
                             SDKManager.Instance.flagTimeScale = 0;
                             Time.timeScale = 1;
-                            if (SDKManager.Instance.CBPauseGame != null) {
+                            if (SDKManager.Instance.CBPauseGame != null)
+                            {
                                 SDKManager.Instance.CBPauseGame.Invoke(false);
                             }
                         }
                     });
-                    if (!re && openadhowtype == 3)
+                    if (!isshow)
+                    {
+                        isshow = AdsHelper.Instance.showFull(true, 99, false, true, "OpenAds_first", false, false, (satead) =>
+                        {
+                            if (satead == AD_State.AD_SHOW)
+                            {
+                                SDKManager.Instance.PopupShowFirstAds.gameObject.SetActive(false);
+                            }
+                            if (satead == AD_State.AD_CLOSE || satead == AD_State.AD_SHOW_FAIL)
+                            {
+                                SDKManager.Instance.PopupShowFirstAds.gameObject.SetActive(false);
+                                SDKManager.Instance.flagTimeScale = 0;
+                                Time.timeScale = 1;
+                                if (SDKManager.Instance.CBPauseGame != null)
+                                {
+                                    SDKManager.Instance.CBPauseGame.Invoke(false);
+                                }
+                            }
+                        });
+                    }
+                    if (!isshow && openadhowtype == 3)
                     {
                         GameHelperIos.showOpenAds(true);
                     }
-                    return re;
+                    return isshow;
                 }
 #endif
             }
@@ -477,7 +542,7 @@ namespace mygame.sdk
             return false;
         }
 
-        public static bool requestIDFA()
+        public static bool isRequestIDFA()
         {
             int lvshowrequest = PlayerPrefs.GetInt("lv_show_request_idfa", 0);
             Debug.Log("mysdk: requestIDFA lvshowrequest=" + lvshowrequest);
@@ -487,20 +552,26 @@ namespace mygame.sdk
             }
             if (GameRes.LevelCommon() >= lvshowrequest)
             {
-                PlayerPrefs.SetInt("lv_show_request_idfa", -1);
 #if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
-                int isallversion = PlayerPrefs.GetInt("cf_ver_os_show_idfa", 1);
-                int vergameshowidfa = PlayerPrefs.GetInt("cf_ver_game_show_idfa", 0);
-                if (AppConfig.verapp < vergameshowidfa)
-                {
-                    isallversion = 0;
-                }
-                Debug.Log("mysdk: requestIDFA call isallversion=" + isallversion + ", vergameshowidfa=" + vergameshowidfa);
-                GameHelperIos.requestIDFA(isallversion);
                 return true;
 #endif
             }
             return false;
+        }
+
+        public static void requestIDFA()
+        {
+            PlayerPrefs.SetInt("lv_show_request_idfa", -1);
+#if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
+            int isallversion = PlayerPrefs.GetInt("cf_ver_os_show_idfa", 1);
+            int vergameshowidfa = PlayerPrefs.GetInt("cf_ver_game_show_idfa", 0);
+            if (AppConfig.verapp < vergameshowidfa)
+            {
+                isallversion = 0;
+            }
+            Debug.Log("mysdk: requestIDFA call isallversion=" + isallversion + ", vergameshowidfa=" + vergameshowidfa);
+            GameHelperIos.requestIDFA(isallversion);
+#endif
         }
 
         public static void showCMP()
@@ -535,6 +606,42 @@ namespace mygame.sdk
             return Screen.width;
 #endif
         }
+        
+        public static void switchFlash(bool isOn)
+        {
+#if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
+            //mygame.sdk.GameHelperIos.switchFlash(isOn);
+#else
+            //mygame.plugin.Android.GameHelperAndroid.switchFlash(isOn);
+#endif
+        }
+
+        public static long CurrentTimeMilisReal()
+        {
+#if AllowCustomeTime
+            return SdkUtil.CurrentTimeMilis();
+#endif
+#if !UNITY_EDITOR
+
+#if UNITY_IOS || UNITY_IPHONE
+            return mygame.sdk.GameHelperIos.CurrentTimeMilisReal();
+#else
+            return mygame.plugin.Android.GameHelperAndroid.CurrentTimeMilisReal();
+#endif
+
+#else
+            return SdkUtil.CurrentTimeMilis();
+#endif
+        }
+
+        public static void ScreenInfo()
+        {
+#if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
+            //mygame.sdk.GameHelperIos.ScreenInfo(isOn);
+#else
+            //mygame.plugin.Android.GameHelperAndroid.ScreenInfo();
+#endif
+        }
 
         public static bool checkLvXaDu()
         {
@@ -542,7 +649,7 @@ namespace mygame.sdk
             int memsen = 0;
             int TT_Xadu = PlayerPrefs.GetInt("cf_trathai_xadu", 0);
 #if Nho_TrTh_Tao
-            if(TT_Xadu != 100)
+            if (TT_Xadu != 100)
             {
                 memsen = PlayerPrefs.GetInt("nho_tt_ktro", 0);
             }
@@ -558,9 +665,9 @@ namespace mygame.sdk
                 int lvban = PlayerPrefs.GetInt("cf_lv_ktro", deban);
                 Debug.Log($"mysdk: checkLvXaDu ban={lvban}");
 #if Xem_Nga_Tao
-                if(TT_Xadu != 100 && TT_Xadu != 99)
+                if (TT_Xadu != 100 && TT_Xadu != 99)
                 {
-                    long tcurr = SdkUtil.systemCurrentMiliseconds() / 1000;
+                    long tcurr = CurrentTimeMilisReal() / 1000;
                     dt = tcurr - Day_len_Luc;
                     Debug.Log($"mysdk: checkLvXaDu dt={dt}");
                 }
@@ -580,6 +687,14 @@ namespace mygame.sdk
 #endif
         }
 
+        public static int getFreeMem()
+        {
+#if UNITY_ANDROID && !UnityEditor
+            return mygame.plugin.Android.GameHelperAndroid.getFreeMem();
+#else
+            return 10000;
+#endif
+        }
         //================================================================================================
         public void checkCountryNoInapp()
         {

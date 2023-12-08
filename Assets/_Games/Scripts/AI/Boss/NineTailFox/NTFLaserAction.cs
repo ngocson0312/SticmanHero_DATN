@@ -26,6 +26,14 @@ namespace SuperFight
             skillState = 0;
         }
 
+        public override void OnPause()
+        {
+        }
+
+        public override void OnResume()
+        {
+        }
+
         public override void UpdateLogic(float deltaTime)
         {
             skillTimer -= Time.deltaTime;

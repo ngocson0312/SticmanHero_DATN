@@ -89,7 +89,7 @@ public class AdTestHelper : BaseAdCanvas
     }
     private BaseAdCanvasObject getAdsWithType(AdCanvasSize type, Vector3 pos, Vector3 forward, Transform _target, int stateLookat, bool isFloowY)
     {
-        if (listAdsUse[type].listAds.Count < 15)
+        if (listAdsUse.ContainsKey(type) && listAdsUse[type].listAds.Count < 15)
         {
             if (listAdsFree[type].listAds.Count > 0)
             {

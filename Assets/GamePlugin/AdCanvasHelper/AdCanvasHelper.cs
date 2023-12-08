@@ -103,10 +103,12 @@ public class AdCanvasHelper : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+#if ENABLE_ADCANVAS
         foreach (var ad in listAdUse)
         {
             ad.Value.onUpdate();
         }
+#endif
     }
 
     void addRes2Use()
@@ -158,19 +160,6 @@ public class AdCanvasHelper : MonoBehaviour
         }
     }
 
-    public void ShowCMPIOS()
-    {
-#if ENABLE_ADCANVAS
-        if (PlayerPrefs.GetInt("cf_adcanvas_enable", 1) == 1 && PlayerPrefs.GetInt("cf_adcanvas_CMP", 1) == 1 && PlayerPrefs.GetInt("mem_show_CMP", 0) <= 0)
-        {
-#if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
-            Debug.Log($"mysdk: adcv ShowCMPIOS");
-            mygame.sdk.GameHelper.showCMP();
-#endif
-        }
-#endif
-    }
-
     public void onShowCmp(int state, string des)
     {
         if (state == 0)
@@ -188,7 +177,6 @@ public class AdCanvasHelper : MonoBehaviour
 
     public void onShowCmpNative()
     {
-        PlayerPrefs.SetInt("mem_show_CMP", 1);
         foreach (var ad in listAdUse)
         {
             ad.Value.onShowCmpNative();
@@ -230,7 +218,7 @@ public class AdCanvasHelper : MonoBehaviour
             }
             while (re == null && n > 0)
             {
-                if (type.Equals(AdCanvasSize.Size6x5) && listAdUse[ListTypeAdUse[idxListUse]].TypeAdCanvas.Equals(AdCanvasType.GadsMe))
+                if (type.Equals(AdCanvasSize.Size6x5) && (listAdUse[ListTypeAdUse[idxListUse]].TypeAdCanvas.Equals(AdCanvasType.GadsMe) || listAdUse[ListTypeAdUse[idxListUse]].TypeAdCanvas.Equals(AdCanvasType.AdVerty)))
                 {
                     int typevd = 0;
                     if (isDeviceStrong && listVideo.Count > 0)
@@ -255,7 +243,7 @@ public class AdCanvasHelper : MonoBehaviour
                 {
                     re = listAdUse[ListTypeAdUse[idxListUse]].genAd(type, pos, forward, _target, stateLookat, isFloowY);
                 }
-                
+
                 idxListUse++;
                 n--;
                 if (idxListUse >= ListTypeAdUse.Count)
@@ -284,7 +272,7 @@ public class AdCanvasHelper : MonoBehaviour
             }
             return;
         }
-        if (mygame.sdk.AdsHelper.isRemoveAds == 1)
+        //if (mygame.sdk.AdsHelper.isRemoveAds(0))
         {
             // isClick = false;
         }

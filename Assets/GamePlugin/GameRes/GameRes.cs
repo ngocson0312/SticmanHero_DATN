@@ -20,9 +20,6 @@ namespace mygame.sdk
     public class GameRes
     {
         private static GameRes _instance = null;
-        public static long timeStartGame = 0;
-        public static long timeEndGame = 0;
-        public static float duarationPlayLv = 0;
         private static int lvCommon = -1;
 
         public static GameRes Instance()
@@ -125,25 +122,6 @@ namespace mygame.sdk
             }
         }
 
-        public static void startLevel()
-        {
-            timeStartGame = SdkUtil.systemCurrentMiliseconds();
-            timeEndGame = 0;
-            duarationPlayLv = 0;
-        }
-
-        public static void endLevel()
-        {
-            if (timeStartGame > 0)
-            {
-                timeEndGame = SdkUtil.systemCurrentMiliseconds();
-            }
-            else
-            {
-                timeEndGame = 0;
-            }
-        }
-
         public static int getRes(RES_type type, int defaultva = 0)
         {
             string nameRes = type.ToString().ToLower();
@@ -236,7 +214,7 @@ namespace mygame.sdk
                 if (value > 0)
                 {
                     Dictionary<string, string> dicParam = new Dictionary<string, string>();
-                    dicParam.Add("gold", value.ToString());
+                    dicParam.Add(nameRes, value.ToString());
                     dicParam.Add("des", desUpdate);
                     AdjustHelper.LogEvent(AdjustEventName.ResGet, dicParam);
                     Myapi.LogEventApi.Instance().logResource(LevelCommon(), "source", nameRes, 1, nameRes, value, _currVa, _currVa + value, desUpdate);
@@ -244,7 +222,7 @@ namespace mygame.sdk
                 else
                 {
                     Dictionary<string, string> dicParam = new Dictionary<string, string>();
-                    dicParam.Add("gold", value.ToString());
+                    dicParam.Add(nameRes, value.ToString());
                     dicParam.Add("des", desUpdate);
                     AdjustHelper.LogEvent(AdjustEventName.ResSpend, dicParam);
                     Myapi.LogEventApi.Instance().logResource(LevelCommon(), "sink", nameRes, 1, nameRes, value, _currVa, _currVa + value, desUpdate);

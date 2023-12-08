@@ -77,7 +77,7 @@ namespace SuperFight
             if (other.GetComponent<PlayerManager>() != null)
             {
                 greenFx.Stop();
-                SoundManager.Instance.playSoundFx(SoundManager.Instance.effStarKick);
+                //SoundManager.Instance.playSoundFx(//SoundManager.Instance.effStarKick);
                 Active();
             }
             else
@@ -93,7 +93,7 @@ namespace SuperFight
             trail.SetActive(false);
             impact.SetActive(true);
             DamageInfo damageInfo = new DamageInfo();
-            damageInfo.damage = PlayerManager.Instance.playerController.stats.damage;
+            damageInfo.damage = PlayerManager.Instance.playerController.runtimeStats.damage;
             damageInfo.characterType = CharacterType.Character;
             coll.enabled = false;
             Debug.Log(damageInfo.damage);

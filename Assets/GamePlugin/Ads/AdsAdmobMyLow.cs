@@ -346,7 +346,6 @@ namespace mygame.sdk
             {
                 SdkUtil.logd("ads admobmyLow showFull type=" + adsType);
                 FullTryLoad = 0;
-                isFullLoaded = false;
 #if ENABLE_ADS_ADMOB && USE_ADSMOB_MY
                 cbFullShow = cb;
                 AdsAdmobMyLowBridge.Instance.showFull();
@@ -441,7 +440,6 @@ namespace mygame.sdk
             cbGiftShow = null;
             if (getGiftLoaded())
             {
-                isGiftLoaded = false;
 #if ENABLE_ADS_ADMOB && USE_ADSMOB_MY
                 cbGiftShow = cb;
                 AdsAdmobMyLowBridge.Instance.showGift();
@@ -564,6 +562,7 @@ namespace mygame.sdk
         private void OnInterstitialDismissedEvent()
         {
             isFullLoading = false;
+            isFullLoaded = false;
             if (cbFullShow != null)
             {
                 AdCallBack tmpcb = cbFullShow;
@@ -634,12 +633,12 @@ namespace mygame.sdk
             {
                 var tmpcb = cbGiftShow;
 #if ENABLE_MYLOG
-                SdkUtil.logd("ads admobmyLow rw HandleRewardBasedVideoClosed2");
+                SdkUtil.logd("ads admobmyLow rw HandleRewardBasedVideoOpened1");
 #endif
                 AdsProcessCB.Instance().Enqueue(() => { tmpcb(AD_State.AD_SHOW); });
             }
 #if ENABLE_MYLOG
-            SdkUtil.logd("ads admobmyLow rw HandleRewardBasedVideoOpened 1");
+            SdkUtil.logd("ads admobmyLow rw HandleRewardBasedVideoOpened2");
 #endif
         }
 

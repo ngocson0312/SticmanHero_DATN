@@ -38,12 +38,12 @@ namespace SuperFight
         {
             if (IsEnable) return;
             IsEnable = true;
-            SoundManager.Instance.playSoundFx(SoundManager.Instance.effSavePoint);
+           // SoundManager.Instance.playSoundFx(SoundManager.Instance.effSavePoint);
 
             checkPointText.gameObject.SetActive(true);
             objFire.SetActive(true);
             animShowText.Play("CheckPointOn");
-            GameplayCtrl.Instance.setNewCheckPoint(this);
+            //GameplayCtrl.Instance.setNewCheckPoint(this);
 
         }
 

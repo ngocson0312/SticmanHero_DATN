@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa625ff184278044e9e5a703a3d629bf, type: 3}
+  m_Name: WeekRewardMisson
+  m_EditorClassIdentifier: 
+  itemRewards:
+  - type: 1
+    amout: 5000
+    equipmentData:
+      idInventory: 0
+      itemID: 0
+      level: 0
+      grade: 0
+      embedStone: 0
+  - type: 2
+    amout: 30
+    equipmentData:
+      idInventory: 0
+      itemID: 0
+      level: 0
+      grade: 0
+      embedStone: 0
+  - type: 1
+    amout: 10000
+    equipmentData:
+      idInventory: 0
+      itemID: 0
+      level: 0
+      grade: 0
+      embedStone: 0
+  - type: 2
+    amout: 60
+    equipmentData:
+      idInventory: 0
+      itemID: 0
+      level: 0
+      grade: 0
+      embedStone: 0
+  - type: 1
+    amout: 15000
+    equipmentData:
+      idInventory: 0
+      itemID: 0
+      level: 0
+      grade: 0
+      embedStone: 0
+  - type: 2
+    amout: 75
+    equipmentData:
+      idInventory: 0
+      itemID: 0
+      level: 0
+      grade: 0
+      embedStone: 0
+  - type: 1
+    amout: 20000
+    equipmentData:
+      idInventory: 0
+      itemID: 0
+      level: 0
+      grade: 0
+      embedStone: 0
+  - type: 2
+    amout: 100
+    equipmentData:
+      idInventory: 0
+      itemID: 7
+      level: 0
+      grade: 3
+      embedStone: 0
+  - type: 1
+    amout: 25000
+    equipmentData:
+      idInventory: 0
+      itemID: 0
+      level: 0
+      grade: 0
+      embedStone: 0
+  - type: 2
+    amout: 120
+    equipmentData:
+      idInventory: 0
+      itemID: 8
+      level: 0
+      grade: 3
+      embedStone: 0

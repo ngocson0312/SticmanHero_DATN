@@ -5,7 +5,7 @@ using DG.Tweening;
 
 namespace SuperFight
 {
-    public class ItemSpikeTrap : MonoBehaviour
+    public class ItemSpikeTrap : ItemObject
     {
         [SerializeField] Spike[] spikes;
         [SerializeField] int dam = 50;
@@ -21,20 +21,36 @@ namespace SuperFight
         Tweener twMoveDown;
         private void OnEnable()
         {
+
+        }
+
+
+        public override void Initialize()
+        {
             SpikeMove();
             for (int i = 0; i < spikes.Length; i++)
             {
                 if (spikes[i] != null)
                 {
-                    spikes[i].damage = dam;
+                   // spikes[i].damage = dam;
+                
+                   
                 }
             }
+
+        }
+
+        public override void ResetObject()
+        {
+
         }
 
         void SpikeMove()
         {
-            twMoveDown = SpikeAnchor.DOLocalMoveY(EndAnchor.localPosition.y, timeDown).SetEase(ease).SetDelay(timeDelayDown).OnComplete(() => {
-                twMoveUP = SpikeAnchor.DOLocalMoveY(StartAnchor.localPosition.y, timeUp).SetEase(ease).SetDelay(timeDelayUP).OnComplete(() => {
+            twMoveDown = SpikeAnchor.DOLocalMoveY(EndAnchor.localPosition.y, timeDown).SetEase(ease).SetDelay(timeDelayDown).OnComplete(() =>
+            {
+                twMoveUP = SpikeAnchor.DOLocalMoveY(StartAnchor.localPosition.y, timeUp).SetEase(ease).SetDelay(timeDelayUP).OnComplete(() =>
+                {
                     KillTween();
                     SpikeMove();
                 });

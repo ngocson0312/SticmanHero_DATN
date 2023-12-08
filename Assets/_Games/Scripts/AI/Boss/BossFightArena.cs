@@ -1,8 +1,25 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 namespace SuperFight
 {
+#if UNITY_EDITOR
+    using UnityEditor;
+
+    [CustomEditor(typeof(BossFightArena))]
+    public class BossFightArenaEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            if (GUILayout.Button("Setup"))
+            {
+                BossFightArena arena = target as BossFightArena;
+                arena.bosses = arena.GetComponentsInChildren<Boss>();
+                EditorUtility.SetDirty(arena);
+            }
+        }
+    }
+#endif
     public class BossFightArena : MonoBehaviour
     {
         public float arenaRangeX = 10f;
@@ -11,60 +28,90 @@ namespace SuperFight
         public Vector2 offsetCamera;
         public Transform center;
         public Boss[] bosses;
+        public RewardInfo[] rewards;
+        private Chest chest;
+        private FillBar healthBar;
         private int bossCount;
-        FillBar healthBar;
-        float totalHealth = 0;
-        float currentHealth = 0;
+        private float totalHealth = 0;
+        private float currentHealth = 0;
         private bool battleActive;
-        private bool startBattle;
         public float timeDelayBattleActive;
-        public void Initialize()
+        private GameObject door;
+        public void Initialize(GameObject door)
         {
+            this.door = door;
             bossCount = bosses.Length;
             battleActive = false;
-            startBattle = false;
             currentHealth = 0;
             totalHealth = 0;
             for (int i = 0; i < bosses.Length; i++)
             {
                 bosses[i].Initialize(this);
-                totalHealth += bosses[i].stats.health;
+                bosses[i].OnDisappear += OnDisappear;
+                totalHealth += bosses[i].runtimeStats.health;
             }
             currentHealth = totalHealth;
-            PlayScreenCtl ingameScreen = ScreenUIManager.Instance.GetScreen<PlayScreenCtl>(ScreenName.PLAYSCREEN);
+            IngameScreenUI ingameScreen = UIManager.Instance.GetScreen<IngameScreenUI>();
             healthBar = ingameScreen.bossHealthBar;
+            chest = FactoryObject.Spawn<Chest>("Item", "Chest");
+            chest.SetActive(false);
+            door.SetActive(false);
+            GameManager.OnPause += OnPauseGame;
+            GameManager.OnResume += OnResumeGame;
         }
         private void Update()
         {
             if (PlayerManager.Instance == null || battleActive) return;
-            Bounds bound = new Bounds(center.position, new Vector3(arenaRangeX, arenaRangeY, 0));
+            Vector3 centerPos = center.position;
+            centerPos.z = 0;
+            Bounds bound = new Bounds(centerPos, new Vector3(arenaRangeX, arenaRangeY, 0));
             Vector2 playerPos = PlayerManager.Instance.transform.position;
             if (bound.Contains(playerPos))
             {
                 OnTriggerBattle();
             }
         }
-        IEnumerator IEDelayBattleActive()
-        {
-            ScreenUIManager.Instance.ShowScreen(ScreenName.PLAYSCREEN);
-            yield return new WaitForSeconds(timeDelayBattleActive);
-            for (int i = 0; i < bosses.Length; i++)
-            {
-                bosses[i].Active();
-            }
-            battleActive = true;
-        }
         public void OnTriggerBattle()
         {
+            // lockObj.SetActive(true);
             healthBar.InitializeBar(true);
             Bounds bound = new Bounds(center.position, new Vector3(arenaRangeX, arenaRangeY, 0));
-            StartCoroutine(IEDelayBattleActive());
             if (lockCamera)
             {
-                CameraController.Instance.SetTargetFollow(center);
+                CameraController.Instance.SetTargetFollow(center, true);
             }
+            CameraController.Instance.SetOrthoSize(bound.size, 1.5f);
             CameraController.Instance.SetOffset(offsetCamera);
-            CameraController.Instance.SetOrthoSize(bound.size, 1.5f, true);
+            StartCoroutine(IEDelayBattleActive());
+            IEnumerator IEDelayBattleActive()
+            {
+                yield return new WaitForSeconds(timeDelayBattleActive);
+                for (int i = 0; i < bosses.Length; i++)
+                {
+                    bosses[i].Active();
+                }
+                battleActive = true;
+            }
+        }
+        private void OnDisappear(Boss boss)
+        {
+            if (currentHealth <= 0)
+            {
+                chest.transform.position = boss.position + Vector3.up;
+                if (DataManager.Level > GameManager.LevelSelected)
+                {
+                    for (int i = 0; i < rewards.Length; i++)
+                    {
+                        rewards[i].amount /= 3;
+                        if (rewards[i].amount == 0)
+                        {
+                            rewards[i].amount = 1;
+                        }
+                    }
+                }
+                chest.Initialize(rewards);
+                chest.SetActive(true);
+            }
         }
         public void OnPauseGame()
         {
@@ -86,28 +133,27 @@ namespace SuperFight
             healthBar.UpdateFillBar(currentHealth / totalHealth);
             if (currentHealth <= 0)
             {
-                GameplayCtrl.Instance.objManager.winDoorInMap.OpenDoor();
-                GameplayCtrl.Instance.enemyKill = 1;
-                PlayScreenCtl playScreen = ScreenUIManager.Instance.GetScreen<PlayScreenCtl>(ScreenName.PLAYSCREEN);
-                playScreen.BlockInput(true);
-                playScreen.SetEnemyCount(1, 1);
-                GameplayCtrl.Instance.objManager.winDoorInMap.SetTextEneMyKill(1, 1);
-                GameplayCtrl.Instance.coinEarned = Random.Range(200, 500);
                 CameraController.Instance.SetOrthoSize(8, 0.5f, true);
-                // CameraController.Instance.SetOffset(Vector3.zero);
-                CameraController.Instance.SetTargetFollow(boss.transform);
+                // lockObj.SetActive(false);
                 StartCoroutine(IEOnFinishFight());
+                IEnumerator IEOnFinishFight()
+                {
+                    yield return new WaitForSeconds(2f);
+                    healthBar.Deactive();
+                    yield return new WaitForSeconds(1.5f);
+                    CameraController.Instance.SetTargetFollow(PlayerManager.Instance.transform, false);
+                    CameraController.Instance.SetOrthoSize(CameraController.CAMERA_ORTHOSIZE, 2f, false);
+                    CameraController.Instance.SetOffset(new Vector3(0, 1.5f));
+                    door.SetActive(true);
+                }
             }
+
         }
-        IEnumerator IEOnFinishFight()
+        public void OnClear()
         {
-            PlayScreenCtl playScreen = ScreenUIManager.Instance.GetScreen<PlayScreenCtl>(ScreenName.PLAYSCREEN);
-            yield return new WaitForSeconds(2f);
-            playScreen.BlockInput(false);
-            yield return new WaitForSeconds(1.5f);
-            CameraController.Instance.SetTargetFollow(PlayerManager.Instance.transform);
-            CameraController.Instance.SetOffset(new Vector3(0, 1.6f, -10));
-            CameraController.Instance.SetOrthoSize(5, 2f, false);
+            FactoryObject.Despawn("Item", chest.transform);
+            GameManager.OnPause -= OnPauseGame;
+            GameManager.OnResume -= OnResumeGame;
         }
         private void OnDrawGizmos()
         {

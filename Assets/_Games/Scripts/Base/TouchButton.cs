@@ -10,7 +10,6 @@ public class TouchButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         buttonPressed = true;
         buttonHeld = true;
     }
-
     public void OnPointerUp(PointerEventData eventData)
     {
         buttonPressed = false;
@@ -29,8 +28,13 @@ public class TouchButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         return buttonHeld;
     }
-    public void SetActive(bool active)
+    public virtual void SetActive(bool active)
     {
         gameObject.SetActive(active);
+    }
+    public virtual void ResetButton()
+    {
+        buttonPressed = false;
+        buttonHeld = false;
     }
 }

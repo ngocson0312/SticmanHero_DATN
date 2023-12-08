@@ -16535,9 +16535,30 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.46666667
-    functionName: TriggerSkill
-    data: 
+  - time: 0.06666667
+    functionName: SendEvent
+    data: CriticalTrue
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.16666667
+    functionName: SendEvent
+    data: ActiveUnstopable
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.5
+    functionName: SendEvent
+    data: TriggerDamage
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.6
+    functionName: SendEvent
+    data: DeactiveUnstopable
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

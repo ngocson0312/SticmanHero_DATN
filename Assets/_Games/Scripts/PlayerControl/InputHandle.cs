@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace SuperFight
@@ -7,32 +7,27 @@ namespace SuperFight
     {
         [SerializeField] InputType inputType;
         public TouchButton jumpButton;
-        public TouchButton comboButton;
+        public SkillButton primaryButton;
+        public SkillButton secondaryButton;
         public TouchButton skillButton;
         public TouchButton dashButton;
-        public Joystick thumbStick;
         public StaticThumb staticThumb;
         public float horizontal;
         public bool jumpPressed;
-        public bool comboPressed;
+        public bool primaryAttackPressed;
+        public bool secondaryAttackPressed;
         public bool skillPressed;
         public bool dashPressed;
-        float attackTimer;
         bool readyToClear;
         bool isActive;
         private void Start()
         {
-            // if (Application.isMobilePlatform)
-            // {
-#if UNITY_STANDALONE || UNITY_EDITOR
             inputType = InputType.KEYBOARD;
-#else
-            inputType = InputType.TOUCH;
-#endif
-            // }
-            // else
-            // {
-            //}
+            if (Application.isMobilePlatform)
+            {
+                inputType = InputType.TOUCH;
+            }
+            ActiveInput();
         }
         public void ResetInput()
         {
@@ -44,6 +39,10 @@ namespace SuperFight
             jumpPressed = false;
             readyToClear = false;
             skillPressed = false;
+            primaryAttackPressed = false;
+            secondaryAttackPressed = false;
+            primaryButton.ResetButton();
+            secondaryButton.ResetButton();
         }
         public void ActiveInput()
         {
@@ -55,7 +54,8 @@ namespace SuperFight
         }
         private void Update()
         {
-            if (GameplayCtrl.Instance.gameState != GAME_STATE.GS_PLAYING || !isActive)
+            //GameplayCtrl.Instance.gameState != GAME_STATE.GS_PLAYING ||
+            if (!isActive)
             {
                 ClearInputs();
                 return;
@@ -71,8 +71,8 @@ namespace SuperFight
                 jumpPressed = jumpPressed || Input.GetKeyDown(KeyCode.Space);
                 skillPressed = skillPressed || Input.GetKeyDown(KeyCode.R);
                 dashPressed = dashPressed || Input.GetKeyDown(KeyCode.LeftShift);
-                comboPressed = comboPressed || Input.GetKeyDown(KeyCode.F) || Input.GetMouseButtonDown(0);
-                
+                primaryAttackPressed = primaryAttackPressed || Input.GetKey(KeyCode.J); /*|| Input.GetMouseButton(0);*/
+                secondaryAttackPressed = secondaryAttackPressed || Input.GetMouseButton(1);
             }
             else if (inputType == InputType.TOUCH)
             {
@@ -80,7 +80,8 @@ namespace SuperFight
                 jumpPressed = jumpPressed || jumpButton.GetButtonDown();
                 skillPressed = skillPressed || skillButton.GetButtonDown();
                 dashPressed = dashPressed || dashButton.GetButtonDown();
-                comboPressed = comboPressed || comboButton.GetButtonDown();
+                primaryAttackPressed = primaryAttackPressed || primaryButton.GetButton();
+                secondaryAttackPressed = secondaryAttackPressed || secondaryButton.GetButton();
             }
         }
         public void ClearInputs()
@@ -90,7 +91,8 @@ namespace SuperFight
                 return;
             }
             horizontal = 0;
-            comboPressed = false;
+            primaryAttackPressed = false;
+            secondaryAttackPressed = false;
             jumpPressed = false;
             readyToClear = false;
             skillPressed = false;

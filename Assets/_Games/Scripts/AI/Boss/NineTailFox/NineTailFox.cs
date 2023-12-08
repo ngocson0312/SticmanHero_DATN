@@ -37,8 +37,8 @@ namespace SuperFight
         }
         protected override void UpdateLogic()
         {
-            animator.SetFloat("MoveAmount", Mathf.Abs(core.movement.currentVelecity.x));
-            isInteracting = animator.animator.GetBool("IsInteracting");
+            animator.SetFloat("MoveAmount", Mathf.Abs(core.movement.currentVelocity.x));
+            isInteracting = animator.GetBool("IsInteracting");
             HandleRotate();
         }
         void HandleRotate()
@@ -76,7 +76,7 @@ namespace SuperFight
         {
             if (!isActive) return;
             base.OnTakeDamage(damageInfo);
-            if (stats.currHealth <= 0)
+            if (runtimeStats.health <= 0)
             {
                 isActive = false;
                 bossDead.Play();

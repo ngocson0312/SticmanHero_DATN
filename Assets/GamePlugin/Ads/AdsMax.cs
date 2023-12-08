@@ -55,10 +55,18 @@ namespace mygame.sdk
             isEnable = true;
             isAdsInited = false;
 #if ENABLE_ADS_AMAZON
-            Amazon.Initialize(amazonAppId);
-            Amazon.SetAdNetworkInfo(new AdNetworkInfo(DTBAdNetwork.MAX));
-            Amazon.EnableLogging(true);
-            Amazon.EnableTesting(true);
+            if (adsType == 6)
+            {
+                Amazon.Initialize(amazonAppId);
+                Amazon.SetAdNetworkInfo(new AdNetworkInfo(DTBAdNetwork.MAX));
+                Amazon.SetMRAIDSupportedVersions(new string[] { "1.0", "2.0", "3.0" });
+                Amazon.SetMRAIDPolicy(Amazon.MRAIDPolicy.CUSTOM);
+                if (SDKManager.Instance.isAdCanvasSandbox)
+                {
+                    Amazon.EnableLogging(true);
+                    Amazon.EnableTesting(true);
+                }
+            }
 #endif
 
             MaxSdkCallbacks.OnSdkInitializedEvent += (MaxSdkBase.SdkConfiguration sdkConfiguration) =>
@@ -75,9 +83,16 @@ namespace mygame.sdk
                         advhelper.loadFull4ThisTurn(false, 99, false, null);
                         advhelper.loadGift4ThisTurn(99, null);
                     }, 0.1f);
-                    if (AdCanvasHelper.Instance != null && PlayerPrefs.GetInt("user_allow_track_ads", 0) != -1)
+                    if (PlayerPrefs.GetInt("user_allow_track_ads", 0) != -1)
                     {
-                        AdCanvasHelper.Instance.ShowCMPIOS();
+                        if (AdCanvasHelper.Instance != null)
+                        {
+                            AdCanvasHelper.Instance.ShowCMPiOS();
+                        }
+                        //if (AdAudioHelper.Instance != null)
+                        //{
+                        //    AdAudioHelper.Instance.ShowCMPiOS();
+                        //}
                     }
                 }
             };
@@ -447,7 +462,7 @@ namespace mygame.sdk
         }
         public override int getFullLoaded(bool _isSplash)
         {
-            long tc = SdkUtil.systemCurrentMiliseconds();
+            long tc = SdkUtil.CurrentTimeMilis();
             SdkUtil.logd($"ads max{adsType} getFullLoaded issplash=" + _isSplash + ", stateShowAppLlovin=" + advhelper.currConfig.stateShowAppLlovin);
             if (_isSplash)
             {
@@ -472,14 +487,14 @@ namespace mygame.sdk
                 if (re > 0 && advhelper.currConfig.stateShowAppLlovin == 1 && advhelper.level4ApplovinFull < advhelper.currConfig.levelShowAppLovin)
                 {
                     SdkUtil.logd($"ads max{adsType} getFullLoaded 1 check reject applovin");
-                    long t = SdkUtil.systemCurrentMiliseconds();
+                    long t = SdkUtil.CurrentTimeMilis();
                     if ((t - timeLoadFull4Wait) < timewaitload)
                     {
                         SdkUtil.logd($"ads max{adsType} getFullLoaded 1 reject applovin");
                         re = 0;
                     }
                 }
-                SdkUtil.logd($"ads max{adsType} getFullLoaded re={re}, dt={(SdkUtil.systemCurrentMiliseconds() - tc)}");
+                SdkUtil.logd($"ads max{adsType} getFullLoaded re={re}, dt={(SdkUtil.CurrentTimeMilis() - tc)}");
                 return re;
             }
             else
@@ -495,14 +510,14 @@ namespace mygame.sdk
                 if (re > 0 && advhelper.currConfig.stateShowAppLlovin == 1 && advhelper.level4ApplovinFull < advhelper.currConfig.levelShowAppLovin)
                 {
                     SdkUtil.logd($"ads max{adsType} getFullLoaded 2 check reject applovin");
-                    long t = SdkUtil.systemCurrentMiliseconds();
+                    long t = SdkUtil.CurrentTimeMilis();
                     if ((t - timeLoadFull4Wait) < timewaitload)
                     {
                         SdkUtil.logd($"ads max{adsType} getFullLoaded 1 reject applovin");
                         re = 0;
                     }
                 }
-                SdkUtil.logd($"ads max{adsType} getFullLoaded1 re={re}, dt={(SdkUtil.systemCurrentMiliseconds() - tc)}");
+                SdkUtil.logd($"ads max{adsType} getFullLoaded1 re={re}, dt={(SdkUtil.CurrentTimeMilis() - tc)}");
                 return re;
             }
 #else
@@ -655,7 +670,7 @@ namespace mygame.sdk
                     bool isok = true;
                     if (advhelper.currConfig.stateShowAppLlovin == 1 && advhelper.level4ApplovinFull < advhelper.currConfig.levelShowAppLovin)
                     {
-                        long t = SdkUtil.systemCurrentMiliseconds();
+                        long t = SdkUtil.CurrentTimeMilis();
                         if ((t - timeLoadFull4Wait) < timewaitload)
                         {
                             SdkUtil.logd($"ads max{adsType} loadFull load ok and wait -> call cb AD_LOAD_OK_WAIT");
@@ -725,7 +740,6 @@ namespace mygame.sdk
             if (ss > 0)
             {
                 FullTryLoad = 0;
-                isFullLoaded = false;
 #if ENABLE_ADS_MAX
                 cbFullShow = cb;
                 if (_isSplash)
@@ -757,14 +771,14 @@ namespace mygame.sdk
         }
         public override bool getGiftLoaded()
         {
-            long tc = SdkUtil.systemCurrentMiliseconds();
+            long tc = SdkUtil.CurrentTimeMilis();
             SdkUtil.logd($"ads max{adsType} getGiftLoaded getGiftLoaded stateShowAppLlovin=" + advhelper.currConfig.stateShowAppLlovin);
 #if ENABLE_ADS_MAX
             bool re = (isGiftLoaded && giftId != null && giftId.Length > 0 && MaxSdk.IsRewardedAdReady(giftId));
             if (re && advhelper.currConfig.stateShowAppLlovin == 1 && advhelper.level4ApplovinGift < advhelper.currConfig.levelShowAppLovin)
             {
                 SdkUtil.logd($"ads max{adsType} getGiftLoaded 1 check reject applovin");
-                long t = SdkUtil.systemCurrentMiliseconds();
+                long t = SdkUtil.CurrentTimeMilis();
                 if ((t - timeLoadGift4Wait) < timewaitload)
                 {
                     SdkUtil.logd($"ads max{adsType} getGiftLoaded 1 reject applovin");
@@ -776,7 +790,7 @@ namespace mygame.sdk
                 SdkUtil.logd($"ads max{adsType} getGiftLoaded 2 reject applovin");
                 re = false;
             }
-            SdkUtil.logd($"ads max{adsType} getGiftLoaded re={re}, dt={(SdkUtil.systemCurrentMiliseconds() - tc)}");
+            SdkUtil.logd($"ads max{adsType} getGiftLoaded re={re}, dt={(SdkUtil.CurrentTimeMilis() - tc)}");
             return re;
 #endif
             return false;
@@ -838,13 +852,13 @@ namespace mygame.sdk
                 {
                     MaxSdk.SetRewardedAdLocalExtraParameter(giftId, "amazon_ad_response", adResponse.GetResponse());
                     MaxSdk.LoadRewardedAd(giftId);
-                    timeLoadGift = SdkUtil.systemCurrentMiliseconds();
+                    timeLoadGift = SdkUtil.CurrentTimeMilis();
                 };
                 rewardedVideoAd.onFailedWithError += (adError) =>
                 {
                     MaxSdk.SetRewardedAdLocalExtraParameter(giftId, "amazon_ad_error", adError.GetAdError());
                     MaxSdk.LoadRewardedAd(giftId);
-                    timeLoadGift = SdkUtil.systemCurrentMiliseconds();
+                    timeLoadGift = SdkUtil.CurrentTimeMilis();
                 };
 
                 rewardedVideoAd.LoadAd();
@@ -852,11 +866,11 @@ namespace mygame.sdk
             else
             {
                 MaxSdk.LoadRewardedAd(giftId);
-                timeLoadGift = SdkUtil.systemCurrentMiliseconds();
+                timeLoadGift = SdkUtil.CurrentTimeMilis();
             }
 #else
             MaxSdk.LoadRewardedAd(giftId);
-            timeLoadGift = SdkUtil.systemCurrentMiliseconds();
+            timeLoadGift = SdkUtil.CurrentTimeMilis();
             // StartCoroutine(WaitGiftErr());
 #endif
 
@@ -917,7 +931,7 @@ namespace mygame.sdk
                 {
                     if (advhelper.currConfig.stateShowAppLlovin == 1 && advhelper.level4ApplovinGift < advhelper.currConfig.levelShowAppLovin)
                     {
-                        long t = SdkUtil.systemCurrentMiliseconds();
+                        long t = SdkUtil.CurrentTimeMilis();
                         if ((t - timeLoadGift4Wait) < timewaitload)
                         {
                             SdkUtil.logd($"ads max{adsType} loadGift load ok and wait -> call cb AD_LOAD_OK_WAIT");
@@ -961,7 +975,6 @@ namespace mygame.sdk
             if (getGiftLoaded())
             {
                 cbGiftShow = cb;
-                isGiftLoaded = false;
 #if ENABLE_ADS_MAX
                 SdkUtil.logd($"ads max{adsType} showGift netname=" + nameGiftCurr);
                 MaxSdk.ShowRewardedAd(giftId); ;
@@ -1035,6 +1048,21 @@ namespace mygame.sdk
             if (adUnitId != null && adUnitId.CompareTo(bannerId) == 0)
             {
                 SdkUtil.logd($"ads max{adsType} OnBannerAdLoadedEvent={adUnitId}");
+                Rect rbn = MaxSdk.GetBannerLayout(adUnitId);
+#if UNITY_IOS || UNITY_IPHONE
+                if (adinfo != null && adinfo.NetworkName != null && adinfo.NetworkName.Contains("Google AdMob"))
+                {
+                    
+                }
+                else
+                {
+                    if (!SdkUtil.isiPad())
+                    {
+                        rbn.height -= 15;
+                    }
+                }
+#endif
+                advhelper.onGetBanner(adsType, rbn);
                 if (cbBanner != null)
                 {
                     var tmpcb = cbBanner;
@@ -1133,7 +1161,7 @@ namespace mygame.sdk
 #if ENABLE_MYLOG
                         SdkUtil.logd($"ads max{adsType} HandleInterstitialAdDidLoad = " + adUnitId + " stateShowAppLlovin=1");
 #endif
-                        timeLoadFull4Wait = SdkUtil.systemCurrentMiliseconds();
+                        timeLoadFull4Wait = SdkUtil.CurrentTimeMilis();
                         status_tt_load = 1;
                     }
                     else if (advhelper.currConfig.stateShowAppLlovin == 3 && advhelper.level4ApplovinFull < advhelper.currConfig.levelShowAppLovin)
@@ -1341,7 +1369,7 @@ namespace mygame.sdk
 #if ENABLE_MYLOG
                         SdkUtil.logd($"ads max{adsType} rw OnRewardedAdLoadedEvent = " + adUnitId + " stateShowAppLlovin=1");
 #endif
-                        timeLoadGift4Wait = SdkUtil.systemCurrentMiliseconds();
+                        timeLoadGift4Wait = SdkUtil.CurrentTimeMilis();
                         status_tt_load = 1;
                     }
                     else if (advhelper.currConfig.stateShowAppLlovin == 3 && advhelper.level4ApplovinGift < advhelper.currConfig.levelShowAppLovin)

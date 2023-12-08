@@ -14,10 +14,16 @@
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 
+#include <sys/types.h>
+#include <sys/sysctl.h>
+
 #include <UserMessagingPlatform/UserMessagingPlatform.h>
 
 #import "MyGameAppController.h"
 #import "MyAdmobUtiliOS.h"
+
+long memTcurr = 0;
+long memTel = 0;
 
 @implementation MyGameNativeiOS
 
@@ -30,6 +36,32 @@
         // Do any other initialisation stuff here
     });
     return sharedInstance;
+}
+
+- (NSTimeInterval) CurrentTimeMilis
+{
+    NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+    return timeStamp;
+}
+
+-(NSTimeInterval) ElapedTimeBoot
+{
+    int mib[2];
+    size_t size;
+    struct timeval  boottime;
+    
+    mib[0] = CTL_KERN;
+    mib[1] = KERN_BOOTTIME;
+    size = sizeof(boottime);
+    if (sysctl(mib, 2, &boottime, &size, NULL, 0) != -1)
+    {
+        NSTimeInterval tcuu = [self CurrentTimeMilis];
+        return (tcuu - boottime.tv_sec);
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 -(BOOL) isStringValideBase64:(NSString*)string
@@ -106,6 +138,69 @@
     //{
     
     //}
+}
+-(void) synchronizeTime:(long) timestampSecond
+{
+    NSLog(@"mysdk: synchronizeTime=%ld", timestampSecond);
+    memTcurr = timestampSecond;
+    memTel = [self ElapedTimeBoot];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithLongLong:memTcurr] forKey:@"meem_local_time"];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithLongLong:memTel] forKey:@"meem_local_elaptime"];
+}
+
+-(long) CurrentTimeMilisReal
+{
+    long currTi = [self CurrentTimeMilis];
+    long currElap = [self ElapedTimeBoot];
+    if (memTcurr < 10)
+    {
+        memTcurr = [[[NSUserDefaults standardUserDefaults] objectForKey:@"meem_local_time"] longLongValue];
+        memTel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"meem_local_elaptime"] longLongValue];
+        if (memTcurr < 10)
+        {
+            memTcurr = currTi;
+            memTel = currElap;
+        }
+    }
+    long dti = currTi - memTcurr;
+    long delap = currElap - memTel;
+    if (dti <= 0)
+    {
+        if (dti == 0)
+        {
+            [self synchronizeTime:currTi];
+        }
+        if (delap < 0)
+        {
+            long re = memTcurr + currElap;
+            [self synchronizeTime:re];
+            return re;
+        }
+        else
+        {
+            return (memTcurr +delap);
+        }
+    }
+    else
+    {
+        if (delap < 0)
+        {
+            if (currTi < (memTcurr + currElap))
+            {
+                [self synchronizeTime:(memTcurr + currElap)];
+                return (memTcurr + currElap);
+            }
+            else
+            {
+                [self synchronizeTime:currTi];
+                return currTi;
+            }
+        }
+        else
+        {
+            return (memTcurr + delap);
+        }
+    }
 }
 
 -(char*) getGiftBox {
@@ -299,6 +394,14 @@ char* getAdsIdentifyNative() {
     return [[MyGameNativeiOS sharedInstance] getAdsIdentify];
 }
 
+void synchronizeTimeNative(long timestampMilisecond) {
+    [[MyGameNativeiOS sharedInstance] synchronizeTime:timestampMilisecond];
+}
+
+long CurrentTimeMilisRealNative() {
+    return [[MyGameNativeiOS sharedInstance] CurrentTimeMilisReal];
+}
+
 char* getGiftBoxNative() {
     return [[MyGameNativeiOS sharedInstance] getGiftBox];
 }
@@ -359,6 +462,16 @@ void showCMPNative() {
     [[MyGameNativeiOS sharedInstance] showCMP];
 }
 
+void localNotifyNative(char* title, char* msg, int hour, int minus, int dayrepeat)
+{
+    NSString* nstitle = [NSString stringWithUTF8String:title];
+    NSString* nsmsg = [NSString stringWithUTF8String:msg];
+    [[MyGameiOSSwift shared] LocalNotifyWithTitle:nstitle msg:nsmsg hour:hour minute:minus repeatday:dayrepeat];
+}
+
+void clearAllNotiNative()
+{
+    [[MyGameiOSSwift shared] clearAllNoti];
+}
+
 @end
-
-

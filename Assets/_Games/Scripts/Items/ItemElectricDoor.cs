@@ -4,25 +4,30 @@ using UnityEngine;
 
 namespace SuperFight
 {
-    public class ItemElectricDoor : MonoBehaviour
+    public class ItemElectricDoor : ItemObject
     {
-        [SerializeField] Electric electric;
-        [SerializeField] int damage = 50;
+       // [SerializeField] Electric electric;
+       // [SerializeField] int damage = 30;
         [SerializeField] float timeDuration = 2.5f;
-        [SerializeField] Animation animation;
+        [SerializeField] Animation anim;
         [SerializeField] Transform TopAnchor;
         [SerializeField] Transform BotAnchor;
         [SerializeField] Transform ElectricAnchor;
         float currentTimeWait;
         bool isOpen;
+        
 
-        private void Start()
+
+        public override void Initialize()
         {
             currentTimeWait = timeDuration;
-            electric.SetDamage(damage);
-            
         }
-        
+
+        public override void ResetObject()
+        {
+
+        }
+
         private void Update()
         {
             OpenDoor();
@@ -37,7 +42,7 @@ namespace SuperFight
                     if (currentTimeWait <= 0)
                     {
                         isOpen = false;
-                        animation.Play("ElectricDoor_Close");
+                        anim.Play("ElectricDoor_Close");
                         currentTimeWait = timeDuration;
                     }
                 }
@@ -50,7 +55,7 @@ namespace SuperFight
                     if (currentTimeWait <= 0)
                     {
                         isOpen = true;
-                        animation.Play("ElectricDoor_Open");
+                        anim.Play("ElectricDoor_Open");
                         currentTimeWait = timeDuration;
                     }
                 }
@@ -61,6 +66,8 @@ namespace SuperFight
         {
 
         }
+
+
     }
 }
 

@@ -1,6 +1,8 @@
 using PathologicalGames;
 using UnityEngine;
-using System.Collections;
+using System;
+using System.Collections.Generic;
+
 public abstract class Projectile : MonoBehaviour
 {
     public float speed;
@@ -11,12 +13,18 @@ public abstract class Projectile : MonoBehaviour
     protected DamageInfo damageInfo;
     protected Vector2 direction;
     public LayerMask layerContact;
-    float lifeTimer;
+    private float lifeTimer;
+    public event Action<List<IDamage>> OnContact;
+    protected Collider2D damageCollider;
     public virtual void Initialize(Vector2 direction, DamageInfo damageInfo)
     {
         this.damageInfo = damageInfo;
         this.direction = direction;
-        GetComponent<Collider2D>().enabled = true;
+        if (damageCollider == null)
+        {
+            damageCollider = GetComponent<Collider2D>();
+        }
+        damageCollider.enabled = true;
         if (display != null)
             display.SetActive(true);
         if (impact != null)
@@ -44,14 +52,16 @@ public abstract class Projectile : MonoBehaviour
     }
     protected void Deactive(float time)
     {
+        if (isPooled) return;
         lifeTimer = time;
         if (time <= 0)
         {
             isPooled = true;
             PoolManager.Pools["Projectile"].Despawn(transform, PoolManager.Pools["Projectile"].transform);
+            OnContact = null;
         }
     }
-    void HandleLifeTime()
+    private void HandleLifeTime()
     {
         if (lifeTimer > 0 && !isPooled)
         {
@@ -59,9 +69,13 @@ public abstract class Projectile : MonoBehaviour
             if (lifeTimer <= 0)
             {
                 lifeTimer = 0;
-                isPooled = true;
-                PoolManager.Pools["Projectile"].Despawn(transform, PoolManager.Pools["Projectile"].transform);
+                Deactive(0);
             }
         }
+    }
+    protected void OnContactCollision(List<IDamage> listContact)
+    {
+        OnContact?.Invoke(listContact);
+        OnContact = null;
     }
 }

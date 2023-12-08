@@ -15,15 +15,44 @@ public class BossBear : Boss
     public ParticleSystem slashFx;
     public ParticleSystem flameFx;
     public ParticleSystem fxDeath;
-    public BoxCollider2D boxSlash;
+    public Vector2 sizeGroundLand;
+    public Vector2 offsetLandCollider;
 
-    public GameObject GroundFake;
-    public GameObject GroundFake2;
+    public Vector2 sizeSlash;
+    public Vector2 offsetSlashCollider;
 
+    public Vector2 sizeFlame;
+    public Vector2 offsetFlameCollider;
     public Transform[] spikePos;
     public GameObject spikeUp;
-
+    public GameObject door;
     private List<Transform> curSpike = new List<Transform>();
+    private int dir;
+    public override void Initialize(BossFightArena arena)
+    {
+        base.Initialize(arena);
+        animatorHandle.OnEventAnimation += OnEventAnim;
+        door.SetActive(true);
+    }
+    private void OnEventAnim(string obj)
+    {
+        if (obj.Equals("Jump"))
+        {
+            JumpToPlayer();
+        }
+        if (obj.Equals("Growl"))
+        {
+            Growl();
+        }
+        if (obj.Equals("Slash"))
+        {
+            Slash();
+        }
+        if (obj.Equals("Flame"))
+        {
+            Flame();
+        }
+    }
 
     void Action1()
     {
@@ -58,8 +87,18 @@ public class BossBear : Boss
         CheckRotate();
         CameraController.Instance.ShakeCamera(.5f, 1f, 10, 90, true);
         SpawnSpike();
-        boxSlash.enabled = true;
-        StartCoroutine(DisableSlash());
+        Vector3 direction = new Vector3(dir, 0);
+        Vector3 point = transform.position + new Vector3(offsetLandCollider.x * direction.x, offsetLandCollider.y, 0);
+        Bounds b = new Bounds(point, sizeGroundLand);
+
+        DamageInfo damageInfo = new DamageInfo();
+        damageInfo.damage = runtimeStats.damage;
+        damageInfo.owner = this;
+        damageInfo.characterType = characterType;
+        if (b.Intersects(PlayerManager.GetBoundPlayer()))
+        {
+            PlayerManager.Instance.playerController.OnTakeDamage(damageInfo);
+        }
     }
     public override void Resume()
     {
@@ -83,27 +122,49 @@ public class BossBear : Boss
     public void Slash()
     {
         slashFx.Play();
-        boxSlash.enabled = true;
-        StartCoroutine(DisableSlash());
-    }
+        Vector3 direction = new Vector3(dir, 0);
+        Vector3 point = transform.position + new Vector3(offsetSlashCollider.x * direction.x, offsetSlashCollider.y, 0);
+        Bounds b = new Bounds(point, sizeSlash);
 
-    IEnumerator DisableSlash()
-    {
-        yield return new WaitForSeconds(0.2f);
-        boxSlash.enabled = false;
+        DamageInfo damageInfo = new DamageInfo();
+        damageInfo.damage = runtimeStats.damage;
+        damageInfo.owner = this;
+        damageInfo.characterType = characterType;
+
+        if (b.Intersects(PlayerManager.GetBoundPlayer()))
+        {
+            PlayerManager.Instance.playerController.OnTakeDamage(damageInfo);
+        }
     }
 
     public void Flame()
     {
         flameFx.Play();
-        flameFx.GetComponent<BoxCollider2D>().enabled = true;
-        StartCoroutine(DisableFlame());
-    }
+        float dealDmgTimer = 0;
 
-    IEnumerator DisableFlame()
-    {
-        yield return new WaitForSeconds(1);
-        flameFx.GetComponent<BoxCollider2D>().enabled = false;
+        DamageInfo damageInfo = new DamageInfo();
+        damageInfo.damage = (int)(runtimeStats.damage * 0.2f);
+        damageInfo.owner = this;
+        damageInfo.stunTime = 0.1f;
+        Vector3 direction = new Vector3(dir, 0);
+        Vector3 point = transform.position + new Vector3(offsetFlameCollider.x * direction.x, offsetFlameCollider.y, 0);
+        Bounds b = new Bounds(point, sizeFlame);
+        StartCoroutine(IEFlame());
+        IEnumerator IEFlame()
+        {
+            float timer = 1;
+            while (timer > 0)
+            {
+                timer -= Time.deltaTime;
+                dealDmgTimer -= Time.deltaTime;
+                if (dealDmgTimer <= 0 && b.Intersects(PlayerManager.GetBoundPlayer()))
+                {
+                    dealDmgTimer = 0.2f;
+                    PlayerManager.Instance.playerController.OnTakeDamage(damageInfo);
+                }
+                yield return null;
+            }
+        }
     }
 
     void SpawnSpike()
@@ -132,33 +193,27 @@ public class BossBear : Boss
         if (playerPos <= transform.position.x)
         {
             transform.GetChild(0).localRotation = Quaternion.Euler(0, 220, 0);
+            dir = -1;
         }
         else
         {
             transform.GetChild(0).localRotation = Quaternion.Euler(0, 140, 0);
+            dir = 1;
         }
     }
 
     public override void OnTakeDamage(DamageInfo damageInfo)
     {
-        if(!isActive)return;
+        if (!isActive) return;
         base.OnTakeDamage(damageInfo);
-        if (stats.currHealth <= 0)
+        if (runtimeStats.health <= 0)
         {
-            if (GroundFake != null)
-            {
-                GroundFake.SetActive(false);
-            }
-            isActive = false;
-            fxDeath.Play();
-            GameplayCtrl.Instance.CreateCoinBoss(transform.position + new Vector3(0, 0, -1));
-            SoundManager.Instance.playSoundFx(SoundManager.Instance.effBossDie);
             animatorHandle.PlayAnimation("Die", 0.1f, 1, true);
+            door.SetActive(false);
             Die(true);
         }
         else
         {
-            SoundManager.Instance.playRandFx(TYPE_RAND_FX.FX_TAKE_DAMAGE);
             animatorHandle.PlayAnimation("Hit", 0.1f, 0, true);
         }
     }
@@ -166,12 +221,8 @@ public class BossBear : Boss
     public override void Active()
     {
         isActive = true;
-        boxSlash.GetComponent<Electric>().SetDamage(stats.damage);
-        flameFx.GetComponent<Laser>().SetDamage(stats.damage / 3);
-        if (GroundFake2 != null)
-        {
-            GroundFake2.SetActive(true);
-        }
+        // boxSlash.GetComponent<Electric>().SetDamage(stats.damage);
+        // flameFx.GetComponent<Laser>().SetDamage(stats.damage / 3);
         StartCoroutine(AttackAcction());
         SpawnSpike();
         CheckRotate();
@@ -183,5 +234,11 @@ public class BossBear : Boss
 
     protected override void UpdatePhysic()
     {
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(transform.position + (Vector3)offsetLandCollider, sizeGroundLand);
+        Gizmos.DrawWireCube(transform.position + (Vector3)offsetSlashCollider, sizeSlash);
+        Gizmos.DrawWireCube(transform.position + (Vector3)offsetFlameCollider, sizeFlame);
     }
 }

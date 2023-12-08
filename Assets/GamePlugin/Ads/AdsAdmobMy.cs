@@ -33,6 +33,8 @@ namespace mygame.sdk
         bool isProcessShowBN = false;
         List<AdsECPM> listFullEcpm = new List<AdsECPM>();
         int idxCurrEcpmFull = 0;
+        List<AdsECPM> listGiftEcpm = new List<AdsECPM>();
+        int idxCurrEcpmGift = 0;
 
         long timeShowBanner = 0;
         float _membnDxCenter;
@@ -57,6 +59,7 @@ namespace mygame.sdk
 #if ENABLE_ADS_ADMOB && USE_ADSMOB_MY
             initBanner();
             initFull();
+            initGift();
 
             AdsAdmobMyBridge.onBNLoaded += OnBannerAdLoadedEvent;
             AdsAdmobMyBridge.onBNLoadFail += OnBannerAdLoadFailedEvent;
@@ -140,6 +143,38 @@ namespace mygame.sdk
             listFullEcpm.Add(bnc);
             idxCurrEcpmFull = 0;
             SdkUtil.logd("ads admobmy stepFloorECPMFull count=" + listFullEcpm.Count);
+        }
+
+        public void initGift()
+        {
+            if (adsType != 0)
+            {
+                return;
+            }
+            listGiftEcpm.Clear();
+            try
+            {
+                SdkUtil.logd("ads admobmy stepFloorECPMGift=" + advhelper.currConfig.stepFloorECPMGift);
+                if (advhelper.currConfig.stepFloorECPMGift.Length > 0)
+                {
+                    string[] arrlv = advhelper.currConfig.stepFloorECPMGift.Split(new char[] { ';' });
+                    foreach (string item in arrlv)
+                    {
+                        if (item.StartsWith("ca-app"))
+                        {
+                            listGiftEcpm.Add(new AdsECPM(item));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Log("mysdk: ex=" + ex.ToString());
+            }
+            AdsECPM bnc = new AdsECPM(giftId);
+            listGiftEcpm.Add(bnc);
+            idxCurrEcpmGift = 0;
+            SdkUtil.logd("ads admobmy stepFloorECPMGift count=" + listGiftEcpm.Count);
         }
 
         public override string getname()
@@ -371,6 +406,10 @@ namespace mygame.sdk
             }
             if (!_isSplash)
             {
+                if (idxCurrEcpmFull >= listFullEcpm.Count)
+                {
+                    idxCurrEcpmFull = 0;
+                }
                 idLoad = listFullEcpm[idxCurrEcpmFull].adsid;
 #if ENABLE_TEST_ADMOB
                 idLoad = "ca-app-pub-3940256099942544/1033173712";
@@ -447,13 +486,13 @@ namespace mygame.sdk
 
             bool isLoaded = false;
             bool isLoadding = false;
-            idxCurrEcpmFull = 0;
             cbFullLoad = cb;
             isLoaded = isFullLoaded;
             isLoadding = isFullLoading;
             if (!isLoadding && !isLoaded)
             {
                 FullTryLoad = 0;
+                idxCurrEcpmFull = 0;
                 tryLoadFull(_isSplash);
             }
             else
@@ -478,7 +517,6 @@ namespace mygame.sdk
             {
                 SdkUtil.logd("ads admobmy showFull type=" + adsType);
                 FullTryLoad = 0;
-                isFullLoaded = false;
 #if ENABLE_ADS_ADMOB && USE_ADSMOB_MY
                 cbFullShow = cb;
                 AdsAdmobMyBridge.Instance.showFull();
@@ -509,12 +547,12 @@ namespace mygame.sdk
         protected override void tryloadGift()
         {
 #if ENABLE_ADS_ADMOB && USE_ADSMOB_MY
-            string idLoad = giftId;
+            string idLoad = listGiftEcpm[idxCurrEcpmGift].adsid;
 #if ENABLE_TEST_ADMOB
             idLoad = "ca-app-pub-3940256099942544/5354046379";
 #endif
 #if ENABLE_MYLOG
-            SdkUtil.logd("ads admobmy tryloadGift =" + idLoad);
+            SdkUtil.logd("ads admobmy tryloadGift =" + idLoad + ", idxCurrEcpmGift=" + idxCurrEcpmGift);
 #endif
             if (GiftTryLoad >= toTryLoad)
             {
@@ -551,6 +589,7 @@ namespace mygame.sdk
             if (!isGiftLoading && !isGiftLoaded)
             {
                 GiftTryLoad = 0;
+                idxCurrEcpmGift = 0;
                 tryloadGift();
             }
             else
@@ -564,7 +603,6 @@ namespace mygame.sdk
             cbGiftShow = null;
             if (getGiftLoaded())
             {
-                isGiftLoaded = false;
 #if ENABLE_ADS_ADMOB && USE_ADSMOB_MY
                 cbGiftShow = cb;
                 AdsAdmobMyBridge.Instance.showGift();
@@ -765,6 +803,7 @@ namespace mygame.sdk
         private void OnInterstitialDismissedEvent()
         {
             isFullLoading = false;
+            isFullLoaded = false;
             if (cbFullShow != null)
             {
                 AdCallBack tmpcb = cbFullShow;
@@ -792,7 +831,7 @@ namespace mygame.sdk
         private void OnRewardedAdLoadedEvent()
         {
 #if ENABLE_MYLOG
-            SdkUtil.logd("ads admobmy rw HandleRewardBasedVideoLoaded");
+            SdkUtil.logd("ads admobmy rw HandleRewardBasedVideoLoaded idxCurrEcpmGift=" + idxCurrEcpmGift);
 #endif
             GiftTryLoad = 0;
             isGiftLoading = false;
@@ -815,11 +854,23 @@ namespace mygame.sdk
 #endif
             isGiftLoading = false;
             isGiftLoaded = false;
-            AdsProcessCB.Instance().Enqueue(() =>
+            if (idxCurrEcpmGift < (listGiftEcpm.Count - 1))
             {
-                GiftTryLoad++;
+#if ENABLE_MYLOG
+                SdkUtil.logd("ads admobmy rw OnRewardedAdFailedEvent load other ecpm idxCurrEcpmGift=" + idxCurrEcpmGift + ", count=" + listGiftEcpm.Count);
+#endif
+                idxCurrEcpmGift++;
                 tryloadGift();
-            }, 1.0f);
+            }
+            else
+            {
+                AdsProcessCB.Instance().Enqueue(() =>
+                {
+                    GiftTryLoad++;
+                    tryloadGift();
+                }, 1.0f);
+            }
+
 #if ENABLE_MYLOG
             SdkUtil.logd("ads admobmy rw HandleRewardBasedVideoFailedToLoad 1");
 #endif
@@ -835,12 +886,12 @@ namespace mygame.sdk
             {
                 var tmpcb = cbGiftShow;
 #if ENABLE_MYLOG
-                SdkUtil.logd("ads admobmy rw HandleRewardBasedVideoClosed2");
+                SdkUtil.logd("ads admobmy rw HandleRewardBasedVideoOpened1");
 #endif
                 AdsProcessCB.Instance().Enqueue(() => { tmpcb(AD_State.AD_SHOW); });
             }
 #if ENABLE_MYLOG
-            SdkUtil.logd("ads admobmy rw HandleRewardBasedVideoOpened 1");
+            SdkUtil.logd("ads admobmy rw HandleRewardBasedVideoOpened2");
 #endif
         }
 

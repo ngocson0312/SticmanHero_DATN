@@ -5,7 +5,8 @@ using UnityEngine;
 public enum AdCanvasType
 {
     GadsMe = 0,
-    AdVerty
+    AdVerty,
+    Bidstack
 }
 
 public abstract class  BaseAdCanvas : MonoBehaviour

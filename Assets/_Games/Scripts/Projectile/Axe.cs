@@ -14,7 +14,7 @@ namespace SuperFight
         }
         protected override void OnCollision(Collider2D other)
         {
-            throw new System.NotImplementedException();
+            
         }
         private void OnTriggerEnter2D(Collider2D other)
         {

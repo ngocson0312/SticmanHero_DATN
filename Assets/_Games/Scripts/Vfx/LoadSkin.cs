@@ -22,7 +22,7 @@ public class LoadSkin : MonoBehaviour
     IEnumerator DelaySetSkin()
     {
         yield return new WaitForSeconds(0.03f);
-        string skinName = DataManager.Instance.currentSkin;
+        string skinName = "";
         if (skinName.Contains("Diana") || skinName.Contains("DrStrange"))
         {
             skeletonAnimation[0].gameObject.SetActive(false);

@@ -31,7 +31,7 @@ namespace SuperFight
                 if (colls[i] != null && colls[i].GetInstanceID() != controller.core.combat.getColliderInstanceID)
                 {
                     DamageInfo damageInfo = new DamageInfo();
-                    damageInfo.damage = nineTailFox.stats.damage;
+                    damageInfo.damage = nineTailFox.runtimeStats.damage;
                     colls[i].GetComponent<IDamage>()?.TakeDamage(damageInfo);
                 }
             }
@@ -39,7 +39,7 @@ namespace SuperFight
         void ActiveLaser()
         {
             DamageInfo damageInfo = new DamageInfo();
-            damageInfo.damage = nineTailFox.stats.damage;
+            damageInfo.damage = nineTailFox.runtimeStats.damage;
             beam.transform.position = mouth.position;
             beam.ActiveBeam(Vector3.right * controller.core.movement.facingDirection, damageInfo);
         }
@@ -56,7 +56,7 @@ namespace SuperFight
         {
             foxFireOrb.transform.position = mouth.position;
             DamageInfo damageInfo = new DamageInfo();
-            damageInfo.damage = controller.stats.damage / 5;
+            damageInfo.damage = controller.runtimeStats.damage / 5;
             damageInfo.idSender = controller.core.combat.getColliderInstanceID;
             damageInfo.owner = controller;
             foxFireOrb.Active(controller.core.movement.facingDirection, damageInfo);

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90bd872860d8f564390f2c0d54235f1f, type: 3}
+  m_Name: Sword
+  m_EditorClassIdentifier: 
+  id: 1
+  icon: {fileID: 21300000, guid: 3e548b89ed34c8548b0fdbd58ea07e8d, type: 3}
+  prefab: {fileID: 384591945704963890, guid: ea03bbe2b3d372044b8452d59152bb4f, type: 3}
+  equipmentType: 0
+  itemName: Board Sword
+  gradeSkillDesc:
+  - <color=#4dff3a>+10%</color> ATK
+  - <color=#4dff3a>+10%</color> Crit rate
+  - <color=#4dff3a>+20%</color> Crit damage
+  - <color=#4dff3a>+15%</color> damage each strike, up to <color=#4dff3a>+80%</color>
+  - <color=#4dff3a>+20%</color> ATK
+  description: 'Each strike in the combo increases 10% damage and deals up to 50%
+    damage.
+
+    Combo is effective for 8 seconds.
+
+    "The Crooked Mirror''s power
+    grows with each rank".'

@@ -218,7 +218,7 @@ namespace mygame.plugin.Android
             }
         }
 
-        public static void checkPiraCheck()
+        public static void checkPiraCheck(int flag)
         {
             using (AndroidJavaClass playerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
             {
@@ -229,7 +229,7 @@ namespace mygame.plugin.Android
                     int[] paskey = { -1, -1, 1, 1, 5, 2, 10, 2, 6, 7, 13, 7, 13, 16, 16 };
                     byte[] pasva = { 5, 16, 13, 1, 18, 7, 12, 16, 12, 1, 8, 16, 3, 1, 0 };
                     string pkey = mygame.sdk.SdkUtil.myGiaima(makey, paskey, pasva);
-                    gameUtil.CallStatic("piraCheck", activity, pkey);
+                    gameUtil.CallStatic("piraCheck", activity, pkey, flag);
                 }
             }
         }
@@ -242,6 +242,78 @@ namespace mygame.plugin.Android
                 using (AndroidJavaObject gameUtil = new AndroidJavaObject("mygame.plugin.util.GameUtil"))
                 {
                     gameUtil.CallStatic("printSigngame", activity);
+                }
+            }
+        }
+    
+        public static int getFreeMem()
+        {
+            using (AndroidJavaClass playerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+            {
+                using (AndroidJavaObject activity = playerClass.GetStatic<AndroidJavaObject>("currentActivity"))
+                using (AndroidJavaObject gameUtil = new AndroidJavaObject("mygame.plugin.util.GameUtil"))
+                {
+                    return gameUtil.CallStatic<int>("getFreeMem", activity);
+                }
+            }
+        }
+
+        public static void setupEnviromentNotify(string nameAc = "com.unity3d.player.UnityPlayer", string nameIcon = "app_icon")
+        {
+            using (AndroidJavaClass playerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+            {
+                using (AndroidJavaObject activity = playerClass.GetStatic<AndroidJavaObject>("currentActivity"))
+                using (AndroidJavaObject gameUtil = new AndroidJavaObject("mygame.plugin.util.GameUtil"))
+                {
+                    gameUtil.CallStatic("setupEnviromentNotify", activity, nameAc, nameIcon);
+                }
+            }
+        }
+
+        public static void setupLocalNotifyNotify(string dataNoti)
+        {
+            using (AndroidJavaClass playerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+            {
+                using (AndroidJavaObject activity = playerClass.GetStatic<AndroidJavaObject>("currentActivity"))
+                using (AndroidJavaObject gameUtil = new AndroidJavaObject("mygame.plugin.util.GameUtil"))
+                {
+                    gameUtil.CallStatic("setupPushNotify", activity, dataNoti);
+                }
+            }
+        }
+        
+        public static void switchFlash(bool isOn)
+        {
+            using (AndroidJavaClass playerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+            {
+                using (AndroidJavaObject activity = playerClass.GetStatic<AndroidJavaObject>("currentActivity"))
+                using (AndroidJavaObject gameUtil = new AndroidJavaObject("mygame.plugin.util.GameUtil"))
+                {
+                    gameUtil.CallStatic("switchFlash", activity, isOn);
+                }
+            }
+        }
+        
+        public static void ScreenInfo()
+        {
+            using (AndroidJavaClass playerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+            {
+                using (AndroidJavaObject activity = playerClass.GetStatic<AndroidJavaObject>("currentActivity"))
+                using (AndroidJavaObject gameUtil = new AndroidJavaObject("mygame.plugin.util.GameUtil"))
+                {
+                    gameUtil.CallStatic("ScreenInfo", activity);
+                }
+            }
+        }
+
+        public static long CurrentTimeMilisReal()
+        {
+            using (AndroidJavaClass playerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+            {
+                using (AndroidJavaObject activity = playerClass.GetStatic<AndroidJavaObject>("currentActivity"))
+                using (AndroidJavaObject gameUtil = new AndroidJavaObject("mygame.plugin.util.TimeUtil"))
+                {
+                    return gameUtil.CallStatic<long>("getTimeLocal", activity);
                 }
             }
         }

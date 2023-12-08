@@ -11,7 +11,7 @@ namespace SuperFight
         {
             if (other.GetComponent<PlayerManager>() != null)
             {
-                other.GetComponent<PlayerManager>().character.LoadWeapon(itemObject);
+                // other.GetComponent<PlayerManager>().character.LoadWeapon(itemObject);
                 gameObject.SetActive(false);
             }
         }

@@ -1,41 +1,79 @@
 {
   "project_info": {
-    "project_number": "659678642086",
-    "firebase_url": "https://game4test-4e65f-default-rtdb.firebaseio.com",
-    "project_id": "game4test-4e65f",
-    "storage_bucket": "game4test-4e65f.appspot.com"
+    "project_number": "554610885901",
+    "firebase_url": "https://dhbc-648ad.firebaseio.com",
+    "project_id": "dhbc-648ad",
+    "storage_bucket": "dhbc-648ad.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:659678642086:android:315184bc603c863fea5967",
+        "mobilesdk_app_id": "1:554610885901:android:895bba91a6016aab",
         "android_client_info": {
-          "package_name": "com.viet.game.app.dev"
+          "package_name": "com.duoihinhbatchu.xuanbac"
         }
       },
       "oauth_client": [
         {
-          "client_id": "659678642086-6dtn6cfvh7rlvc1aldujrfkcb9oq1nob.apps.googleusercontent.com",
+          "client_id": "554610885901-36jl4166vmr1alncohgkr3b9bk7i3q1m.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDMZN72fYwIcOxQn_U2Y3TiYE9ejZUPvKA"
+          "current_key": "AIzaSyAcYbmgIlOBOYfPxhbdCCDD5MeiJ-x9v40"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "659678642086-6dtn6cfvh7rlvc1aldujrfkcb9oq1nob.apps.googleusercontent.com",
+              "client_id": "554610885901-36jl4166vmr1alncohgkr3b9bk7i3q1m.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "659678642086-lio27tlpco0igbfj3dlrf8plqqt5ukis.apps.googleusercontent.com",
+              "client_id": "554610885901-3i4a6jg0hu4km2rihq60oauu4dafada3.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.viet.game.app.dev"
+                "bundle_id": "com.duoihinhbatchu.xuanbac",
+                "app_store_id": "1337588231"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:554610885901:android:11167fa4c13b47697edc44",
+        "android_client_info": {
+          "package_name": "com.stickman.animation.craftman"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "554610885901-36jl4166vmr1alncohgkr3b9bk7i3q1m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcYbmgIlOBOYfPxhbdCCDD5MeiJ-x9v40"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "554610885901-36jl4166vmr1alncohgkr3b9bk7i3q1m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "554610885901-3i4a6jg0hu4km2rihq60oauu4dafada3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.duoihinhbatchu.xuanbac",
+                "app_store_id": "1337588231"
               }
             }
           ]
@@ -44,4 +82,4 @@
     }
   ],
   "configuration_version": "1"
- }
+}

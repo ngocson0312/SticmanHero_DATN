@@ -12,8 +12,8 @@ using Adverty;
 
 public class AdvertyHelper : BaseAdCanvas
 {
-    private const string ANDROID_API_KEY = "ZWRjOWI3YTUtMjdmOC00ZTliLWE4NWEtNDNlYTM4YmFiOTM2JGh0dHBzOi8vYWRzZXJ2ZXIuYWR2ZXJ0eS5jb20=";
-    private const string IOS_API_KEY = "Your_iOS_API_Key"; //put your iOS API key here
+    private const string ANDROID_API_KEY = "ZjZiMGY0NWUtYWNkZS00ZjEzLTg0ZGYtNzRlOGNkMDAyNWM5JGh0dHBzOi8vYWRzZXJ2ZXIuYWR2ZXJ0eS5jb20=";
+    private const string IOS_API_KEY = "N2YzYzFmMjktODY4Ny00MWFmLWI0MzUtMTVmNzI3NDFlNTdiJGh0dHBzOi8vYWRzZXJ2ZXIuYWR2ZXJ0eS5jb20=";
     private Dictionary<AdCanvasSize, AdvertyObjectWithType> listAdsFree;
     private Dictionary<AdCanvasSize, AdvertyObjectWithType> listAdsUse;
     private List<Vector3> listMem4Check;
@@ -56,26 +56,25 @@ public class AdvertyHelper : BaseAdCanvas
     public override void onStart()
     {
 #if ENABLE_Adverty
-        onChangeCamera(AdCanvasHelper.Instance.mainCam);
 
-        //Define data and initialize Adverty SDK
+        ////Define data and initialize Adverty SDK
         AdvertySettings.SandboxMode = false; //For production we turn off sandbox mode
         AdvertySettings.Platform = AdvertySettings.Mode.Mobile; //define target platform (Mobile, VR, AR)
         AdvertySettings.RestrictUserData = false; //do you disallow collect extra user data?
 
-        if(SDKManager.Instance.isAdCanvasSandbox)
+        if (SDKManager.Instance.isAdCanvasSandbox)
         {
             AdvertySettings.SandboxMode = true; //Sandbox mode enabled if we are using Development build or we are in editor
         }
-        UserData userData;
+        Adverty.UserData userData;
         string iABTCv2String = PlayerPrefs.GetString("mem_iab_tcv2", "");
         if (iABTCv2String != null && iABTCv2String.Length > 10)
         {
-            userData = new UserData(AgeSegment.Adult, Gender.Male, iABTCv2String);
+            userData = new Adverty.UserData(AgeSegment.Unknown, Gender.Unknown, iABTCv2String);
         }
         else
         {
-            userData = new UserData(AgeSegment.Adult, Gender.Male);
+            userData = new Adverty.UserData(AgeSegment.Unknown, Gender.Unknown);
         }
 
         //Depends on mobile platform we set correspondent API key
@@ -85,8 +84,6 @@ public class AdvertyHelper : BaseAdCanvas
 #elif UNITY_IOS || UNITY_EDITOR_OSX
         AdvertySettings.APIKey = IOS_API_KEY;
 #endif
-
-        AdvertySDK.Init(userData);
 
         AdvertyEvents.AdvertySessionActivationFailed += AdvertySessionActivationFailed;
         AdvertyEvents.AdvertySessionTerminated += AdvertySessionTerminated;
@@ -98,29 +95,15 @@ public class AdvertyHelper : BaseAdCanvas
         AdvertyEvents.UnitViewed += UnitViewed;
         AdvertyEvents.AdDelivered += AdDelivered;
         AdvertyEvents.AdCompleted += AdCompleted;
-        if (PlayerPrefs.GetInt("cf_adcanvas_enable", 1) == 1 && PlayerPrefs.GetInt("cf_adcanvas_CMP", 1) == 1 && PlayerPrefs.GetInt("mem_show_CMP", 0) <= 0)
-        {
-            Debug.Log($"mysdk: adcv adverty Start");
-#if UNITY_IOS || UNITY_IPHONE
 
-#if !UNITY_EDITOR
-            //mygame.sdk.GameHelper.showCMP();
-#endif
-
-#elif UNITY_ANDROID
-
-#if !UNITY_EDITOR
-            // mygame.sdk.GameHelper.showCMP();
-#endif
-
-#endif
-        }
+        AdvertySDK.Init(userData);
+        onChangeCamera(AdCanvasHelper.Instance.mainCam);
 #endif
     }
 
     public override void onChangeCamera(Camera newCamera)
     {
-        if(newCamera == null)
+        if (newCamera == null)
         {
             newCamera = Camera.main;
         }
@@ -182,7 +165,7 @@ public class AdvertyHelper : BaseAdCanvas
         //             if (Physics.Raycast(ray, out hit, AdCanvasHelper.Instance.lenghtRayClick, LayerMask.GetMask("AdCanvasLayer")))
         //             {
         //                 placementClick = hit.collider.GetComponent<AdvertyPlacement>();
-        //                 tClickDown = SdkUtil.systemCurrentMiliseconds();
+        //                 tClickDown = SdkUtil.CurrentTimeMilis();
         //             }
         //         }
         //     }
@@ -191,7 +174,7 @@ public class AdvertyHelper : BaseAdCanvas
         //         if (placementClick != null)
         //         {
         //             Vector2 dclick = new Vector2(Input.mousePosition.x, Input.mousePosition.y) - posClick;
-        //             long tup = SdkUtil.systemCurrentMiliseconds();
+        //             long tup = SdkUtil.CurrentTimeMilis();
         //             if ((tup - tClickDown) <= 2000 && Mathf.Abs(dclick.x) <= 10 && Mathf.Abs(dclick.y) <= 10)
         //             {
         //                 placementClick.Interact();
@@ -301,7 +284,7 @@ public class AdvertyHelper : BaseAdCanvas
     }
     private BaseAdCanvasObject getAdsWithType(AdCanvasSize type, Vector3 pos, Vector3 forward, Transform _target, int stateLookat, bool isFloowY)
     {
-        if (listAdsUse[type].listAds.Count < 15)
+        if (listAdsUse.ContainsKey(type) && listAdsUse[type].listAds.Count < 15)
         {
             if (listAdsFree[type].listAds.Count > 0)
             {
@@ -470,7 +453,7 @@ public class AdvertyHelper : BaseAdCanvas
     {
         Debug.Log($"mysdk: adcv adverty onCMPOK=" + iABTCv2String);
 #if ENABLE_Adverty && !UNITY_EDITOR
-        UserData userData = new UserData(AgeSegment.Unknown, Gender.Unknown, iABTCv2String);
+        Adverty.UserData userData = new Adverty.UserData(AgeSegment.Unknown, Gender.Unknown, iABTCv2String);
         AdvertySDK.UpdateUserData(userData);
 #endif
     }

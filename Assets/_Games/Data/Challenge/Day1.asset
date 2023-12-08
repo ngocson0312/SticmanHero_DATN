@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8f5526178aa2e34dbaef4753e8c5bf5, type: 3}
+  m_Name: Day1
+  m_EditorClassIdentifier: 
+  numQuest: 8
+  questSamples:
+  - questType: 1
+    require: 5
+    description: Open 0 chest
+    coinReward: 0
+    gemReward: 20
+    pointMission: 20
+    increase: 0
+  - questType: 2
+    require: 200
+    description: Spend 0 dimaond
+    coinReward: 0
+    gemReward: 20
+    pointMission: 20
+    increase: 0
+  - questType: 12
+    require: 5
+    description: Revive 0 times
+    coinReward: 0
+    gemReward: 20
+    pointMission: 20
+    increase: 0
+  - questType: 3
+    require: 5000
+    description: Tieu 0 coin
+    coinReward: 0
+    gemReward: 20
+    pointMission: 20
+    increase: 0
+  - questType: 4
+    require: 20
+    description: Upgrade equipment 0 times
+    coinReward: 0
+    gemReward: 10
+    pointMission: 20
+    increase: 0
+  - questType: 5
+    require: 30
+    description: Kill 0 enemy
+    coinReward: 0
+    gemReward: 20
+    pointMission: 20
+    increase: 0
+  - questType: 8
+    require: 3000
+    description: Earn 0 coin
+    coinReward: 0
+    gemReward: 10
+    pointMission: 20
+    increase: 0
+  - questType: 9
+    require: 100
+    description: Earn 0 diamond
+    coinReward: 0
+    gemReward: 10
+    pointMission: 20
+    increase: 0

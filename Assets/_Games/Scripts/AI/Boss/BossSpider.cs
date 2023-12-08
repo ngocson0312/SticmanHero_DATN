@@ -9,7 +9,6 @@ namespace SuperFight
         public int state; //1 normal attack,2 farattack,3 deploy kid
         int currentStateAtk;
         public ParticleSystem fxBlood;
-        public ParticleSystem bossDie;
         [Header("Movement")]
         float moveAmount;
         public int direction;
@@ -28,7 +27,6 @@ namespace SuperFight
         int countSpawn;
         float spawnTimer;
         bool bosscanattack = true;
-
         public override void Initialize(BossFightArena bossFightArena)
         {
             base.Initialize(bossFightArena);
@@ -75,7 +73,16 @@ namespace SuperFight
                     fb.transform.position = firePoint.position;
                     DamageInfo damageInfo = new DamageInfo();
                     damageInfo.idSender = core.combat.getColliderInstanceID;
-                    damageInfo.damage = stats.damage / 2;
+                    damageInfo.damage = runtimeStats.damage / 2;
+                    damageInfo.listEffect = new List<StatusEffectData>();
+                    damageInfo.listEffect.Add(new PoisonEffectData(this, StatusEffectType.POISON));
+                    fb.OnContact += (x) =>
+                    {
+                        for (int i = 0; i < x.Count; i++)
+                        {
+                            x[i].TakeDamage(damageInfo);
+                        }
+                    };
                     fb.Initialize(Vector2.right * direction, damageInfo);
                     fireRateTimer = fireRate;
 
@@ -124,7 +131,10 @@ namespace SuperFight
                         if (distance <= attackCloseRange && dot > 0)
                         {
                             DamageInfo damageInfo = new DamageInfo();
-                            damageInfo.damage = stats.damage;
+                            damageInfo.damage = runtimeStats.damage;
+                            damageInfo.owner = this;
+                            damageInfo.listEffect = new List<StatusEffectData>();
+                            damageInfo.listEffect.Add(new PoisonEffectData(this, StatusEffectType.POISON));
                             PlayerManager.Instance.playerController.core.combat.TakeDamage(damageInfo);
                         }
                         attackTimer = -0.36f;
@@ -147,13 +157,16 @@ namespace SuperFight
                 if (spawnTimer <= 0 && countSpawn > 0)
                 {
                     stateTimer = 3;
-                    MiniSpider c = PoolingObject.GetObjectFree<MiniSpider>(spider);
-                    GameplayCtrl.Instance.objManager.addEnemy(c);
+                    MiniSpider c = Instantiate(spider);
                     c.transform.SetParent(arena.transform);
                     posSpawn[indexPosSpawn].Play();
                     c.transform.position = posSpawn[indexPosSpawn].transform.position;
+                    CharacterStats characterStats = new CharacterStats();
+                    characterStats.health = (int)(originalStats.health / 20f);
+                    characterStats.damage = (int)(originalStats.damage / 10f);
                     c.Initialize();
-                    c.ResetStatEnemy(new CharacterStats(30, 10));
+                    c.ConfigStats(characterStats, 0);
+                    c.Active();
                     spawnTimer = 0.5f;
                     countSpawn--;
                 }
@@ -162,22 +175,15 @@ namespace SuperFight
 
         public override void OnTakeDamage(DamageInfo damageInfo)
         {
-            if(!isActive) return;
+            if (!isActive) return;
             base.OnTakeDamage(damageInfo);
             fxBlood.Play();
-            if (stats.currHealth <= 0)
+            if (runtimeStats.health <= 0)
             {
                 isActive = false;
-                bossDie.Play();
-                animatorHandle.PlayAnimation("Die", 0.1f, 1, false);
-                GameplayCtrl.Instance.CreateCoinOnKillBoss(transform.position, 20, 40);
-                SoundManager.Instance.playSoundFx(SoundManager.Instance.effBossDie);
+                animatorHandle.PlayAnimation("Dead", 0.1f, 1, false);
                 bosscanattack = false;
                 Die(true);
-            }
-            else
-            {
-                SoundManager.Instance.playRandFx(TYPE_RAND_FX.FX_TAKE_DAMAGE);
             }
         }
 
@@ -186,10 +192,7 @@ namespace SuperFight
         {
             Gizmos.DrawWireSphere(transform.position, attackCloseRange);
         }
-        public override void Die(bool deactiveCharacter)
-        {
-            base.Die(deactiveCharacter);
-        }
+
         public override void Active()
         {
             isActive = true;

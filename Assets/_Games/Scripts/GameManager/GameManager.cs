@@ -3,160 +3,48 @@ using System.Collections.Generic;
 using UnityEngine;
 using mygame.sdk;
 using System;
-
+using Random = UnityEngine.Random;
 namespace SuperFight
 {
     public class GameManager : Singleton<GameManager>
     {
-        public GAMEMODE gameMode;
-        public StandingCtrl standingCtrl;
+        public static GAMEMODE GameMode { get; private set; }
+        public static GameState GameState { get; private set; }
+        public static event Action OnPause;
+        public static event Action OnResume;
+        public static event Action resetDay;
         [Header("Component")]
         public DataManager dataManager;
-        [SerializeField] RevivePopupCtl revivePopup;
-        public LuckWheelPopup luckWheelPopup;
-        public NotEnoughPopup notEnoughPopup;
-        private ScreenUIManager screenManager;
-        public static event Action resetDay;
+        public UIManager uiManager;
+        public QuestManager questManager;
+        // public ChallengeManager challengeManager;
+        public PlayerManager playerManager;
+        public LevelManager levelManager;
+        public GameObject standingTheme;
         [Header("Level")]
-        public int maxLevel = 32;
-        public int CurrLevel;
-        public int levelTempId
+        public int maxLevel;
+        public static int LevelSelected
         {
-            get { return PlayerPrefs.GetInt("level_temp_id", 1); }
-            set { PlayerPrefs.SetInt("level_temp_id", value); }
+            get { return PlayerPrefs.GetInt("sf_lv_selected", 1); }
+            private set { PlayerPrefs.SetInt("sf_lv_selected", value); }
         }
-        public int Getlevelrandom(int _level)
-        {
-            int lvLoad = PlayerPrefs.GetInt("mem_lv_load" + _level, 0);
-            if (lvLoad <= 0)
-            {
-                lvLoad = ranlevelOver(_level);
-            }
-            Debug.Log($"aaa: Getlevelrandom level={_level}-lvLoad={lvLoad}");
-            return lvLoad;
-        }
-
-        public int FreeSkinItem
-        {
-            get { return PlayerPrefs.GetInt("FreeSkinItem", 2); }
-            set { PlayerPrefs.SetInt("FreeSkinItem", value); }
-        }
-        public int FreeSwordItem
-        {
-            get { return PlayerPrefs.GetInt("FreeSwordItem", 2); }
-            set { PlayerPrefs.SetInt("FreeSwordItem", value); }
-        }
-
-        //--------------------------------------------------------------------------------------------------------------------------------------------
-        private List<int> listLvRanNormal = new List<int>();
-        private List<int> listLvRanBoss = new List<int>();
-
-        public int ranlevelOver(int level)
-        {
-            int lvRan;
-            if (level % 4 == 0)
-            {
-                if (listLvRanBoss.Count == 0)
-                {
-                    getListLvRan("_boss");
-                    if (listLvRanBoss.Count == 0)
-                    {
-                        for (int i = 20; i <= maxLevel; i++)
-                        {
-                            if (i % 4 == 0)
-                            {
-                                int va = i;
-                                listLvRanBoss.Add(va);
-                            }
-                        }
-                    }
-                }
-                int n = UnityEngine.Random.Range(0, listLvRanBoss.Count);
-                lvRan = listLvRanBoss[n];
-                listLvRanBoss.RemoveAt(n);
-                saveListLvRan(listLvRanBoss, "_boss", level, lvRan);
-            }
-            else
-            {
-                if (listLvRanNormal.Count == 0)
-                {
-                    getListLvRan("_normal");
-                    if (listLvRanNormal.Count == 0)
-                    {
-                        for (int i = 20; i <= maxLevel; i++)
-                        {
-                            if (i % 4 != 0)
-                            {
-                                int va = i;
-                                listLvRanNormal.Add(va);
-                            }
-                        }
-                    }
-                }
-                int n = UnityEngine.Random.Range(0, listLvRanNormal.Count);
-                lvRan = listLvRanNormal[n];
-                listLvRanNormal.RemoveAt(n);
-                saveListLvRan(listLvRanNormal, "_normal", level, lvRan);
-            }
-
-            return lvRan;
-        }
-        void getListLvRan(string namelist)
-        {
-            string keyran;
-            List<int> ltmp;
-            if (name.StartsWith("_normal"))
-            {
-                keyran = "mem_slv_ran_normal";
-                ltmp = listLvRanNormal;
-            }
-            else
-            {
-                keyran = "mem_slv_ran_boss";
-                ltmp = listLvRanBoss;
-            }
-
-            string sli = PlayerPrefs.GetString(keyran, "");
-            if (sli.Length > 0)
-            {
-                string[] arr = sli.Split(',');
-                if (arr != null)
-                {
-                    for (int i = 0; i < arr.Length; i++)
-                    {
-                        int va = int.Parse(arr[i]);
-                        ltmp.Add(va);
-                    }
-                }
-            }
-        }
-        void saveListLvRan(List<int> list, string namelist, int level, int lvran)
-        {
-            string slv = "";
-            if (list.Count > 0)
-            {
-                slv = "" + list[0];
-                if (list.Count > 1)
-                {
-                    for (int i = 1; i < list.Count; i++)
-                    {
-                        slv += ("," + list[i]);
-                    }
-                }
-            }
-            PlayerPrefs.SetString("mem_slv_ran" + namelist, slv);
-            PlayerPrefs.SetInt("mem_lv_load" + level, lvran);
-        }
+        private bool hasSecondChange;
         //========================================================
-        protected override void Awake()
+        private void Start()
         {
-            base.Awake();
-            Application.targetFrameRate = 60;
-            dataManager.LoadData();
+            mygame.sdk.SDKManager.CBFinishloadDing += () =>
+            {
+                AdsHelper.Instance.showBanner(AD_BANNER_POS.TOP, App_Open_ad_Orien.Orien_Landscape, 320);
+                BackToMenu();
+            };
+            Initialize();
         }
-        void Start()
+        public void Initialize()
         {
-            PopupManager.Instance.Initialize();
+            Application.targetFrameRate = 60;
+            DataManager.Instance.LoadData();
+            uiManager.GetPopup<DailyReward>().ResetDay();
+            // challengeManager.ResetDay();
             if (PlayerPrefsUtil.Yesterday.Length <= 0)
             {
                 resetDay?.Invoke();
@@ -169,218 +57,173 @@ namespace SuperFight
                 {
                     resetDay?.Invoke();
                     PlayerPrefsUtil.Yesterday = DateTime.Today.ToString();
+                    uiManager.ShowPopup<DailyReward>(null);
                 }
             }
-            screenManager = ScreenUIManager.Instance;
-            SoundManager.Instance.playSoundBG(SoundManager.Instance.musicBgMenu);
-            Invoke("LoadAds", 2f);
-            screenManager.ShowScreen(ScreenName.MAINSCREEN);
-            mygame.sdk.SDKManager.CBFinishloadDing += () =>
-            {
-                AdsHelper.Instance.showBanner(AD_BANNER_POS.TOP, App_Open_ad_Orien.Orien_Landscape, 320);
-            };
+            // challengeManager.Initialize();
+            uiManager.Initialize(this);
+            questManager.Initialize();
+            playerManager.Initialize();
+            SwitchGameState(GameState.NONE);
         }
-
-      
-
-        public void ShowNotEnough(UpgradePopupCtrl _upgradePopupCtrl)
+#if UNITY_EDITOR
+        private void Update()
         {
-            notEnoughPopup.gameObject.SetActive(true);
-            notEnoughPopup.upgradePopupCtrl = _upgradePopupCtrl;
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                DataManager.Level++;
+                PlayGame(DataManager.Level);
+            }
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                DataManager.Level--;
+                PlayGame(DataManager.Level);
+            }
         }
+#endif
 
         public void SwitchGameMode(GAMEMODE mode)
         {
-            gameMode = mode;
+            GameMode = mode;
         }
-        public void PlayLevelBoss(int level)
+        public void SwitchGameState(GameState newState)
         {
-            SwitchGameMode(GAMEMODE.BOSS);
-            standingCtrl.HideStanding();
-            GameplayCtrl.Instance.StartGame(level);
-            if (mygame.sdk.GameHelper.checkLvXaDu())
-            {
-                AdsHelper.Instance.showFull(false, GameRes.LevelCommon(), false, false, "play_game", false, true);
-            }
+            GameState = newState;
         }
-        public void PlayGame(int level = 0)
+        public void PlayGame(int level)
         {
-            SwitchGameMode(GAMEMODE.CAMPAIGN);
-            CurrLevel = level;
-            if (mygame.sdk.GameHelper.checkLvXaDu())
+            FIRhelper.logEvent($"Level_{level:000}_play");
+            uiManager.transition.Transition(1, () =>
             {
-               
-                if (level <= 0)
-                {
-                    level = GameRes.GetLevel();
-                    CurrLevel = level;
-                }
+                LevelSelected = level;
 
                 if (level > maxLevel)
                 {
-                    level = Getlevelrandom(CurrLevel);
-                }
-            }
-            else
-            {
-               
-                if (level > 6)
-                {
-                    int a = level / 6;
-                    int b = level;
-                    level = b - 6 * a;
-                }
-            }
-           
-            standingCtrl.HideStanding();
-            GameplayCtrl.Instance.StartGame(level);
-           
-        }
-
-        public void PlayLevelTest()
-        {
-            GameplayCtrl.Instance.SwitchStateGame(GAME_STATE.GS_PLAYING);
-            standingCtrl.HideStanding();
-            GameplayCtrl.Instance.StartGameTest();
-        }
-
-        public void BackMenu()
-        {
-            PopupManager.Instance.ClearQueue();
-            GameplayCtrl.Instance.SwitchStateGame(GAME_STATE.GS_STOP);
-            SoundManager.Instance.playSoundBG(SoundManager.Instance.musicBgMenu);
-            standingCtrl.ShowStanding(PlayerPrefsUtil.Theme);
-            PlayerManager.Instance.ResetCharacter(Vector3.zero, true);
-            GameplayCtrl.Instance.clearMapToNewGame();
-            CameraController.Instance.CameraOnMain(Vector3.zero);
-            screenManager.ShowScreen(ScreenName.MAINSCREEN);
-           
-        }
-        public void Restart()
-        {
-            if (!SDKManager.Instance.checkConnection()) return;
-            if (gameMode == GAMEMODE.CAMPAIGN)
-            {
-                FIRhelper.logEvent($"Level_{CurrLevel:000}_restart");
-                bool isshow = AdsHelper.Instance.showFull(false, GameRes.LevelCommon() - 1, false, false, "restart_game", false, true, (satead) =>
-                {
-                    if (satead == AD_State.AD_CLOSE || satead == AD_State.AD_SHOW_FAIL)
+                    if (level % 4 == 0)
                     {
-                        PlayGame(CurrLevel);
+                        level = Random.Range(1, maxLevel / 4) * 4;
                     }
-                });
-                if (!isshow)
-                {
-                    PlayGame(CurrLevel);
+                    else
+                    {
+                        level = Random.Range(15, maxLevel);
+                    }
                 }
 
+                hasSecondChange = true;
+                SwitchGameState(GameState.PLAYING);
+                uiManager.ActiveScreen<IngameScreenUI>(false);
+                standingTheme.SetActive(false);
+                levelManager.LoadLevel(level);
+                CameraController.Instance.CamOnStart();
+            });
+        }
+        public void BackToMenu()
+        {
+            SwitchGameState(GameState.NONE);
+            PlayerManager.Instance.ResetCharacter();
+            levelManager.ClearLevel();
+            standingTheme.SetActive(true);
+            uiManager.ActiveScreen<MenuScreenUI>();
+            PlayerManager.Instance.SetPosition(Vector3.zero);
+            hasSecondChange = true;
+            CameraController.Instance.CameraOnMain(Vector3.zero);
+        }
+        public void Respawn()
+        {
+            uiManager.transition.Transition(1f, () =>
+            {
+                SwitchGameState(GameState.PLAYING);
+                hasSecondChange = true;
+                CameraController.Instance.CamOnStart();
+                playerManager.ResetCharacter();
+            });
+        }
+        public void CompleteLevel()
+        {
+            if (GameState == GameState.FINISH) return;
+            FIRhelper.logEvent($"Level_{LevelSelected:000}_win");
+            SwitchGameState(GameState.FINISH);
+            uiManager.DeactiveAllScreen(false);
+            playerManager.playerController.OnWin();
+            LevelSelected++;
+            if (LevelSelected >= DataManager.Level)
+            {
+                DataManager.Level = LevelSelected;
+            }
+            DelayCallBack(2f, () =>
+            {
+                uiManager.ActiveScreen<WinScreenUI>();
+            });
+        }
+        public void OnLose()
+        {
+            if (GameState == GameState.FINISH) return;
+            FIRhelper.logEvent($"Level_{LevelSelected:000}_lose");
+            if (hasSecondChange)
+            {
+                PauseGame();
+                hasSecondChange = false;
+                CameraController.Instance.DeathSaturation();
+                uiManager.GetScreen<IngameScreenUI>().ActiveSecondChange();
             }
             else
             {
-                bool isshow = AdsHelper.Instance.showFull(false, GameRes.LevelCommon() - 1, false, false, "restart_game", false, true, (satead) =>
-               {
-                   if (satead == AD_State.AD_CLOSE || satead == AD_State.AD_SHOW_FAIL)
-                   {
-                       PlayLevelBoss(DataManager.Instance.currentBossLevelSelect);
-                   }
-               });
-                if (!isshow)
+                ResumeGame();
+                SwitchGameState(GameState.FINISH);
+                DelayCallBack(1f, () =>
                 {
-                    PlayLevelBoss(DataManager.Instance.currentBossLevelSelect);
-                }
+                    AudioManager.Instance.PlayOneShot("DeathPiano", 1f);
+                    uiManager.ActiveScreen<LoseScreenUI>();
+                });
             }
+        }
+        public void Revive()
+        {
+            CameraController.Instance.ReviveSaturation();
+            AudioManager.Instance.PlayOneShot("ReverseTime", 1f);
+            playerManager.playerController.Revive();
+            DelayCallBack(2f, () =>
+            {
+                ResumeGame();
+                SwitchGameState(GameState.PLAYING);
+                playerManager.ResetCharacter();
+            });
         }
         public void PauseGame()
         {
-            GameplayCtrl.Instance.OnStartPause();
+            OnPause?.Invoke();
         }
         public void ResumeGame()
         {
-            GameplayCtrl.Instance.OnEndPause();
+            OnResume?.Invoke();
         }
-
-        public void GameLose()
+        public void DelayCallBack(float duration, Action onComplete)
         {
-            FIRhelper.logEvent($"Level_{CurrLevel:000}_lose");
-            bool isshow = AdsHelper.Instance.showFull(false, GameRes.LevelCommon() - 1, false, false, "lose_level", false, true, (satead) =>
+            StartCoroutine(IEDelay());
+            IEnumerator IEDelay()
             {
-                if (satead == AD_State.AD_CLOSE || satead == AD_State.AD_SHOW_FAIL)
+                float timer = duration;
+                while (timer > 0)
                 {
-                    // losePopup.Show();
-                    screenManager.ShowScreen(ScreenName.LOSESCREEN);
+                    timer -= Time.deltaTime;
+                    yield return null;
                 }
-            });
-            if (!isshow)
-            {
-                screenManager.ShowScreen(ScreenName.LOSESCREEN);
-            }
-
-        }
-
-        public void GameWin(int coinEarned)
-        {
-            if (CurrLevel == GameRes.GetLevel())
-            {
-                if (gameMode != GAMEMODE.BOSS)
-                {
-                    GameRes.IncreaseLevel();
-                }
-                CurrLevel = GameRes.GetLevel();
-                if (GameRes.GetLevel() == 11)
-                {
-                    PromoPackManager.Instance.ShowRivenPack();
-                }
-                if (GameRes.GetLevel() == 16)
-                {
-                    PromoPackManager.Instance.ShowKaisaPack();
-                }
-            }
-
-            FIRhelper.logEvent("win_level" + GameRes.GetLevel());
-            bool isshow = AdsHelper.Instance.showFull(false, GameRes.LevelCommon() - 1, false, false, "win_level", false, true, (satead) =>
-            {
-                if (satead == AD_State.AD_CLOSE || satead == AD_State.AD_SHOW_FAIL)
-                {
-                    DataManager.Instance.AddCoin(coinEarned, 0, "finish_level");
-                    WinScreen winScreen = screenManager.ShowScreen<WinScreen>(ScreenName.WINSCREEN);
-                    winScreen.SetCoinEarn(coinEarned);
-                }
-            });
-            if (!isshow)
-            {
-                DataManager.Instance.AddCoin(coinEarned, 0, "finish_level");
-                WinScreen winScreen = screenManager.ShowScreen<WinScreen>(ScreenName.WINSCREEN);
-                winScreen.SetCoinEarn(coinEarned);
+                onComplete?.Invoke();
             }
         }
-
-        public void SecondChange()
+        public void UpdateTask(QuestType questType, int amount)
         {
-            revivePopup.gameObject.SetActive(true);
-        }
-
-        public void TimeoutRevive()
-        {
-            GameplayCtrl.Instance.handleTimeOutRevive();
-        }
-
-        public void OnRevival()
-        {
-            GameplayCtrl.Instance.handleSecondChance();
-        }
-
-        public void NextLevel(int _currentLevel)
-        {
-            if (_currentLevel != GameRes.GetLevel())
-            {
-                _currentLevel++;
-            }
-            PlayGame(_currentLevel);
+            questManager.UpdateTask(questType, amount);
+            // challengeManager.UpdateTask(questType, amount);
         }
     }
     public enum GAMEMODE
     {
         CAMPAIGN, BOSS
+    }
+    public enum GameState
+    {
+        NONE, PLAYING, PAUSE, FINISH
     }
 }
 

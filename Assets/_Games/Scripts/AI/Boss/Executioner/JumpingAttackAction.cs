@@ -6,15 +6,16 @@ namespace SuperFight
     {
         Transform target;
         Executioner executioner;
-        float timer;
-        int state;
-        float originY;
+        private float timer;
+        private int state;
+        private float originY;
+        Tween tween;
         public JumpingAttackAction(Executioner controller, Transform target, float timeDelayAction) : base(controller)
         {
             this.target = target;
             timer = timeDelayAction;
             executioner = controller;
-            originY = controller.transform.position.y;
+            originY = executioner.transform.position.y;
         }
 
         public override void ExitAction()
@@ -28,17 +29,15 @@ namespace SuperFight
         }
         void FallDown()
         {
-            int currentDirection = 0;
-            Vector3 direction = (target.position - executioner.transform.position).normalized;
+            executioner.HandleLockTarget(target, 1f);
+            Vector3 direction = (target.position - executioner.transform.position);
             Vector3 targetPostion = target.position;
             if (direction.x < 0)
             {
-                currentDirection = -1;
                 targetPostion.x += 3;
             }
             else if (direction.x > 0)
             {
-                currentDirection = 1;
                 targetPostion.x -= 3;
             }
             else
@@ -60,12 +59,8 @@ namespace SuperFight
             {
                 targetPostion.x = executioner.xMax;
             }
-            if (currentDirection != executioner.core.movement.facingDirection)
-            {
-                executioner.core.movement.Flip();
-            }
-
-            controller.transform.DOMove(new Vector3(targetPostion.x, originY, 0), 0.25f).SetEase(Ease.InQuart).OnComplete(() =>
+            AudioManager.Instance.PlayOneShot("DropDown", 1f);
+            tween = controller.transform.DOMove(new Vector3(targetPostion.x, originY, 0), 0.25f).SetEase(Ease.InQuart).OnComplete(() =>
             {
                 controller.animatorHandle.PlayAnimation("AttackLanding", 0.1f, 1, true);
                 executioner.core.Resume();
@@ -79,7 +74,7 @@ namespace SuperFight
             executioner.core.Pause();
             controller.animatorHandle.PlayAnimation("JumpingAttack", 0.1f, 1, true);
             Vector3 newPos = controller.transform.position + new Vector3(3 * controller.core.movement.facingDirection, 5);
-            controller.transform.DOMove(newPos, 0.75f).SetEase(Ease.OutQuart).SetDelay(0.5f).OnComplete(FallDown);
+            tween = controller.transform.DOMove(newPos, 0.75f).SetEase(Ease.OutQuart).SetDelay(0.5f).OnComplete(FallDown);
         }
 
         public override void UpdateLogic(float deltaTime)
@@ -105,6 +100,30 @@ namespace SuperFight
 
         public override void UpdatePhysic(float fixedDeltaTime)
         {
+        }
+
+        public override void OnPause()
+        {
+            if (tween != null)
+            {
+                tween.Pause();
+            }
+        }
+
+        public override void OnResume()
+        {
+            if (tween != null)
+            {
+                tween.Play();
+            }
+            if (state < 2)
+            {
+                executioner.core.Pause();
+            }
+            else
+            {
+                executioner.core.Resume();
+            }
         }
     }
 

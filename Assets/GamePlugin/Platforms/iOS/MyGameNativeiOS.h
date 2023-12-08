@@ -13,6 +13,8 @@ extern "C"
     char *getLanguageCodeNative();
     char *getCountryCodeNative();
     char *getAdsIdentifyNative();
+    void synchronizeTimeNative(long timestampMilisecond);
+    long CurrentTimeMilisRealNative();
     char *getGiftBoxNative();
     void vibrateNative(int type);
     long getMemoryLimit();
@@ -26,9 +28,12 @@ extern "C"
     bool appReviewNative();
     void requestIDFANative(int isallversion);
     void showCMPNative();
+    void localNotifyNative(char* title, char* msg, int hour, int minus, int dayrepeat);
+    void clearAllNotiNative();
 
 #ifdef __cplusplus
 }
 #endif
 
 @end
+

@@ -463,7 +463,7 @@ namespace mygame.sdk
             isGiftLoading = true;
             isGiftLoaded = false;
             MoPub.RequestRewardedVideo(giftId);
-            timeLoadGift = SdkUtil.systemCurrentMiliseconds();
+            timeLoadGift = SdkUtil.CurrentTimeMilis();
             StartCoroutine(WaitGiftErr());
 #else
             if (cbGiftLoad != null)

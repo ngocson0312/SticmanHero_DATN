@@ -24,6 +24,14 @@ namespace SuperFight
             
         }
 
+        public override void OnPause()
+        {
+        }
+
+        public override void OnResume()
+        {
+        }
+
         public override void UpdateLogic(float deltaTime)
         {
             actionTimer -= deltaTime;

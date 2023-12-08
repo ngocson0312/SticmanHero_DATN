@@ -8,147 +8,55 @@ namespace SuperFight
     {
         [Header("Components")]
         public PlayerController playerController;
-        public Character character;
         public InputHandle input;
-        private Collider2D coll;
-        public Transform characterHolder;
-        [Header("Flags Status")]
-        public bool isDead;
-        [SerializeField] private ParticleSystem fxMainDie;
-        [SerializeField] private ParticleSystem fxEquipWeapon;
-        private void Start()
-        {
-            Initialize();
-        }
-        public void ResetCharacter(Vector3 newPos, bool newLevel)
-        {
-            transform.position = newPos;
-            isDead = false;
-            input.ResetInput();
-            input.ActiveInput();
-            playerController.Resume();
-            playerController.ResetScript();
-            character.ResetAnimator();
-            Weapon weapon = character.currentWeapon;
-            SetSkin(DataManager.Instance.currentSkin);
-            Debug.Log("kskskkk: " + newLevel);
-            if (newLevel)
-            {
-                character.LoadWeapon(null, true);
-            }
-            else
-            {
-                if(weapon.keyWeapon)
-                {
-                    character.LoadWeapon(weapon, true);
-                }
-            }
-            Invincible();
-        }
-        public void Invincible()
-        {
-            playerController.isInvincible = true;
-            Invoke(nameof(DeactiveInvincible), 2f);
-        }
-        void DeactiveInvincible()
-        {
-            playerController.isInvincible = false;
-        }
+        private Collider2D selfCollider;
         public void Initialize()
         {
-            coll = GetComponent<Collider2D>();
+            selfCollider = GetComponent<Collider2D>();
             playerController.Initialize(this);
-            SetToDefaultSkin();
         }
-
-        public void SetToDefaultSkin()
+        public void SetPosition(Vector3 pos)
         {
-            SetSkin(DataManager.Instance.currentSkin);
+            pos.z = 0;
+            transform.position = pos;
         }
-
-        public void SetSkin(string skinName)
+        public void ResetCharacter()
         {
-            Debug.Log(skinName);
-            if (character != null)
-            {
-                Destroy(character.gameObject);
-            }
-            SkinObject skin = DataManager.Instance.GetSkin(skinName);
-            Character c = skin.character;
-            if (c == null)
-            {
-                c = Resources.Load<Character>("DefaultCharacter");
-            }
-            character = Instantiate(c, characterHolder);
-            playerController.animatorHandle = character;
-            character.Initialize(playerController);
-            character.ResetAnimator();
-            character.LoadSkin(skinName);
+            transform.parent = null;
+            input.ResetInput();
+            input.ActiveInput();
+            playerController.ResetController();
         }
-
         void Update()
         {
-            if (GameplayCtrl.Instance.gameState == GAME_STATE.GS_PAUSEGAME)
-            {
-                // playerController.SetVelocity(Vector2.zero);
-                return;
-            }
-            if (character == null) return;
+            // if (GameplayCtrl.Instance.gameState == GAME_STATE.GS_PAUSEGAME)
+            // {
+            //     // playerController.SetVelocity(Vector2.zero);
+            //     return;
+            // }
+            // if (character == null) return;
+            // if (GameManager.GameState != GameState.PLAYING) return;
             playerController.UpdateScript();
         }
         void FixedUpdate()
         {
-            if (GameplayCtrl.Instance.gameState == GAME_STATE.GS_PAUSEGAME) return;
-            if (character == null) return;
+            // if (GameManager.GameState != GameState.PLAYING) return;
+            // if (GameplayCtrl.Instance.gameState == GAME_STATE.GS_PAUSEGAME) return;
+            // if (character == null) return;
             playerController.FixedUpdateScript();
         }
-        public void OnHealing(float valPercent)
+        public void PlayerDie()
         {
-            playerController.Heal(valPercent);
-        }
-        public void PlayerDie(bool _explode = false)
-        {
-            if (isDead) return;
-            character.LoadWeapon(null);
             input.Deactive();
-            SoundManager.Instance.playSoundFx(SoundManager.Instance.effDeath);
-            isDead = true;
             input.ResetInput();
-            fxMainDie.Play();
-            if (_explode)
-            {
-                character.gameObject.SetActive(false);
-            }
-            else
-            {
-                character.gameObject.SetActive(true);
-            }
-            GameplayCtrl.Instance.mainPlayerBeKill(2);
-            FIRhelper.logEvent($"Level_{GameManager.Instance.CurrLevel:000}_die");
+            GameManager.Instance.OnLose();
+            // FIRhelper.logEvent($"Level_{GameManager.Instance.CurrLevel:000}_die");
         }
-        public Bounds GetBoundPlayer()
+        public static Bounds GetBoundPlayer()
         {
-            Vector2 center = coll.bounds.center;
-            Bounds bounds = new Bounds(center, coll.bounds.size);
+            Vector2 center = Instance.selfCollider.bounds.center;
+            Bounds bounds = new Bounds(center, Instance.selfCollider.bounds.size);
             return bounds;
-        }
-        public void OnWin()
-        {
-            character.PlayAnimation("Victory", 1, false);
-        }
-        public void PlayFXEquipWeapon()
-        {
-            fxEquipWeapon.Play();
-        }
-        public void OnPause()
-        {
-            playerController.Pause();
-            character.Pause();
-        }
-        public void OnResume()
-        {
-            playerController.Resume();
-            character.Resume();
         }
     }
 }

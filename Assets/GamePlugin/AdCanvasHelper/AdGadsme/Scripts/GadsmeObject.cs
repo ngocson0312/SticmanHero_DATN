@@ -11,7 +11,9 @@ public enum GadsmePlacementType
 {
     P_300x250 = 0,
     P_300x50,
-    P_V4x3
+    P_V4x3,
+    P_300x600,
+    P_960x540
 }
 
 public class GadsmeObject : BaseAdCanvasObject

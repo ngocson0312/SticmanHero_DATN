@@ -1,20 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace SuperFight
+using SuperFight;
+public abstract class State
 {
-    public abstract class State
+    public string stateName;
+    protected Controller controller;
+    protected Core core;
+    protected Transform transform;
+    public State(Controller controller, string stateName)
     {
-        public string stateName;
-        protected Controller controller;
-        public State(Controller controller, string stateName)
-        {
-            this.controller = controller;
-            this.stateName = stateName;
-        }
-        public abstract void EnterState();
-        public abstract void UpdateLogic();
-        public abstract void UpdatePhysic();
-        public abstract void ExitState();
+        this.controller = controller;
+        this.stateName = stateName;
+        this.core = controller.core;
+        this.transform = controller.transform;
     }
+    public abstract void EnterState();
+    public abstract void UpdateLogic();
+    public abstract void UpdatePhysic();
+    public abstract void ExitState();
 }

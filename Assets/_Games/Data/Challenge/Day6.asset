@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8f5526178aa2e34dbaef4753e8c5bf5, type: 3}
+  m_Name: Day6
+  m_EditorClassIdentifier: 
+  numQuest: 7
+  questSamples:
+  - questType: 13
+    require: 5
+    description: Complete 0 weekly mission
+    coinReward: 0
+    gemReward: 300
+    pointMission: 20
+    increase: 0
+  - questType: 12
+    require: 100
+    description: Revive 0 times
+    coinReward: 0
+    gemReward: 300
+    pointMission: 20
+    increase: 0
+  - questType: 11
+    require: 60
+    description: Complete 0 daily missions
+    coinReward: 0
+    gemReward: 300
+    pointMission: 20
+    increase: 0
+  - questType: 2
+    require: 10000
+    description: Spend 0 diamond
+    coinReward: 0
+    gemReward: 500
+    pointMission: 20
+    increase: 0
+  - questType: 3
+    require: 2000000
+    description: Spend 0 coin
+    coinReward: 0
+    gemReward: 500
+    pointMission: 20
+    increase: 0
+  - questType: 10
+    require: 300
+    description: 'Successfully merge equipment 0 items '
+    coinReward: 0
+    gemReward: 500
+    pointMission: 20
+    increase: 0
+  - questType: 1
+    require: 300
+    description: 'Successfully merge equipment 0 items '
+    coinReward: 0
+    gemReward: 500
+    pointMission: 20
+    increase: 0

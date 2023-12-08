@@ -3,71 +3,97 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using TMPro;
+using System;
 
-public class TopUI : MonoBehaviour
+namespace SuperFight
 {
-    public Button plusCoin;
-    public TextMeshProUGUI coinText;
-    public ParticleSystem coinFx;
-
-    public Button plusGem;
-    public TextMeshProUGUI gemText;
-    public ParticleSystem gemFx;
-
-    public void Start()
+    public class TopUI : MonoBehaviour
     {
-        plusCoin.onClick.AddListener(() => OnClickPlus(1));
-        DataManager.OnAddCoin += SetCoinText;
-        coinText.text = DataManager.Instance.coin.ToString();
-    }
+        public Button addCoinButton;
+        public Text coinText;
+        public ParticleSystem coinFx;
+        public CoinFx coinFxFly;
 
-    void OnClickPlus(int id)
-    {
-
-    }
-
-    public void SetCoinText(int startValue, int endValue, float delayTime = 0, bool showAnim = true)
-    {
-        int num = startValue;
-        DOTween.To(() => num, x => num = x, endValue, 1).SetDelay(0.2f).OnUpdate(() =>
+        public Button addDiamondButton;
+        public Text diamondText;
+        public ParticleSystem diamondFx;
+        public CoinFx diamondFxFly;
+        public void Initialize()
         {
-            coinText.text = ConvertMoneyToString(num);
-        });
-        if (endValue > startValue)
+            DataManager.OnAddCoin += SetCoinText;
+            DataManager.OnAddDiamond += SetDiamondText;
+            coinText.text = ConvertMoneyToString(DataManager.Coin);
+            diamondText.text = ConvertMoneyToString(DataManager.Diamond);
+            addCoinButton.onClick.AddListener(OpenShop);
+            addDiamondButton.onClick.AddListener(OpenShop);
+
+        }
+        public void SetActive(bool status)
         {
-            if (showAnim)
+            gameObject.SetActive(status);
+        }
+        private void SetDiamondText(int startValue, int endValue, float delayTime)
+        {
+            int num = startValue;
+            DOTween.To(() => num, x => num = x, endValue, 1).SetDelay(0.2f).OnUpdate(() =>
             {
-                CoinFx.Instance.PlayFx(() => coinFx.Play());
+                diamondText.text = ConvertMoneyToString(num);
+            });
+            if (endValue > startValue)
+            {
+                diamondFxFly.PlayFx(() => diamondFx.Play(), 1);
             }
         }
-    }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.V))
+        public void SetCoinText(int startValue, int endValue, float delayTime, bool showAnim)
         {
-            DataManager.Instance.AddCoin(10000, 0, "test");
-            DataManager.Instance.AddSpineTicket(5);
+            int num = startValue;
+            DOTween.To(() => num, x => num = x, endValue, 1).SetDelay(0.2f).OnUpdate(() =>
+            {
+                coinText.text = ConvertMoneyToString(num);
+            });
+            if (endValue > startValue && showAnim)
+            {
+                coinFxFly.PlayFx(() => coinFx.Play(), 0);
+            }
         }
-    }
+#if UNITY_EDITOR
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.V))
+            {
+                DataManager.Instance.AddCoin(10000, 0, "test", true);
+            }
 
-    #region ConvertMoney
-    public static string ConvertMoneyToString(long money)
-    {
-        if (money >= 1000000000)
-        {
-            return (money / 1000000000).ToString() + "B";
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                DataManager.Instance.AddDiamond(2000, 0, "test");
+            }
+
         }
-        if (money >= 1000000)
+#endif
+        public void OpenShop()
         {
-            return (money / 1000000).ToString() + "M";
+            UIManager.Instance.ShowPopup<ShopScreenUI>(null);
         }
-        if (money >= 100000)
+
+        #region ConvertMoney
+        public static string ConvertMoneyToString(long money)
         {
-            return (money / 1000).ToString() + "K";
+            if (money >= 1000000000)
+            {
+                return (money / 1000000000).ToString() + "B";
+            }
+            if (money >= 1000000)
+            {
+                return (money / 1000000).ToString() + "M";
+            }
+            if (money >= 100000)
+            {
+                return (money / 1000).ToString() + "K";
+            }
+            return money.ToString();
         }
-        return money.ToString();
+        #endregion
     }
-    #endregion
 }

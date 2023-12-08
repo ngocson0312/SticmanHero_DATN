@@ -28,7 +28,7 @@ public class BossAxe : Boss
         fb.transform.localScale = new Vector3(-1, 1, 1);
         fb.speed = 18;
         DamageInfo damageInfo = new DamageInfo();
-        damageInfo.damage = stats.damage / 3;
+        damageInfo.damage = runtimeStats.damage / 3;
         damageInfo.idSender = core.combat.getColliderInstanceID;
         fb.Initialize(Vector3.left, damageInfo);
     }
@@ -47,7 +47,7 @@ public class BossAxe : Boss
     {
         if (!isActive) return;
         base.OnTakeDamage(damageInfo);
-        if (stats.currHealth <= 0)
+        if (runtimeStats.health <= 0)
         {
             if (GroundFake != null)
             {
@@ -55,14 +55,14 @@ public class BossAxe : Boss
             }
             isActive = false;
             fxDeath.Play();
-            GameplayCtrl.Instance.CreateCoinBoss(transform.position + new Vector3(0, 0, -1));
-            SoundManager.Instance.playSoundFx(SoundManager.Instance.effBossDie);
+            // GameplayCtrl.Instance.CreateCoinBoss(transform.position + new Vector3(0, 0, -1));
+            // //SoundManager.Instance.playSoundFx(//SoundManager.Instance.effBossDie);
             animatorHandle.PlayAnimation("Die", 0.1f, 1, true);
             Die(true);
         }
         else
         {
-            SoundManager.Instance.playRandFx(TYPE_RAND_FX.FX_TAKE_DAMAGE);
+            //SoundManager.Instance.playRandFx(TYPE_RAND_FX.FX_TAKE_DAMAGE);
             animatorHandle.PlayAnimation("Hit", 0.1f, 0, true);
         }
     }

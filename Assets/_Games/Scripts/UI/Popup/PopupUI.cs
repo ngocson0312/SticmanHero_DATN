@@ -1,26 +1,25 @@
-using mygame.sdk;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 namespace SuperFight
 {
     public abstract class PopupUI : MonoBehaviour
     {
-        public PopupName popupName;
-        protected PopupManager popupManager;
-        public virtual void Initialize(PopupManager popupManager)
+        protected UIManager uiManager;
+        protected Action onClose;
+        public virtual void Initialize(UIManager manager)
         {
-            this.popupManager = popupManager;
+            this.uiManager = manager;
         }
-        public virtual void Show()
+        public virtual void Show(Action onClose)
         {
+            this.onClose = onClose;
             gameObject.SetActive(true);
         }
         public virtual void Hide()
         {
+            onClose?.Invoke();
             gameObject.SetActive(false);
-            AdsHelper.Instance.showBanner(AD_BANNER_POS.TOP, App_Open_ad_Orien.Orien_Landscape, 320);
-            popupManager.OnHidePopup();
+            onClose = null;
         }
     }
 }

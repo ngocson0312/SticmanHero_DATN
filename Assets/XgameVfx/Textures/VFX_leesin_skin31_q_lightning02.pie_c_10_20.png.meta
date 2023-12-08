@@ -355,15 +355,15 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      VFX_leesin_skin31_q_lightning02.pie_c_10_20_0: 3366734455749258392
-      VFX_leesin_skin31_q_lightning02.pie_c_10_20_1: -919956779673410918
       VFX_leesin_skin31_q_lightning02.pie_c_10_20_2: -2187998768551558629
       VFX_leesin_skin31_q_lightning02.pie_c_10_20_3: -4352711464791382261
+      VFX_leesin_skin31_q_lightning02.pie_c_10_20_6: -1443649736640027608
+      VFX_leesin_skin31_q_lightning02.pie_c_10_20_0: 3366734455749258392
+      VFX_leesin_skin31_q_lightning02.pie_c_10_20_8: -9077528813015869799
+      VFX_leesin_skin31_q_lightning02.pie_c_10_20_1: -919956779673410918
       VFX_leesin_skin31_q_lightning02.pie_c_10_20_4: -1308577661863682657
       VFX_leesin_skin31_q_lightning02.pie_c_10_20_5: 1812467806760678326
-      VFX_leesin_skin31_q_lightning02.pie_c_10_20_6: -1443649736640027608
       VFX_leesin_skin31_q_lightning02.pie_c_10_20_7: -7591894234557554627
-      VFX_leesin_skin31_q_lightning02.pie_c_10_20_8: -9077528813015869799
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

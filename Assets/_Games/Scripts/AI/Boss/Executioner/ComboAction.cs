@@ -26,6 +26,16 @@ namespace SuperFight
             state = 0;
         }
 
+        public override void OnPause()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void OnResume()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void UpdateLogic(float deltaTime)
         {
             timer -= deltaTime;

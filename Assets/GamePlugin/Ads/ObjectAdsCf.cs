@@ -8,41 +8,8 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 using mygame.sdk;
+using MyJson;
 
-public class IntervalLevelShowfull
-{
-    public int startlevel;
-    public int endLevel;
-    public int deltal4Show;
-
-    public IntervalLevelShowfull(string data)
-    {
-        fromStringData(data);
-    }
-
-    public void fromStringData(string data)
-    {
-        deltal4Show = -1;
-        try
-        {
-            string[] sarr = data.Split(new char[] { ',' });
-            if (sarr.Length == 3)
-            {
-                startlevel = int.Parse(sarr[0]);
-                endLevel = int.Parse(sarr[1]);
-                deltal4Show = int.Parse(sarr[2]);
-                if (startlevel >= endLevel)
-                {
-                    deltal4Show = -1;
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.Log("mysdk: fromStringData ex=" + ex.ToString());
-        }
-    }
-}
 public class ObjectAdsCf
 {
     public string countrycode = mygame.sdk.GameHelper.CountryDefault;
@@ -54,6 +21,7 @@ public class ObjectAdsCf
     public int OpenadLvshow;
     public int OpenAdTimeWaitShowFirst;
     public int cfLvStaticAds;
+    public int typeMyopenAd;
 
     public int isChangeBNStatic;
     public int verShowBanner;
@@ -66,20 +34,29 @@ public class ObjectAdsCf
 
     public int fullTotalOfday;
     public int fullLevelStart;
+    public int fullSessionStart;
+    public int full2LevelStart;
     public int fullTimeStart;
     public int fullDeltatime;
+    public int full2Deltatime;
     public int fullShowPlaying;
     public int fullLoadAdsMobStatic;
     public int fullDefaultNumover = 2;
+    public int full2Numover = 2;
     public string stepShowFull;
+    public string stepShowFull2;
     public string intervalnumoverfull;
     public string stepFloorECPMFull;
+    public string stepFloorECPMGift;
     public string excluseFullrunning;
     public List<IntervalLevelShowfull> listIntervalShow = new List<IntervalLevelShowfull>();
     public List<int> fullStepShowCircle;
     public List<int> fullStepShowRe;
     public List<int> fullExcluseShowRunning;
+    public List<int> full2StepShowCircle;
     public int isLoadMaxLow;
+
+    public int maskAdsStatus = 0xf;
 
     public int giftTotalOfday;
     public int giftDeltatime;
@@ -90,6 +67,10 @@ public class ObjectAdsCf
     public int loadOtherWhenLoadedApplovinButNotReady = 0;
     public List<int> giftStepShowCircle;
     public List<int> giftStepShowRe;
+
+    public int specialType;// =0-session, 1-timeplay
+    public string specialData = "";
+    public List<SpecialConditionShow> listSpecialShow = new List<SpecialConditionShow>();
 
     public int typeLoadStart = 1;//0-auto, 1-video-auto, 2-video only
 
@@ -103,10 +84,13 @@ public class ObjectAdsCf
         fullStepShowCircle = new List<int>();
         fullStepShowRe = new List<int>();
         fullExcluseShowRunning = new List<int>();
+        full2StepShowCircle = new List<int>();
         listIntervalShow.Clear();
 
         giftStepShowCircle = new List<int>();
         giftStepShowRe = new List<int>();
+
+        listSpecialShow.Clear();
 
         countrycode = code;
         //loadFromPlayerPrefs();
@@ -117,6 +101,7 @@ public class ObjectAdsCf
         if (other != null)
         {
             Debug.Log($"mysdk: object ads coppy {other.countrycode} to {countrycode}");
+            maskAdsStatus = other.maskAdsStatus;
             isChangeBNStatic = other.isChangeBNStatic;
             stepShowBanner = other.stepShowBanner;
             parSerStepBN(stepShowBanner);
@@ -129,17 +114,23 @@ public class ObjectAdsCf
 
             fullTotalOfday = other.fullTotalOfday;
             fullLevelStart = other.fullLevelStart;
+            fullSessionStart = other.fullSessionStart;
+            full2LevelStart = other.full2LevelStart;
             fullTimeStart = other.fullTimeStart;
             fullDefaultNumover = other.fullDefaultNumover;
+            full2Numover = other.full2Numover;
             intervalnumoverfull = other.intervalnumoverfull;
             fullShowPlaying = other.fullShowPlaying;
             fullLoadAdsMobStatic = other.fullLoadAdsMobStatic;
             parserIntervalnumoverfull(intervalnumoverfull);
             fullDeltatime = other.fullDeltatime;
+            full2Deltatime = other.full2Deltatime;
             typeLoadStart = other.typeLoadStart;
             stepShowFull = other.stepShowFull;
+            stepShowFull2 = other.stepShowFull2;
             isLoadMaxLow = other.isLoadMaxLow;
             parSerStepFull(stepShowFull);
+            parSerStepFull2(stepShowFull2);
             if (fullStepShowCircle.Count == 0 && fullStepShowRe.Count == 0)
             {
                 parSerStepFull(AppConfig.defaultStepFull);
@@ -168,6 +159,7 @@ public class ObjectAdsCf
             OpenAdTimeWaitShowFirst = other.OpenAdTimeWaitShowFirst;
 
             cfLvStaticAds = other.cfLvStaticAds;
+            typeMyopenAd = other.typeMyopenAd;
 
             stateShowAppLlovin = other.stateShowAppLlovin;
             levelShowAppLovin = other.levelShowAppLovin;
@@ -176,11 +168,17 @@ public class ObjectAdsCf
 
             stepFloorECPMBanner = other.stepFloorECPMBanner;
             stepFloorECPMFull = other.stepFloorECPMFull;
+            stepFloorECPMGift = other.stepFloorECPMGift;
+
+            specialType = other.specialType;
+            specialData = other.specialData;
+            parSerSpecialStep(specialData);
         }
     }
 
     public void loadFromPlayerPrefs()
     {
+        maskAdsStatus = PlayerPrefs.GetInt("cf_mask_ads_status", 0xf);
         if (AppConfig.isAddAdsMob)
         {
             isChangeBNStatic = PlayerPrefs.GetInt("cf_change_bn_sta", 1);
@@ -200,11 +198,15 @@ public class ObjectAdsCf
 
         fullTotalOfday = PlayerPrefs.GetInt("cf_fullTotalOfday", 200);
         fullLevelStart = PlayerPrefs.GetInt("cf_fullLevelStart", 1);
+        fullSessionStart = PlayerPrefs.GetInt("cf_fullSessionStart", 1);
+        full2LevelStart = PlayerPrefs.GetInt("cf_full2LevelStart", 2000);
         fullTimeStart = PlayerPrefs.GetInt("cf_fullTimeStart", 0) * 1000;
         fullDefaultNumover = PlayerPrefs.GetInt("cf_fulldefaultnumover", 1);
+        full2Numover = PlayerPrefs.GetInt("cf_full2numover", 2);
         intervalnumoverfull = PlayerPrefs.GetString("cf_fullNumover", "");
         parserIntervalnumoverfull(intervalnumoverfull);
         fullDeltatime = PlayerPrefs.GetInt("cf_fullDeltatime", 30000);
+        full2Deltatime = PlayerPrefs.GetInt("cf_full2Deltatime", 150000);
         typeLoadStart = PlayerPrefs.GetInt("cf_type_full_start", 1);
         fullShowPlaying = PlayerPrefs.GetInt("cf_fullShowPlaying", 0);
         isLoadMaxLow = PlayerPrefs.GetInt("cf_load_maxlow", 0);
@@ -217,7 +219,9 @@ public class ObjectAdsCf
             fullLoadAdsMobStatic = PlayerPrefs.GetInt("cf_fullLoadAdsMobStatic", 0);
         }
         stepShowFull = PlayerPrefs.GetString("cf_step_full", AppConfig.defaultStepFull);
+        stepShowFull2 = PlayerPrefs.GetString("cf_step_full2", "");
         parSerStepFull(stepShowFull);
+        parSerStepFull2(stepShowFull2);
         if (fullStepShowCircle.Count == 0 && fullStepShowRe.Count == 0)
         {
             parSerStepFull(AppConfig.defaultStepFull);
@@ -246,6 +250,7 @@ public class ObjectAdsCf
         OpenAdTimeWaitShowFirst = PlayerPrefs.GetInt("cf_open_ad_wait_first", 60);
 
         cfLvStaticAds = PlayerPrefs.GetInt("cf_lv_static_ads", 0);
+        typeMyopenAd = PlayerPrefs.GetInt("cf_type_myopenad", 0);
 
         stateShowAppLlovin = PlayerPrefs.GetInt("cf_state_show_applovin", 0);//vvv
         levelShowAppLovin = PlayerPrefs.GetInt("lv_show_apploovin", 10);//vvv
@@ -254,10 +259,16 @@ public class ObjectAdsCf
 
         stepFloorECPMBanner = PlayerPrefs.GetString("conf_banner_floor_ecpm", "");
         stepFloorECPMFull = PlayerPrefs.GetString("conf_full_floor_ecpm", "");
+        stepFloorECPMGift = PlayerPrefs.GetString("conf_gift_floor_ecpm", "");
+
+        specialType = PlayerPrefs.GetInt("cf_special_type", 0);
+        specialData = PlayerPrefs.GetString("cf_special_data", "");
+        parSerSpecialStep(specialData);
     }
 
     public void saveAllConfig()
     {
+        PlayerPrefs.SetInt("cf_mask_ads_status", maskAdsStatus);
         PlayerPrefs.SetInt("cf_open_ad_type", OpenAdShowtype);
         PlayerPrefs.SetInt("cf_open_ad_showat", OpenAdShowat);
         PlayerPrefs.SetInt("cf_open_ad_show_firstopen", OpenAdIsShowFirstOpen);
@@ -266,6 +277,7 @@ public class ObjectAdsCf
         PlayerPrefs.SetInt("cf_open_ad_wait_first", OpenAdTimeWaitShowFirst);
 
         PlayerPrefs.SetInt("cf_lv_static_ads", cfLvStaticAds);
+        PlayerPrefs.SetInt("cf_type_myopenad", typeMyopenAd);
 
         PlayerPrefs.SetInt("android_build_ver_show_bn", verShowBanner);
         PlayerPrefs.SetInt("cf_state_show_applovin", stateShowAppLlovin);
@@ -275,6 +287,10 @@ public class ObjectAdsCf
 
         PlayerPrefs.SetString("conf_banner_floor_ecpm", stepFloorECPMBanner);
         PlayerPrefs.SetString("conf_full_floor_ecpm", stepFloorECPMFull);
+        PlayerPrefs.SetString("conf_gift_floor_ecpm", stepFloorECPMGift);
+
+        PlayerPrefs.SetInt("cf_special_type", specialType);
+        PlayerPrefs.SetString("cf_special_data", specialData);
 
         saveBNConfig();
         saveFullConfig();
@@ -293,15 +309,20 @@ public class ObjectAdsCf
         //full
         PlayerPrefs.SetInt("cf_fullTotalOfday", fullTotalOfday);
         PlayerPrefs.SetInt("cf_fullLevelStart", fullLevelStart);
+        PlayerPrefs.SetInt("cf_fullSessionStart", fullSessionStart);
+        PlayerPrefs.SetInt("cf_full2LevelStart", full2LevelStart);
         PlayerPrefs.SetInt("cf_fullTimeStart", (fullTimeStart / 1000));
         PlayerPrefs.SetInt("cf_fulldefaultnumover", fullDefaultNumover);
+        PlayerPrefs.SetInt("cf_full2numover", full2Numover);
         PlayerPrefs.SetInt("cf_fullShowPlaying", fullShowPlaying);
         PlayerPrefs.SetInt("cf_fullLoadAdsMobStatic", fullLoadAdsMobStatic);
         PlayerPrefs.SetString("cf_fullNumover", listIntervaltoString());
         PlayerPrefs.SetInt("cf_fullDeltatime", fullDeltatime);
+        PlayerPrefs.SetInt("cf_full2Deltatime", full2Deltatime);
         PlayerPrefs.SetInt("cf_type_full_start", typeLoadStart);
         PlayerPrefs.SetInt("cf_load_maxlow", isLoadMaxLow);
         PlayerPrefs.SetString("cf_step_full", stepShowFull);
+        PlayerPrefs.SetString("cf_step_full2", stepShowFull2);
         PlayerPrefs.SetString("cf_full_excluse_run", excluseFullrunning);
     }
 
@@ -534,6 +555,29 @@ public class ObjectAdsCf
         }
     }
 
+    public void parSerStepFull2(string step)
+    {
+        if (step == null || step.Length == 0)
+        {
+            return;
+        }
+        Debug.Log("mysdk: parSerStepFull2=" + step);
+        string[] steplist = step.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+        full2StepShowCircle.Clear();
+        for (int i = 0; i < steplist.Length; i++)
+        {
+            try
+            {
+                int value = int.Parse(steplist[i]);
+                full2StepShowCircle.Add(value);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+    }
+
     public void parSerStepGift(string step)
     {
         if (step == null || step.Length == 0)
@@ -587,71 +631,160 @@ public class ObjectAdsCf
         }
     }
 
-    public void parConfigFull(string config)
+    public void parSerSpecialStep(string data)
     {
-        string[] arr1 = config.Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
-        for (int i = 0; i < arr1.Length; i++)
+        listSpecialShow.Clear();
+        var liststep = (List<object>)JsonDecoder.DecodeText(specialData);
+        if (liststep != null && liststep.Count > 0)
         {
-            if (arr1[i].StartsWith("to:"))
+            foreach (object ob in liststep)
             {
-                string va = arr1[i].Substring(3);
-                fullTotalOfday = int.Parse(va);
-            }
-            else if (arr1[i].StartsWith("lv:"))
-            {
-                string va = arr1[i].Substring(3);
-                fullLevelStart = int.Parse(va);
-            }
-            else if (arr1[i].StartsWith("ts:"))
-            {
-                string va = arr1[i].Substring(3);
-                fullTimeStart = int.Parse(va) * 1000;
-            }
-            else if (arr1[i].StartsWith("ov:"))
-            {
-                string va = arr1[i].Substring(3);
-                parserIntervalnumoverfull(va);
-            }
-            else if (arr1[i].StartsWith("del:"))
-            {
-                string va = arr1[i].Substring(4);
-                fullDeltatime = int.Parse(va);
-                fullDeltatime = fullDeltatime * 1000;
-            }
-            else if (arr1[i].StartsWith("typestart:"))
-            {
-                string va = arr1[i].Substring(10);
-                typeLoadStart = int.Parse(va);
-            }
-            else if (arr1[i].StartsWith("step:"))
-            {
-                string va = arr1[i].Substring(5);
-                parSerStepFull(va);
+                IDictionary<string, object> dicob = (IDictionary<string, object>)ob;
+                SpecialConditionShow spec = new SpecialConditionShow(dicob);
+                listSpecialShow.Add(spec);
             }
         }
     }
 
-    public void parConfigGift(string config)
+    public void parSerSpecial(IDictionary<string, object> dicdata)
     {
-        string[] arr1 = config.Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
-        for (int i = 0; i < arr1.Length; i++)
+        listSpecialShow.Clear();
+        if (dicdata == null || dicdata.Count == 0)
         {
-            if (arr1[i].StartsWith("to:"))
+            return;
+        }
+        specialType = 0;
+        if (dicdata.ContainsKey("type"))
+        {
+            specialType = Convert.ToInt32(dicdata["type"]);
+        }
+        if (dicdata.ContainsKey("data"))
+        {
+            List<object> liststep = (List<object>)dicdata["data"];
+            if (liststep != null && liststep.Count > 0)
             {
-                string va = arr1[i].Substring(3);
-                giftTotalOfday = int.Parse(va);
-            }
-            else if (arr1[i].StartsWith("del:"))
-            {
-                string va = arr1[i].Substring(4);
-                giftDeltatime = int.Parse(va);
-                giftDeltatime = giftDeltatime * 1000;
-            }
-            else if (arr1[i].StartsWith("step:"))
-            {
-                string va = arr1[i].Substring(5);
-                parSerStepGift(va);
+                specialData = "[";
+                bool isStart = true;
+                foreach (object ob in liststep)
+                {
+                    IDictionary<string, object> dicob = (IDictionary<string, object>)ob;
+                    SpecialConditionShow spec = new SpecialConditionShow(dicob);
+                    listSpecialShow.Add(spec);
+                    if (!isStart)
+                    {
+                        specialData += ",";
+                    }
+                    specialData += spec.toJsonOb();
+
+                    isStart = false;
+                }
+                specialData += "]";
             }
         }
+    }
+
+}
+
+//-------------------------------------------------
+public class IntervalLevelShowfull
+{
+    public int startlevel;
+    public int endLevel;
+    public int deltal4Show;
+
+    public IntervalLevelShowfull(string data)
+    {
+        fromStringData(data);
+    }
+
+    public void fromStringData(string data)
+    {
+        deltal4Show = -1;
+        try
+        {
+            string[] sarr = data.Split(new char[] { ',' });
+            if (sarr.Length == 3)
+            {
+                startlevel = int.Parse(sarr[0]);
+                endLevel = int.Parse(sarr[1]);
+                deltal4Show = int.Parse(sarr[2]);
+                if (startlevel >= endLevel)
+                {
+                    deltal4Show = -1;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.Log("mysdk: fromStringData ex=" + ex.ToString());
+        }
+    }
+}
+//------------------------------------------------
+public class SpecialConditionShow
+{
+    public int startCon;//con session, timeplay
+    public int endCon;//con session, timeplay
+
+    public int deltal4Show = 0;
+    public string stepFull = "";
+    public string stepGift = "";
+
+    public SpecialConditionShow(IDictionary<string, object> dicdata)
+    {
+        fromStringData(dicdata);
+    }
+
+    public void fromStringData(IDictionary<string, object> dicdata)
+    {
+        deltal4Show = 0;
+        stepFull = "";
+        stepGift = "";
+        try
+        {
+            if (dicdata.ContainsKey("start"))
+            {
+                startCon = Convert.ToInt32(dicdata["start"]);
+            }
+            if (dicdata.ContainsKey("end"))
+            {
+                endCon = Convert.ToInt32(dicdata["end"]);
+            }
+            if (dicdata.ContainsKey("delta"))
+            {
+                deltal4Show = Convert.ToInt32(dicdata["delta"]);
+            }
+            if (dicdata.ContainsKey("full"))
+            {
+                stepFull = (string)dicdata["full"];
+            }
+            if (dicdata.ContainsKey("gift"))
+            {
+                stepGift = (string)dicdata["gift"];
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.Log("mysdk: fromStringData ex=" + ex.ToString());
+        }
+    }
+
+    public string toJsonOb()
+    {
+        string sjson = "{";
+        sjson += $"\"start\":{startCon}";
+        sjson += $",\"end\":{endCon}";
+        sjson += $",\"delta\":{deltal4Show}";
+        if (stepFull != null && stepFull.Length > 3)
+        {
+            sjson += $",\"full\":\"{stepFull}\"";
+        }
+        if (stepFull != null && stepFull.Length > 3)
+        {
+            sjson += $",\"gift\":\"{stepGift}\"";
+        }
+        sjson += "}";
+
+        return sjson;
     }
 }

@@ -9,63 +9,70 @@ namespace SuperFight
         private State currentState;
         public SpriteBar healthBar;
         public ParticleSystem hitFX;
-        protected bool isInit;
-        protected float delayTimePlaySoundFx;
-        protected Vector3 startPosition;
-        public EnemyAnimator animator{get;set;}
+        protected Collider2D selfCollider;
+        public ParticleSystem CiticalVfx;
+        public ParticleSystem buffFX;
+        public Weapon weapon;
+        public bool isUnstopable;
+        public int coinReward;
         public virtual void Initialize()
         {
-            isInit = true;
+            selfCollider = GetComponent<Collider2D>();
             core.Initialize(this);
             animatorHandle.Initialize(this);
-            animator = (EnemyAnimator)animatorHandle;
-            stats.ResetStats();
+            weapon.Initialize(this);
+            weapon.OnEquip();
             isActive = false;
+            GameManager.OnPause += Pause;
+            GameManager.OnResume += Resume;
+            animatorHandle.OnEventAnimation += OnEventAnim;
+        }
+
+        private void OnEventAnim(string obj)
+        {
+            if (obj.Equals("ActiveUnstopable"))
+            {
+                isUnstopable = true;
+            }
+            if (obj.Equals("DeactiveUnstopable"))
+            {
+                isUnstopable = false;
+            }
+        }
+
+        public void ConfigStats(CharacterStats characterStats, int coinReward)
+        {
+            originalStats = new CharacterStats(characterStats);
+            runtimeStats = new CharacterStats(originalStats);
+            this.coinReward = coinReward;
+        }
+        public void Active()
+        {
+            gameObject.SetActive(true);
+            isActive = true;
+            selfCollider.enabled = true;
+            ResetController();
         }
         protected virtual void LogicUpdate()
         {
-            // character.SetBool("IsOnGround", core.collisionSenses.IsOnGround());
-            // character.SetBool("IsStunning", isStunning);
-            // character.SetFloat("MoveAmount", Mathf.Abs(core.movement.currentVelecity.x));
-            // character.SetFloat("VelocityY", core.movement.currentVelecity.y);
-            isInteracting = animatorHandle.animator.GetBool("IsInteracting");
-            if (isActive == false || GameplayCtrl.Instance.gameState != GAME_STATE.GS_PLAYING) return;
+            if (GameManager.GameState != GameState.PLAYING) return;
+            isInteracting = animatorHandle.GetBool("IsInteracting");
             core.UpdateLogicCore();
-            if (currentState != null && GameplayCtrl.Instance.gameState == GAME_STATE.GS_PLAYING)
+            if (currentState != null)
             {
                 currentState.UpdateLogic();
             }
-            delayTimePlaySoundFx -= Time.deltaTime;
-            
+            weapon.OnUpdate();
         }
-        public virtual void ResetStatEnemy(CharacterStats overrideStats)
+        public override void SetHealth(int amount)
         {
-            startPosition = transform.position;
-            animatorHandle.ResetAnimator();
-            isActive = true;
-            core.Active();
-            core.Resume();
-            if (overrideStats == null)
-            {
-                stats.ResetStats();
-            }
-            else
-            {
-                stats = overrideStats;
-                stats.ResetStats();
-            }
-            if (GameManager.Instance.CurrLevel > GameManager.Instance.maxLevel)
-            {
-                int health = DataManager.Instance.playerDamage * Random.Range(3, 8);
-                int damage = (int)(DataManager.Instance.playerMaxHp / Random.Range(5, 10));
-                stats = new CharacterStats(health, damage);
-                stats.ResetStats();
-            }
-            GetComponent<Collider2D>().enabled = true;
+            base.SetHealth(amount);
+            healthBar.UpdateBar(NormalizeHealth());
+            buffFX.Play();
         }
         protected virtual void PhysicUpdate()
         {
-            if (isActive == false || GameplayCtrl.Instance.gameState != GAME_STATE.GS_PLAYING) return;
+            if (GameManager.GameState != GameState.PLAYING) return;
             if (currentState != null)
             {
                 currentState.UpdatePhysic();
@@ -73,14 +80,15 @@ namespace SuperFight
         }
         private void Update()
         {
+            if (!isActive) return;
             LogicUpdate();
+            UpdateStatusEffects();
         }
         private void FixedUpdate()
         {
+            if (!isActive) return;
             PhysicUpdate();
         }
-       
-        public abstract void DetectPlayer();
         public void SwitchState(State newState)
         {
             if (currentState != null)
@@ -90,22 +98,80 @@ namespace SuperFight
             currentState = newState;
             currentState.EnterState();
         }
+        public void StopStateMachine()
+        {
+            if (currentState != null)
+            {
+                currentState.ExitState();
+            }
+        }
         public abstract Controller GetTargetInView();
+        public abstract Controller GetTargetInView(Bounds bounds);
         public override void Die(bool deactiveCharacter)
         {
-            if(!isActive) return;
+            if (!isActive) return;
             base.Die(deactiveCharacter);
+            SpawnCoin();
             healthBar.Deactive();
             core.Deactive();
-            GetComponent<Collider2D>().enabled = false;
-            GameplayCtrl.Instance.freeEnemyBeKill(this, 2f);
-            GameplayCtrl.Instance.enemyBeKill(this);
+            selfCollider.enabled = false;
+            GameManager.Instance.UpdateTask(QuestType.KILL_ENEMY, 1);
+        }
+        private void SpawnCoin()
+        {
+            coinReward = 20 + (GameManager.LevelSelected * 3);
+            int count = Random.Range(3, 5);
+            for (int i = 0; i < count; i++)
+            {
+                var coin = FactoryObject.Spawn<ItemCoin>("Item", "Coin");
+                coin.transform.position = transform.position + Vector3.up;
+                coin.Initialize(coinReward / count);
+            }
         }
         public override void OnTakeDamage(DamageInfo damageInfo)
         {
-            UltimateTextDamageManager.Instance.Add(damageInfo.damage.ToString(), transform.position + Vector3.up * 2);
-            animatorHandle.PlayAnimation("Stun", 0.1f, 1, true);
-            hitFX.Play();
+            // for (int i = 0; i < statusEffects.Count; i++)
+            // {
+            //     if (statusEffects[i].statusName == StatusEffectType.BURNING)
+            //     {
+            //         int bonus = (int)(damageInfo.damage * 15f / 100f);
+            //         damageInfo.damage += bonus;
+            //     }
+            //     // if (statusEffects[i].statusName == StatusEffectType.ELECTROCUTE && damageInfo.isCritical)
+            //     // {
+
+            //     //   //  int bonus = (int)(damageInfo.damage / 2);
+            //     //    // damageInfo.damage += bonus;
+
+            //     // }
+            //     //if(statusEffects[i].statusName == StatusEffectType.CURSE)
+            //     //{
+            //     //    int bonus = (int)(runtimeStats.health);
+            //     //    damageInfo.damage += bonus;
+            //     //}
+            // }
+            if (damageInfo.listEffect != null)
+            {
+                for (int i = 0; i < damageInfo.listEffect.Count; i++)
+                {
+                    AddStatusEffect(damageInfo.listEffect[i]);
+                }
+            }
+            runtimeStats.health -= damageInfo.damage;
+            if (damageInfo.impactSound)
+            {
+                AudioManager.Instance.PlayOneShot(damageInfo.impactSound, 1f);
+            }
+            else
+            {
+                AudioManager.Instance.PlayOneShot("eff_be_hit" + Random.Range(1, 4), 1f);
+            }
+            base.OnTakeDamage(damageInfo);
+        }
+        private void OnDestroy()
+        {
+            GameManager.OnPause -= Pause;
+            GameManager.OnResume -= Resume;
         }
     }
 }

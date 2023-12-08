@@ -6,6 +6,7 @@ using UnityEngine;
 #if ENABLE_ADS_ADMOB && !USE_ADSMOB_MY
 using GoogleMobileAds.Api;
 using mygame.plugin.Android;
+using System.Collections.Generic;
 #endif
 
 namespace mygame.sdk
@@ -35,6 +36,26 @@ namespace mygame.sdk
 #if ENABLE_ADS_ADMOB && !USE_ADSMOB_MY
             isEnable = true;
             MobileAds.Initialize(initStatus => { });
+            MobileAds.Initialize((initStatus) =>
+            {
+                Dictionary<string, AdapterStatus> map = initStatus.getAdapterStatusMap();
+                foreach (KeyValuePair<string, AdapterStatus> keyValuePair in map)
+                {
+                    string className = keyValuePair.Key;
+                    AdapterStatus status = keyValuePair.Value;
+                    switch (status.InitializationState)
+                    {
+                        case AdapterState.NotReady:
+                            // The adapter initialization did not complete.
+                            SdkUtil.logd("ads admob Adapter: " + className + " not ready.");
+                            break;
+                        case AdapterState.Ready:
+                            // The adapter was successfully initialized.
+                            SdkUtil.logd("ads admob Adapter: " + className + " is initialized.");
+                            break;
+                    }
+                }
+            });
 #endif
         }
 
@@ -385,7 +406,20 @@ namespace mygame.sdk
             full.OnAdFailedToShow += HandleInterstitialFailedToShow;
             full.OnAdClosed += HandleInterstitialClosed;
             full.OnPaidEvent += HandleInterstitialPaidEvent;
+#if ADMOB_VUNG
+            VungleInterstitialMediationExtras extras = new VungleInterstitialMediationExtras();
+#if UNITY_ANDROID
+            extras.SetAllPlacements(new string[] { "ANDROID_PLACEMENT_1", "ANDROID_PLACEMENT_2" });
+#elif UNITY_IPHONE
+            extras.SetAllPlacements(new string[] { "IOS_PLACEMENT_1", "IOS_PLACEMENT_2" });
+#endif
+
+            AdRequest request = new AdRequest.Builder()
+                    .AddMediationExtras(extras)
+                    .Build();
+#else
             AdRequest request = new AdRequest.Builder().Build();
+#endif
             if (request != null)
             {
                 full.LoadAd(request);
@@ -454,7 +488,6 @@ namespace mygame.sdk
                 SdkUtil.logd("ads admob showFull type=" + adsType);
 #endif
                 FullTryLoad = 0;
-                isFullLoaded = false;
 #if ENABLE_ADS_ADMOB && !USE_ADSMOB_MY
                 cbFullShow = cb;
                 full.Show();
@@ -516,7 +549,20 @@ namespace mygame.sdk
             gift.OnUserEarnedReward += HandleRewardBasedVideoRewarded;
             gift.OnAdClosed += HandleRewardBasedVideoClosed;
             gift.OnPaidEvent += HandleRewardBasedPaidEvent;
+#if ADMOB_VUNG
+            VungleRewardedVideoMediationExtras extras = new VungleRewardedVideoMediationExtras();
+#if UNITY_ANDROID
+            extras.SetAllPlacements(new string[] { "ANDROID_PLACEMENT_1", "ANDROID_PLACEMENT_2" });
+#elif UNITY_IPHONE
+            extras.SetAllPlacements(new string[] { "IOS_PLACEMENT_1", "IOS_PLACEMENT_2" });
+#endif
+
+            AdRequest request = new AdRequest.Builder()
+                .AddMediationExtras(extras)
+                .Build();
+#else
             AdRequest request = new AdRequest.Builder().Build();
+#endif
             if (request != null)
             {
                 gift.LoadAd(request);
@@ -559,7 +605,6 @@ namespace mygame.sdk
             cbGiftShow = null;
             if (getGiftLoaded())
             {
-                isGiftLoaded = false;
 #if ENABLE_ADS_ADMOB && !USE_ADSMOB_MY
                 cbGiftShow = cb;
                 gift.Show();
@@ -767,6 +812,7 @@ namespace mygame.sdk
             SdkUtil.logd("ads admob" + adsType + " full HandleInterstitialClosed");
 #endif
             isFullLoading = false;
+            isFullLoaded = false;
             if (cbFullShow != null)
             {
                 AdCallBack tmpcb = cbFullShow;

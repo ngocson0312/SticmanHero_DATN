@@ -145,7 +145,7 @@
 //             }
 //             else
 //             {
-//                 SoundManager.Instance.playRandFx(TYPE_RAND_FX.FX_TAKE_DAMAGE);
+//                 //SoundManager.Instance.playRandFx(TYPE_RAND_FX.FX_TAKE_DAMAGE);
 //                 character.PlayAnimation("Stun", 1, true);
 //             }
 //         }

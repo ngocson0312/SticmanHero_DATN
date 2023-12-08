@@ -212,8 +212,8 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       water-breathing-status-large_0: 7683383888126536042
-      water-breathing-status-large_1: -8535856774364209157
       water-breathing-status-large_2: 6124143287061038249
+      water-breathing-status-large_1: -8535856774364209157
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

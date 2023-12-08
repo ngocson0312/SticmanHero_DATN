@@ -14,7 +14,6 @@ namespace SuperFight
         }
         public override void EnterState()
         {
-            
             currentDirection = enemy.core.movement.facingDirection;
             attackTimer = Random.Range(0, 0.3f);
         }
@@ -28,12 +27,12 @@ namespace SuperFight
             enemy.core.movement.SetVelocityX(0);
             if (target == null)
             {
-                enemy.SwitchState(enemy.patrol);
+                // enemy.SwitchState(enemy.patrol);
                 return;
             }
-            if (Vector2.SqrMagnitude(target.transform.position - controller.transform.position) > enemy.attackRange)
+            if (Vector2.SqrMagnitude(target.transform.position - controller.transform.position) > enemy.attackRange && !controller.isInteracting)
             {
-                enemy.SwitchState(enemy.chaseState);
+                // enemy.SwitchState(enemy.chaseState);
                 return;
             }
 
@@ -53,6 +52,7 @@ namespace SuperFight
                     if (currentDirection != controller.core.movement.facingDirection)
                     {
                         controller.core.movement.Flip();
+
                     }
                 }
             }
@@ -60,12 +60,13 @@ namespace SuperFight
             if (attackTimer >= 0)
             {
                 attackTimer -= Time.deltaTime;
-                if (attackTimer <= 0)
+                if (attackTimer <= 0 && !controller.isInteracting)
                 {
-                    enemy.animator.HandleCombo();
+                    enemy.weapon.TriggerWeapon();
                     attackTimer = 1 / enemy.attackSpeed;
                 }
             }
+
         }
 
         public override void UpdatePhysic()

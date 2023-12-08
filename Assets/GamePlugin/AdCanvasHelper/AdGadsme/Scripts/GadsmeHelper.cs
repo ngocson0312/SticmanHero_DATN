@@ -64,24 +64,6 @@ public class GadsmeHelper : BaseAdCanvas
             GadsmeSDK.SetGdprConsentString(iABTCv2String);
         }
         GadsmeSDK.SetInteractionsEnabled(false);
-        if (PlayerPrefs.GetInt("cf_adcanvas_enable", 1) == 1 && PlayerPrefs.GetInt("cf_adcanvas_CMP", 1) == 1 && PlayerPrefs.GetInt("mem_show_CMP", 0) <= 0)
-        {
-            Debug.Log($"mysdk: adcv gadsme Start");
-#if UNITY_IOS || UNITY_IPHONE
-
-#if !UNITY_EDITOR
-            GadsmeSDK.SetAllowConsentDialog(false);
-            //mygame.sdk.GameHelper.showCMP();
-#endif
-
-#elif UNITY_ANDROID
-
-#if !UNITY_EDITOR
-            mygame.sdk.GameHelper.showCMP();
-#endif
-
-#endif
-        }
 #endif
     }
 
@@ -145,7 +127,7 @@ public class GadsmeHelper : BaseAdCanvas
                     if (Physics.Raycast(ray, out hit, AdCanvasHelper.Instance.lenghtRayClick, LayerMask.GetMask("Default", "AdCanvasLayer")))
                     {
                         placementClick = hit.collider.GetComponent<GadsmePlacement>();
-                        tClickDown = SdkUtil.systemCurrentMiliseconds();
+                        tClickDown = SdkUtil.CurrentTimeMilis();
                     }
                 }
             }
@@ -154,7 +136,7 @@ public class GadsmeHelper : BaseAdCanvas
                 if (placementClick != null)
                 {
                     Vector2 dclick = new Vector2(Input.mousePosition.x, Input.mousePosition.y) - posClick;
-                    long tup = SdkUtil.systemCurrentMiliseconds();
+                    long tup = SdkUtil.CurrentTimeMilis();
                     if ((tup - tClickDown) <= 2000 && Mathf.Abs(dclick.x) <= 10 && Mathf.Abs(dclick.y) <= 10)
                     {
                         placementClick.Interact();
@@ -286,7 +268,7 @@ public class GadsmeHelper : BaseAdCanvas
     }
     private BaseAdCanvasObject getAdsWithType(AdCanvasSize type, Vector3 pos, Vector3 forward, Transform _target, int stateLookat, bool isFloowY)
     {
-        if (listAdsUse[type].listAds.Count < 15)
+        if (listAdsUse.ContainsKey(type) && listAdsUse[type].listAds.Count < 15)
         {
             if (listAdsFree[type].listAds.Count > 0)
             {

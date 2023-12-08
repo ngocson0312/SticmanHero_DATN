@@ -7,21 +7,36 @@ namespace SuperFight
     {
         public Transform arrowPrefab;
         public Transform firePoint;
+        [SerializeField] Projectile projectile;
         public override void ResetAnimator()
         {
             gameObject.SetActive(true);
             ResumeAnimator();
-            animator.Rebind();
+            Animator.Rebind();
         }
-        void ThrowSilk()
+
+        public void Attack()
         {
-            Arrow arrow = PathologicalGames.PoolManager.Pools["Projectile"].Spawn(arrowPrefab).GetComponent<Arrow>();
-            arrow.transform.position = firePoint.position;
-            Vector3 d = Vector3.down;
             DamageInfo damageInfo = new DamageInfo();
+            damageInfo.damage = controller.runtimeStats.damage;
+            damageInfo.owner = this.controller;
+            damageInfo.characterType = controller.characterType;
             damageInfo.idSender = controller.core.combat.getColliderInstanceID;
-            damageInfo.damage = controller.stats.damage;
-            arrow.Initialize(d.normalized, damageInfo);
+            damageInfo.listEffect = new List<StatusEffectData>();
+            damageInfo.listEffect.Add(new PoisonEffectData(controller, StatusEffectType.POISON));
+            Projectile p = FactoryObject.Spawn<Projectile>("Projectile", projectile.transform);
+            p.OnContact += (x) =>
+            {
+                for (int i = 0; i < x.Count; i++)
+                {
+                    x[i].TakeDamage(damageInfo);
+                }
+            };
+            p.transform.position = transform.position + Vector3.up * 0.5f;
+            p.Initialize(Vector2.down, damageInfo);
+
         }
+
+
     }
 }

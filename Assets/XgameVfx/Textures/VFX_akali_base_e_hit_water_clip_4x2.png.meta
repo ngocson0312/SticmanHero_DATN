@@ -331,14 +331,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      VFX_akali_base_e_hit_water_clip_4x2_0: -5548101794965883132
-      VFX_akali_base_e_hit_water_clip_4x2_1: 4325253839945884359
-      VFX_akali_base_e_hit_water_clip_4x2_2: -7112320688265312153
-      VFX_akali_base_e_hit_water_clip_4x2_3: 4448640824817040991
-      VFX_akali_base_e_hit_water_clip_4x2_4: -8319454681310176726
       VFX_akali_base_e_hit_water_clip_4x2_5: 4976971566937330993
+      VFX_akali_base_e_hit_water_clip_4x2_3: 4448640824817040991
+      VFX_akali_base_e_hit_water_clip_4x2_1: 4325253839945884359
       VFX_akali_base_e_hit_water_clip_4x2_6: -8193936716601144863
+      VFX_akali_base_e_hit_water_clip_4x2_2: -7112320688265312153
+      VFX_akali_base_e_hit_water_clip_4x2_0: -5548101794965883132
       VFX_akali_base_e_hit_water_clip_4x2_7: -1575106800292707535
+      VFX_akali_base_e_hit_water_clip_4x2_4: -8319454681310176726
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

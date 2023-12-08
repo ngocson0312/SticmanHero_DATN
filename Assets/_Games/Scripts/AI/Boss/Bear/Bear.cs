@@ -28,8 +28,8 @@ namespace SuperFight
 
         protected override void UpdateLogic()
         {
-            isInteracting = animatorHandle.animator.GetBool("IsInteracting");
-            animatorHandle.SetFloat("MoveAmount", Mathf.Abs(core.movement.currentVelecity.x));
+            isInteracting = animatorHandle.GetBool("IsInteracting");
+            animatorHandle.SetFloat("MoveAmount", Mathf.Abs(core.movement.currentVelocity.x));
             HandleRotate();
         }
         void HandleRotate()

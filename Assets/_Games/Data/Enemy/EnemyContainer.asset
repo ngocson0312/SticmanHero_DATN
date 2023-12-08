@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80fddeebc6a0f2348876f4735a1fce70, type: 3}
+  m_Name: EnemyContainer
+  m_EditorClassIdentifier: 
+  enemiesName:
+  - Zombie
+  - Piglet
+  - Enderman
+  - Golem
+  - Mage
+  - Pigman
+  - PigmanShield
+  - Skeleton
+  - Spider
+  - Blazer
+  - Creeper
+  - WitherSkeleton
+  - SpiderHanging
+  container:
+  - {fileID: 4811846995624372238, guid: 5f0fb678bab87a748ae66e706de7f304, type: 3}
+  - {fileID: 7848075640894081494, guid: aeb08d908ac6dec4ea19a9a39cb2bc4f, type: 3}
+  - {fileID: 7502455390000949820, guid: 4de1f1c5881c6ec4592eb84cb792756a, type: 3}
+  - {fileID: 8213135348635038814, guid: bbd943f79e9727443be2b1b90d8cb6f0, type: 3}
+  - {fileID: 7852055075718617855, guid: b822c78a8fd53a74c97df7951e30e84f, type: 3}
+  - {fileID: 6638476336591597342, guid: cc08da2b6b324794f92d40ce7fb2c239, type: 3}
+  - {fileID: 3919053379003449810, guid: 9e7d7706db36aab40b988608d3c74c62, type: 3}
+  - {fileID: 3473960935664610308, guid: bfea9b16621388e41adba535e704b8d0, type: 3}
+  - {fileID: 8110119689227153077, guid: 6410846d663e055479a5aace1a378501, type: 3}
+  - {fileID: 1452161086156628886, guid: e9906684b56e82645921bfc97dc825f7, type: 3}
+  - {fileID: 3689350993658854866, guid: 231304f6eda6bea4ab5f25b45231db73, type: 3}
+  - {fileID: 5839756224764901277, guid: 8d272f2c5ec26774ebecbfa7303317f9, type: 3}
+  - {fileID: -3368807085468820891, guid: 3db0d05f2c951ff40875a627aada494f, type: 3}

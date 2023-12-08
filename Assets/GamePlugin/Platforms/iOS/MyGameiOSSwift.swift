@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import StoreKit
+import UserNotifications
 
 @objc public class MyGameiOSSwift : NSObject {
     
@@ -63,4 +64,33 @@ import StoreKit
             return false;
         }
     }
+    
+    @objc public func LocalNotify(title:String, msg:String, hour:Int, minute:Int, repeatday:Int) {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = msg
+        content.sound = UNNotificationSound.default
+        content.badge = 1;
+        
+        var dateCompo = DateComponents()
+        if (repeatday >= 0) {
+            dateCompo.weekday = repeatday
+        }
+        dateCompo.hour = hour
+        dateCompo.minute = minute
+        
+        let idNoti = String(format: "%d-%02d:%02d", repeatday, hour, minute)
+        print(idNoti)
+        let trigger = UNCalendarNotificationTrigger.init(dateMatching: dateCompo, repeats: true)
+        let request = UNNotificationRequest(identifier: idNoti, content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+    }
+    
+    @objc public func clearAllNoti() {
+        let center = UNUserNotificationCenter.current()
+        center.removeAllPendingNotificationRequests()
+        center.removeAllDeliveredNotifications()
+    }
 }
+
+

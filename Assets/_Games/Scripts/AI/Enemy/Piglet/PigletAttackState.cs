@@ -16,11 +16,27 @@ namespace SuperFight
         {
             piglet = controller;
             listDamaged = new List<Controller>();
+            piglet.animatorHandle.OnEventAnimation += CriticalEvent;
         }
-
         public override void EnterState()
         {
             ResetAttack();
+        }
+        ~PigletAttackState()
+        {
+            piglet.animatorHandle.OnEventAnimation -= CriticalEvent;
+        }
+        private void CriticalEvent(string eventName)
+        {
+            if (eventName.Equals("CriticalTrue"))
+            {
+                AudioManager.Instance.PlayOneShot(piglet.pigSfx, 1f);
+                piglet.CiticalVfx.Play();
+            }
+            // if (eventName.Equals("CriticalFalse"))
+            // {
+            //     enemy.Citical.SetActive(false);
+            // }
         }
 
         public override void ExitState()
@@ -49,12 +65,28 @@ namespace SuperFight
             Controller target = piglet.GetTargetInView();
             if (target == null)
             {
-                piglet.SwitchState(piglet.patrol);
+                piglet.SwitchState(piglet.patrolState);
                 return;
             }
-            recoverTimer -= Time.fixedDeltaTime;
-            if (recoverTimer > 0) return;
 
+            if (!controller.isInteracting)
+            {
+                Vector3 direction = (target.position - controller.position);
+                if (direction.x < -0.1f)
+                {
+                    currentDirection = -1;
+                }
+                else if (direction.x > 0.1f)
+                {
+                    currentDirection = 1;
+                }
+                if (currentDirection != controller.core.movement.facingDirection && controller.isInteracting)
+                {
+                    controller.core.movement.Flip();
+                }
+                recoverTimer -= Time.fixedDeltaTime;
+            }
+            if (recoverTimer > 0) return;
             if (moveSet == 1)
             {
                 HandleRollingAttack(target);
@@ -145,7 +177,7 @@ namespace SuperFight
         void OpenCollider(Controller target)
         {
             DamageInfo damageInfo = new DamageInfo();
-            damageInfo.damage = piglet.stats.damage;
+            damageInfo.damage = piglet.runtimeStats.damage;
             damageInfo.hitDirection = controller.core.movement.facingDirection;
             damageInfo.characterType = CharacterType.Mob;
             damageInfo.owner = controller;

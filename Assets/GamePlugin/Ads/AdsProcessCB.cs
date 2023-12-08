@@ -11,7 +11,7 @@ namespace mygame.sdk
         {
             cb = action;
             timeDelay = (long)(tdl * 1000);
-            tAddCb = SdkUtil.systemCurrentMiliseconds();
+            tAddCb = SdkUtil.CurrentTimeMilis();
         }
         public Action cb;
         public long timeDelay = 0;
@@ -34,9 +34,9 @@ namespace mygame.sdk
                 if (_executionQueue != null && _executionQueue.Count > 0)
                 {
 #if ENABLE_MYLOG
-                timecall = SdkUtil.systemCurrentMiliseconds();
+                timecall = SdkUtil.CurrentTimeMilis();
 #endif
-                    tcurr = SdkUtil.systemCurrentMiliseconds();
+                    tcurr = SdkUtil.CurrentTimeMilis();
                     for (int i = 0; i < _executionQueue.Count; i++)
                     {
                         if (_executionQueue[i].timeDelay == 0 || (tcurr - _executionQueue[i].tAddCb) >= _executionQueue[i].timeDelay)
@@ -48,7 +48,7 @@ namespace mygame.sdk
                         }
                     }
 #if ENABLE_MYLOG
-                SdkUtil.logd("ads AdsProcessCB Update1=" + (tcurr - timecall));
+                //SdkUtil.logd("ads AdsProcessCB Update1=" + (tcurr - timecall));
 #endif
                 }
             }

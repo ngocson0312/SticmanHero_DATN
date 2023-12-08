@@ -20,6 +20,14 @@ namespace SuperFight
             nineTailFox.animator.PlayAnimation("Attack1", 0.1f, 1, true);
         }
 
+        public override void OnPause()
+        {
+        }
+
+        public override void OnResume()
+        {
+        }
+
         public override void UpdateLogic(float deltaTime)
         {
             actionTime -= deltaTime;

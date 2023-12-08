@@ -56,17 +56,17 @@ namespace mygame.sdk
 
         public static void loadImageFB(string fbId, Action<Sprite> s, int w = 160, int h = 160)
         {
-            Debug.Log("mysdk: loadImageFB: fbId=" + fbId);
+            SdkUtil.logd("mysdk: loadImageFB: fbId=" + fbId);
             string urlimg = string.Format("https://graph.facebook.com/{0}/picture?width={1}&height={2}", fbId, w, h);
             LoadImageSprite(urlimg, w, h, tt => s?.Invoke(tt));
         }
 
         private void _loadimageTexture(string url, int w, int h, onLoadImageTexture cb)
         {
-            Debug.Log("mysdk: _loadimageTexture: url=" + url);
+            SdkUtil.logd("mysdk: _loadimageTexture: url=" + url);
             if (isloading)
             {
-                Debug.Log("mysdk: ImageLoader: pending");
+                SdkUtil.logd("mysdk: ImageLoader: pending");
                 var ob = new Object4Imageloadder();
                 ob.isTexture = true;
                 ob.cbTT = cb;
@@ -87,10 +87,10 @@ namespace mygame.sdk
 
         private void _loadimageSprite(string url, int w, int h, onLoadImageSprite cb)
         {
-            Debug.Log("mysdk: _loadimageSprite: url=" + url);
+            SdkUtil.logd("mysdk: ImageLoader _loadimageSprite: url=" + url);
             if (isloading)
             {
-                Debug.Log("mysdk: ImageLoader: pending");
+                SdkUtil.logd("mysdk: ImageLoader: pending");
                 var ob = new Object4Imageloadder();
                 ob.isTexture = false;
                 ob.cbSP = cb;
@@ -111,7 +111,7 @@ namespace mygame.sdk
 
         public static IEnumerator LoadSprite(string path, string name, int width, int height, Action<Sprite> action)
         {
-            Debug.Log("mysdk: LoadSprite: path=" + path + ", name=" + name);
+            SdkUtil.logd("mysdk: LoadSprite: path=" + path + ", name=" + name);
             if (name != "")
             {
                 var tex = new Texture2D(width, height);
@@ -138,7 +138,7 @@ namespace mygame.sdk
 
         public static void LoadSprite(string name, int width, int height, Action<Sprite> action)
         {
-            Debug.Log("mysdk: LoadSprite: name" + name);
+            SdkUtil.logd("mysdk: LoadSprite: name" + name);
             var tex = new Texture2D(width, height);
             if (!File.Exists(Application.persistentDataPath + "/" + name + ".png")) return;
             var fileData = File.ReadAllBytes(Application.persistentDataPath + "/" + name + ".png");
@@ -148,7 +148,7 @@ namespace mygame.sdk
 
         private IEnumerator coDownloadImage(string imageUrl, bool isTexture, int w = 100, int h = 100)
         {
-            Debug.Log("mysdk: coDownloadImage: imageUrl=" + imageUrl);
+            SdkUtil.logd("mysdk: coDownloadImage: imageUrl=" + imageUrl);
             string pathimg = url2nameData(imageUrl, 1);
             Texture2D tt = null;
             if (File.Exists(DownLoadUtil.pathCache() + "/" + pathimg))
@@ -184,7 +184,7 @@ namespace mygame.sdk
                     Texture2D tt2d = (Texture2D)myTexture;
                     if (tt2d != null)
                     {
-                        Debug.Log("mysdk: imageLoader: Success");
+                        SdkUtil.logd("mysdk: imageLoader: Success");
                         if (isTexture)
                         {
                             _cbTT?.Invoke(tt2d);
@@ -197,12 +197,12 @@ namespace mygame.sdk
                     }
                     else
                     {
-                        Debug.Log("mysdk: imageLoader: err");
+                        SdkUtil.logd("mysdk: imageLoader: err");
                     }
                 }
                 else
                 {
-                    Debug.Log("mysdk: imageLoader: imageUrl err=" + www.error);
+                    SdkUtil.logd("mysdk: imageLoader: imageUrl err=" + www.error);
                 }
             }
             if (listLoad.Count > 0)
@@ -220,7 +220,7 @@ namespace mygame.sdk
             }
         }
 
-        private void saveTextturetocache(Texture2D texture, string name)
+        public void saveTextturetocache(Texture2D texture, string name)
         {
             if (texture == null) return;
             try

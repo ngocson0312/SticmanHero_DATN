@@ -29,7 +29,7 @@ public class BuildPostProcessor {
 
             // example of adding a boolean key...
             // < key > ITSAppUsesNonExemptEncryption </ key > < false />
-            rootDict.SetString("GADApplicationIdentifier", "ca-app-pub-2777953690987264~6759076705");
+            rootDict.SetString("GADApplicationIdentifier", "ca-app-pub-2777953690987264~7601788654");
             rootDict.SetString("NSUserTrackingUsageDescription", "This identifier will be used to deliver personalized ads to you.");
 #if ENABLE_ADS_IRON
             PlistElementArray arr = rootDict.CreateArray("SKAdNetworkItems");
@@ -93,6 +93,10 @@ public class BuildPostProcessor {
                 {
                     FixBannerFalliOSLanscape(buildPath);
                 }
+                else if (AppConfig.isAdjustBanner)
+                {
+                    FixBannerFalliOSPortrait(buildPath);
+                }
             }
             catch (Exception ex)
             {
@@ -113,7 +117,7 @@ public class BuildPostProcessor {
             {
                 if (stateCheck == 0)
                 {
-                    if (linesRead[i].Contains("- (void)positionAdViewForAdUnitIdentifier:(NSString *)adUnitIdentifier adFormat:(MAAdFormat *)adFormat")) 
+                    if (linesRead[i].Contains("- (void)positionAdViewForAdUnitIdentifier:(NSString *)adUnitIdentifier adFormat:(MAAdFormat *)adFormat"))
                     {
                         stateCheck = 1;
                     }
@@ -123,34 +127,34 @@ public class BuildPostProcessor {
                 {
                     if (linesRead[i].Contains("CGSize adViewSize = CGSizeMake(adViewWidth, adViewHeight);")) 
                     {
-                        if (!linesRead[i - 1].Contains("[self setPosBanner4Show:adView bannerWidth:adViewWidth bannerHeight:adViewHeight];"))
-                        {
-                            linesWrite.Add("        [self setPosBanner4Show:adView bannerWidth:adViewWidth bannerHeight:adViewHeight];");
-                            isw = true;
-                        }
+                        //if (!linesRead[i - 1].Contains("[self setPosBanner4Show:adView adPos:adViewPosition bannerWidth:adViewWidth bannerHeight:adViewHeight];"))
+                        //{
+                        //    linesWrite.Add("        [self setPosBanner4Show:adView adPos:adViewPosition bannerWidth:adViewWidth bannerHeight:adViewHeight];");
+                        //    isw = true;
+                        //}
                         linesWrite.Add(linesRead[i]);
                     }
-                    else if (linesRead[i].Contains("UILayoutGuide *layoutGuide;"))
-                    {
-                        linesWrite.Add(linesRead[i]);
-                        for (int j = 0; j < 8; j++)
-                        {
-                            i++;
-                            if (!linesRead[i].StartsWith("//")) 
-                            {
-                                linesRead[i] = "//" + linesRead[i];
-                                isw = true;
-                            }
-                            linesWrite.Add(linesRead[i]);
-                        }
-                        linesWrite.Add("        layoutGuide = superview.layoutMarginsGuide;");
-                    }
+                    //else if (linesRead[i].Contains("UILayoutGuide *layoutGuide;"))
+                    //{
+                    //    linesWrite.Add(linesRead[i]);
+                    //    for (int j = 0; j < 8; j++)
+                    //    {
+                    //        i++;
+                    //        if (!linesRead[i].StartsWith("//")) 
+                    //        {
+                    //            linesRead[i] = "//" + linesRead[i];
+                    //            isw = true;
+                    //        }
+                    //        linesWrite.Add(linesRead[i]);
+                    //    }
+                    //    linesWrite.Add("        layoutGuide = superview.layoutMarginsGuide;");
+                    //}
                     else if (linesRead[i].Contains("[NSLayoutConstraint activateConstraints: constraints];"))
                     {
                         linesWrite.Add(linesRead[i]);
-                        if (!linesRead[i + 1].Contains("[self setPosBanner4Show:adView bannerWidth:adViewWidth bannerHeight:adViewHeight];"))
+                        if (!linesRead[i + 1].Contains("[self setPosBanner4Show:adView adPos:adViewPosition bannerWidth:adViewWidth bannerHeight:adViewHeight];"))
                         {
-                            linesWrite.Add("        [self setPosBanner4Show:adView bannerWidth:adViewWidth bannerHeight:adViewHeight];");
+                            linesWrite.Add("        [self setPosBanner4Show:adView adPos:adViewPosition bannerWidth:adViewWidth bannerHeight:adViewHeight];");
                             isw = true;
                         }
                         stateCheck = 2;
@@ -168,7 +172,7 @@ public class BuildPostProcessor {
                         bool isadd = false;
                         for (int j = 0; j < 4; j++)
                         {
-                            if (linesRead[i].Contains("-(void)setPosBanner4Show:(UIView*)bn bannerWidth:(float)bnw bannerHeight:(float)bnh"))
+                            if (linesRead[i].Contains("-(void)setPosBanner4Show:(UIView*)bn adPos:(NSString *)adViewPosition bannerWidth:(float)bnw bannerHeight:(float)bnh"))
                             {
                                 isadd = true;
                             }
@@ -194,10 +198,10 @@ public class BuildPostProcessor {
         }
     }
 
-    static void AddCodeFix(List<string> linesWrite)
+    static void AddCodeFix(List<string> linesWrite, bool isPortrait = false)
     {
         string[] all = {
-            "-(void)setPosBanner4Show:(UIView*)bn bannerWidth:(float)bnw bannerHeight:(float)bnh",
+            "-(void)setPosBanner4Show:(UIView*)bn adPos:(NSString *)adViewPosition bannerWidth:(float)bnw bannerHeight:(float)bnh",
             "{",
             "    UIView *unityView = [self unityViewController].view;",
             "    float wscr = unityView.bounds.size.width;",
@@ -205,45 +209,97 @@ public class BuildPostProcessor {
             "        wscr = unityView.bounds.size.height;",
             "    }",
             "    float xbn = (wscr - bnw)/2;",
-            "//    NSLog(@\"checkmax: parent=%f, bnw=%f, xbn=%f\", wscr, bnw, xbn);",
-            "//    NSLog(@\"checkmax: x=%f, y=%f, w=%f, h=%f\", bn.frame.origin.x, bn.frame.origin.y, bn.frame.size.width, bn.frame.size.height);",
-            "//    NSLog(@\"checkmax: bound x=%f, y=%f, w=%f, h=%f\", bn.bounds.origin.x, bn.bounds.origin.y, bn.bounds.size.width, bn.bounds.size.height);",
-            "//    NSLog(@\"checkmax: cx=%f, cy=%f\", bn.center.x, bn.center.y);",
-            "//    for (UIView *i in bn.subviews){",
-            "//        //        NSLog(@\"checkmax: before subview=%@\", i);",
-            "//        i.frame = CGRectMake(0, 0, bnw, bnh);",
-            "//        for (UIView *vvv in i.subviews){",
-            "//            //            NSLog(@\"checkmax: vvv before subview=%@\", vvv);",
-            "//            vvv.frame = CGRectMake(0, 0, bnw, bnh);",
-            "//",
-            "//            for (UIView *kkk in vvv.subviews){",
-            "//                //                NSLog(@\"checkmax: kkk before subview=%@\", kkk);",
-            "//                kkk.frame = CGRectMake(0, 0, bnw, bnh);",
-            "//                //                NSLog(@\"checkmax: kkk subview=%@\", kkk);",
-            "//                for (UIView *ppp in kkk.subviews){",
-            "//                    NSLog(@\"checkmax: ppp before subview=%@\", ppp);",
-            "//                    ppp.frame = CGRectMake(0, 0, bnw, bnh);",
-            "//                    //                NSLog(@\"checkmax: kkk subview=%@\", ppp);",
-            "//                    if ([ppp isKindOfClass:[UIScrollView class]]) {",
-            "//                        UIScrollView *scrv = (UIScrollView *)ppp;",
-            "//                        scrv.contentSize = CGSizeMake(bnw, bnh);",
-            "//                        scrv.contentOffset = CGPointMake(160, 0);",
-            "//                        for (UIView *qqq in ppp.subviews){",
-            "//                            NSLog(@\"checkmax: qqq before subview=%@\", qqq);",
-            "//                            qqq.frame = CGRectMake(0, 0, bnw, bnh);",
-            "//                        }",
-            "//                    }",
-            "//                }",
-            "//            }",
-            "//        }",
-            "//    }",
-            "//    NSLog(@\"checkmax:====================================\");",
-            "    bn.frame = CGRectMake(xbn, 0, bnw, bnh);",
+            "    CGFloat ybn = 0;",
+            "    if ([adViewPosition containsString: @\"bottom_\"])",
+            "    {",
+            "       ybn = unityView.bounds.size.height - bnh;",
+            "    }",
+            "    float safebo = unityView.safeAreaInsets.bottom;",
+            "    if (safebo > 0 && ybn > 0)",
+            "    {",
+            "        ybn -= safebo/2;",
+            "    }",
+            "    bn.frame = CGRectMake(xbn, ybn, bnw, bnh);",
             "}",
         };
+        if (isPortrait)
+        {
+            all[5] = "        //wscr = unityView.bounds.size.height;";
+        }
         for (int i = 0; i < all.Length; i++) 
         {
             linesWrite.Add(all[i]);
+        }
+    }
+
+    static void FixBannerFalliOSPortrait(string path)
+    {
+        string pfilem = path + "/Libraries/MaxSdk/AppLovin/Plugins/iOS/MAUnityAdManager.m";
+        if (File.Exists(pfilem))
+        {
+            string[] linesRead = File.ReadAllLines(pfilem);
+            List<string> linesWrite = new List<string>();
+            int stateCheck = 0;
+            bool isw = false;
+            for (int i = 0; i < linesRead.Length; i++)
+            {
+                if (stateCheck == 0)
+                {
+                    if (linesRead[i].Contains("- (void)positionAdViewForAdUnitIdentifier:(NSString *)adUnitIdentifier adFormat:(MAAdFormat *)adFormat"))
+                    {
+                        stateCheck = 1;
+                    }
+                    linesWrite.Add(linesRead[i]);
+                }
+                else if (stateCheck == 1)
+                {
+                    if (linesRead[i].Contains("[NSLayoutConstraint activateConstraints: constraints];"))
+                    {
+                        linesWrite.Add(linesRead[i]);
+                        if (!linesRead[i + 1].Contains("[self setPosBanner4Show:adView adPos:adViewPosition bannerWidth:adViewWidth bannerHeight:adViewHeight];"))
+                        {
+                            linesWrite.Add("        [self setPosBanner4Show:adView adPos:adViewPosition bannerWidth:adViewWidth bannerHeight:adViewHeight];");
+                            isw = true;
+                        }
+                        stateCheck = 2;
+                    }
+                    else
+                    {
+                        linesWrite.Add(linesRead[i]);
+                    }
+                }
+                else if (stateCheck == 2)
+                {
+                    linesWrite.Add(linesRead[i]);
+                    if (linesRead[i].CompareTo("}") == 0)
+                    {
+                        bool isadd = false;
+                        for (int j = 0; j < 4; j++)
+                        {
+                            if (linesRead[i].Contains("-(void)setPosBanner4Show:(UIView*)bn adPos:(NSString *)adViewPosition bannerWidth:(float)bnw bannerHeight:(float)bnh"))
+                            {
+                                isadd = true;
+                            }
+                        }
+                        if (!isadd)
+                        {
+                            isw = true;
+                            linesWrite.Add("");
+                            AddCodeFix(linesWrite, true);
+                        }
+                        stateCheck = -1;
+                    }
+                }
+                else
+                {
+                    linesWrite.Add(linesRead[i]);
+                }
+            }
+            if (isw)
+            {
+                System.IO.File.WriteAllLines(pfilem, linesWrite);
+                linesWrite.Clear();
+            }
         }
     }
 }

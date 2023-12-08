@@ -1,4 +1,4 @@
-﻿//#define ENABLE_ADS_IRON
+//#define ENABLE_ADS_IRON
 
 using System;
 using UnityEngine;
@@ -17,6 +17,9 @@ namespace mygame.sdk
 #endif
         private static bool isInitAds = false;
         int statusLoadBanner = 0;
+        int posBnCurr = -1;
+        private bool isAdsInited = false;
+        private bool isCallInit = false;
 
         public override void InitAds()
         {
@@ -25,15 +28,67 @@ namespace mygame.sdk
             if (!isInitAds)
             {
                 isInitAds = true;
+                isAdsInited = false;
+                isCallInit = false;
                 IronSource.Agent.setMetaData("do_not_sell", "true");
 
-                IronSource.Agent.setMetaData("is_deviceid_optout", "true");
-                IronSource.Agent.setMetaData("is_child_directed", "true");
-
-                IronSource.Agent.init(appId);
+                int memage = PlayerPrefs.GetInt("mem_age_child", 0);
+                if (memage >= 13)
+                {
+                    IronSource.Agent.setMetaData("is_child_directed", "false");
+                }
+                else if (memage < 13 && memage > 5)
+                {
+                    IronSource.Agent.setMetaData("is_child_directed", "true");
+                    IronSource.Agent.setMetaData("is_deviceid_optout", "true");
+                    IronSource.Agent.setConsent(false);
+                }
+                
                 IronSource.Agent.shouldTrackNetworkState(true);
+                int memss = PlayerPrefs.GetInt("mem_ss_consent_ir", -1);
+                if (memss != -1)
+                {
+                    if (memss == 1)
+                    {
+                        IronSource.Agent.setConsent(true);
+                    }
+                    else
+                    {
+                        IronSource.Agent.setConsent(false);
+                    }
+                    checkInit();
+                }
+                else
+                {
+                    int showss = PlayerPrefs.GetInt("mem_show_CMP", 0);
+                    if (showss == 1)
+                    {
+                        checkInit();
+                    }
+                    else
+                    {
+                        StartCoroutine(WaitInit());
+                    }
+                }
             }
 #endif
+        }
+
+        IEnumerator WaitInit()
+        {
+            yield return new WaitForSeconds(30);
+            checkInit();
+        }
+
+        private void checkInit()
+        {
+            if (!isCallInit)
+            {
+                isCallInit = true;
+#if ENABLE_ADS_IRON
+                IronSource.Agent.init(appId);
+#endif
+            }
         }
 
         public override void AdsAwake()
@@ -41,6 +96,34 @@ namespace mygame.sdk
 #if ENABLE_ADS_IRON
             GameAdsHelperBridge.CBRequestGDPR += onShowCmp;
             isEnable = true;
+#endif
+        }
+
+        public void onShowCmp(int state, string des)
+        {
+#if ENABLE_ADS_IRON
+            if (state == 0)
+            {
+                Debug.Log($"mysdk: ads iron onshow cmp");
+                if (des != null && des.CompareTo("0") == 0)
+                {
+                    checkInit();
+                }
+            }
+            else if (state == 1)
+            {
+                if (des != null && des.Length > 5)
+                {
+                    PlayerPrefs.SetInt("mem_ss_consent_ir", 1);
+                    IronSource.Agent.setConsent(true);
+                }
+                else
+                {
+                    PlayerPrefs.SetInt("mem_ss_consent_ir", 0);
+                    IronSource.Agent.setConsent(false);
+                }
+                checkInit();
+            }
 #endif
         }
 
@@ -52,35 +135,44 @@ namespace mygame.sdk
         private void Start()
         {
 #if ENABLE_ADS_IRON
-            // IronSource.Agent.init(appId);
+            IronSourceEvents.onSdkInitializationCompletedEvent += SdkInitializationCompletedEvent;
 
-            IronSourceEvents.onBannerAdLoadedEvent += BannerAdLoadedEvent;
-            IronSourceEvents.onBannerAdLoadFailedEvent += BannerAdLoadFailedEvent;
+            IronSourceEvents.onImpressionDataReadyEvent += irOnImpressionDataReadyEvent;
+
+            IronSourceBannerEvents.onAdLoadedEvent += BannerAdLoadedEvent;
+            IronSourceBannerEvents.onAdLoadFailedEvent += BannerAdLoadFailedEvent;
             //IronSourceEvents.onBannerAdClickedEvent += BannerAdClickedEvent;
             //IronSourceEvents.onBannerAdScreenPresentedEvent += BannerAdScreenPresentedEvent;
             //IronSourceEvents.onBannerAdScreenDismissedEvent += BannerAdScreenDismissedEvent;
             //IronSourceEvents.onBannerAdLeftApplicationEvent += BannerAdLeftApplicationEvent;
 
-            IronSourceEvents.onInterstitialAdReadyEvent += InterstitialAdReadyEvent;
-            IronSourceEvents.onInterstitialAdLoadFailedEvent += InterstitialAdLoadFailedEvent;
-            IronSourceEvents.onInterstitialAdShowSucceededEvent += InterstitialAdShowSucceededEvent;
-            IronSourceEvents.onInterstitialAdShowFailedEvent += InterstitialAdShowFailedEvent;
-            IronSourceEvents.onInterstitialAdClickedEvent += InterstitialAdClickedEvent;
-            IronSourceEvents.onInterstitialAdOpenedEvent += InterstitialAdOpenedEvent;
-            IronSourceEvents.onInterstitialAdClosedEvent += InterstitialAdClosedEvent;
+            IronSourceInterstitialEvents.onAdReadyEvent += InterstitialAdReadyEvent;
+            IronSourceInterstitialEvents.onAdLoadFailedEvent += InterstitialAdLoadFailedEvent;
+            IronSourceInterstitialEvents.onAdShowSucceededEvent += InterstitialAdShowSucceededEvent;
+            IronSourceInterstitialEvents.onAdShowFailedEvent += InterstitialAdShowFailedEvent;
+            IronSourceInterstitialEvents.onAdClickedEvent += InterstitialAdClickedEvent;
+            IronSourceInterstitialEvents.onAdOpenedEvent += InterstitialAdOpenedEvent;
+            IronSourceInterstitialEvents.onAdClosedEvent += InterstitialAdClosedEvent;
 
-            IronSourceEvents.onRewardedVideoAdOpenedEvent += RewardedVideoAdOpenedEvent;
-            IronSourceEvents.onRewardedVideoAdClosedEvent += RewardedVideoAdClosedEvent;
-            IronSourceEvents.onRewardedVideoAvailabilityChangedEvent += RewardedVideoAvailabilityChangedEvent;
-            IronSourceEvents.onRewardedVideoAdStartedEvent += RewardedVideoAdStartedEvent;
-            IronSourceEvents.onRewardedVideoAdEndedEvent += RewardedVideoAdEndedEvent;
-            IronSourceEvents.onRewardedVideoAdRewardedEvent += RewardedVideoAdRewardedEvent;
-            IronSourceEvents.onRewardedVideoAdShowFailedEvent += RewardedVideoAdShowFailedEvent;
-            if (PlayerPrefs.GetInt("mem_show_CMP", 0) <= 0)
-            {
-                mygame.sdk.GameHelper.showCMP();
-            }
+            IronSourceRewardedVideoEvents.onAdOpenedEvent += RewardedVideoAdOpenedEvent;
+            IronSourceRewardedVideoEvents.onAdClosedEvent += RewardedVideoAdClosedEvent;
+            IronSourceRewardedVideoEvents.onAdAvailableEvent += ReWardedVideoOnAdAvailableEvent;
+            IronSourceRewardedVideoEvents.onAdUnavailableEvent += RewardedVideoOnAdUnavailable;
+            IronSourceRewardedVideoEvents.onAdClickedEvent += RewardedVideoOnAdClickedEvent;
+            IronSourceRewardedVideoEvents.onAdRewardedEvent += RewardedVideoAdRewardedEvent;
+            IronSourceRewardedVideoEvents.onAdShowFailedEvent += RewardedVideoAdShowFailedEvent;
 #endif
+        }
+
+        private void SdkInitializationCompletedEvent()
+        {
+            Debug.Log($"mysdk: ads iron SdkInitializationCompletedEvent");
+            isAdsInited = true;
+            AdsProcessCB.Instance().Enqueue(() =>
+            {
+                advhelper.loadFull4ThisTurn(false, 99, false, null);
+                advhelper.loadGift4ThisTurn(99, null);
+            }, 0.1f);
         }
 
         void OnApplicationPause(bool isPaused)
@@ -90,33 +182,19 @@ namespace mygame.sdk
 #endif
         }
 
-        public void onShowCmp(int state, string des)
-        {
-#if ENABLE_ADS_IRON
-            if (state == 0)
-            {
-                Debug.Log($"mysdk: ads iron onshow cmp");
-                PlayerPrefs.SetInt("mem_show_CMP", 1);
-            }
-            else if (state == 1)
-            {
-                if (des != null && des.Length > 5)
-                {
-                    IronSource.Agent.setConsent(true);
-                }
-                else
-                {
-                    IronSource.Agent.setConsent(false);
-                }
-            }
-#endif
-        }
-
         protected override void tryLoadBanner(int type)
         {
             type = 0;
 #if ENABLE_ADS_IRON
             SdkUtil.logd("ads iron tryLoadBanner");
+            if (!isAdsInited)
+            {
+                SdkUtil.logd($"ads iron tryLoadBanner not init");
+                var tmpcb = cbBanner;
+                cbBanner = null;
+                tmpcb(AD_State.AD_LOAD_FAIL);
+                return;
+            }
             if (BNTryLoad >= toTryLoad)
             {
                 SdkUtil.logd("ads iron tryLoadBanner over trycount");
@@ -199,6 +277,10 @@ namespace mygame.sdk
         {
             SdkUtil.logd("ads iron showBanner");
             type = 0;
+            if (posBnCurr != -1 && posBnCurr != pos)
+            {
+                destroyBanner(type);
+            }
 #if ENABLE_ADS_IRON
             dicBanner[type].isBNShow = true;
             dicBanner[type].posBanner = pos;
@@ -215,6 +297,7 @@ namespace mygame.sdk
             else
             {
                 SdkUtil.logd("ads iron showBanner not show and load");
+                posBnCurr = pos;
                 loadBanner(type, cb);
                 return false;
             }
@@ -252,9 +335,12 @@ namespace mygame.sdk
         {
             SdkUtil.logd("ads iron destroyBanner");
             type = 0;
-            hideBanner(0);
             dicBanner[type].isBNLoading = false;
             dicBanner[type].isBNloaded = false;
+            posBnCurr = -1;
+#if ENABLE_ADS_IRON
+            IronSource.Agent.destroyBanner();
+#endif
         }
 
         //
@@ -284,8 +370,8 @@ namespace mygame.sdk
         {
             if (getFullLoaded(false) == 1)
             {
-#if ENABLE_ADS_FB
-            isFullLoaded = false;123
+#if ENABLE_ADS_IRON
+                isFullLoaded = false;
 #endif
             }
         }
@@ -306,6 +392,19 @@ namespace mygame.sdk
 #if ENABLE_MYLOG
             SdkUtil.logd("ads iron tryLoadFull =" + fullId);
 #endif
+            if (!isAdsInited)
+            {
+#if ENABLE_MYLOG
+                SdkUtil.logd($"ads iron tryLoadFull not init");
+#endif
+                if (cbFullLoad != null)
+                {
+                    var tmpcb = cbFullLoad;
+                    cbFullLoad = null;
+                    tmpcb(AD_State.AD_LOAD_FAIL);
+                }
+                return;
+            }
             if (FullTryLoad >= toTryLoad)
             {
 #if ENABLE_MYLOG
@@ -358,7 +457,6 @@ namespace mygame.sdk
             {
                 SdkUtil.logd("ads iron showFull show");
                 FullTryLoad = 0;
-                isFullLoaded = false;
 #if ENABLE_ADS_IRON
                 cbFullShow = cb;
                 IronSource.Agent.showInterstitial();
@@ -391,6 +489,7 @@ namespace mygame.sdk
             SdkUtil.logd("ads iron Request gift =" + giftId);
 #endif
             isGiftLoading = true;
+            //IronSource.Agent.loadRewardedVideo();
             StartCoroutine(waitGiftReady());
 #else
             if (cbGiftLoad != null)
@@ -465,19 +564,54 @@ namespace mygame.sdk
                 return true;
 #endif
             }
-            else
-            {
-                isGiftLoaded = false;
-            }
             return false;
         }
 
         //-------------------------------------------------------------------------------
 #if ENABLE_ADS_IRON
 
+        int countBnTo = 0;
+        int countBnAdmob = 0;
+        int countFullTo = 0;
+        int countFullAdmob = 0;
+        int countGiftTo = 0;
+        int countGiftAdmob = 0;
+        private void irOnImpressionDataReadyEvent(IronSourceImpressionData impressionData)
+        {
+            if (impressionData != null)
+            {
+                FIRhelper.logEventAdsPaidIron(appId, impressionData.adNetwork, impressionData.adUnit, impressionData.instanceName, (double)impressionData.revenue, impressionData.country, impressionData.placement);
+                if (impressionData.adUnit.Contains("interstitial"))
+                {
+                    countFullTo++;
+                    if (impressionData.adNetwork.Contains("admob"))
+                    {
+                        countFullAdmob++;
+                    }
+                }
+                else if (impressionData.adUnit.Contains("rewarded_video"))
+                {
+                    countGiftTo++;
+                    if (impressionData.adNetwork.Contains("admob"))
+                    {
+                        countGiftAdmob++;
+                    }
+                }
+                else if (impressionData.adUnit.Contains("banner"))
+                {
+                    countBnTo++;
+                    if (impressionData.adNetwork.Contains("admob"))
+                    {
+                        countBnAdmob++;
+                    }
+                }
+                Debug.Log($"mysdk:{impressionData.adNetwork}-{impressionData.adUnit} Banner:{countBnAdmob}-{countBnTo}, full:{countFullAdmob}-{countFullTo}, Gift:{countGiftAdmob}-{countGiftTo}");
+            }
+        }
+
         #region BANNER AD EVENTS
 
-        private void BannerAdLoadedEvent()
+        private void BannerAdLoadedEvent(IronSourceAdInfo adInfo)
         {
 
             SdkUtil.logd("ads iron HandleBannerAdLoaded");
@@ -514,7 +648,7 @@ namespace mygame.sdk
             }
         }
 
-        private void BannerAdLoadFailedEvent(IronSourceError error)
+        private void BannerAdLoadFailedEvent(IronSourceError ironSourceError)
         {
             SdkUtil.logd("ads iron HandleBannerAdFailedToLoad");
             statusLoadBanner = -1;
@@ -534,7 +668,7 @@ namespace mygame.sdk
 
         #region INTERSTITIAL AD EVENTS
 
-        private void InterstitialAdReadyEvent()
+        private void InterstitialAdReadyEvent(IronSourceAdInfo adInfo)
         {
 #if ENABLE_MYLOG
             SdkUtil.logd("ads iron HandleInterstitialAdDidLoad");
@@ -553,7 +687,7 @@ namespace mygame.sdk
 #endif
         }
 
-        private void InterstitialAdLoadFailedEvent(IronSourceError err)
+        private void InterstitialAdLoadFailedEvent(IronSourceError ironSourceError)
         {
 #if ENABLE_MYLOG
             SdkUtil.logd("ads iron HandleInterstitialAdDidFailWithError");
@@ -570,17 +704,17 @@ namespace mygame.sdk
 #endif
         }
 
-        private void InterstitialAdShowSucceededEvent()
+        private void InterstitialAdShowSucceededEvent(IronSourceAdInfo adInfo)
         {
 #if ENABLE_MYLOG
             SdkUtil.logd("ads iron InterstitialAdShowSucceededEvent");
 #endif
         }
 
-        private void InterstitialAdShowFailedEvent(IronSourceError err)
+        private void InterstitialAdShowFailedEvent(IronSourceError ironSourceError, IronSourceAdInfo adInfo)
         {
 #if ENABLE_MYLOG
-            SdkUtil.logd("ads iron InterstitialAdShowFailedEvent err=" + err.ToString());
+            SdkUtil.logd("ads iron InterstitialAdShowFailedEvent err=" + ironSourceError.ToString());
 #endif
             isFullLoading = false;
             isFullLoaded = false;
@@ -595,14 +729,14 @@ namespace mygame.sdk
             onFullClose();
         }
 
-        private void InterstitialAdClickedEvent()
+        private void InterstitialAdClickedEvent(IronSourceAdInfo adInfo)
         {
 #if ENABLE_MYLOG
             SdkUtil.logd("ads iron InterstitialAdClickedEvent");
 #endif
         }
 
-        private void InterstitialAdOpenedEvent()
+        private void InterstitialAdOpenedEvent(IronSourceAdInfo adInfo)
         {
 #if ENABLE_MYLOG
             SdkUtil.logd("ads iron InterstitialAdOpenedEvent 0");
@@ -620,7 +754,7 @@ namespace mygame.sdk
             }
         }
 
-        private void InterstitialAdClosedEvent()
+        private void InterstitialAdClosedEvent(IronSourceAdInfo adInfo)
         {
 #if ENABLE_MYLOG
             SdkUtil.logd("ads iron InterstitialAdClosedEvent 0");
@@ -646,33 +780,50 @@ namespace mygame.sdk
         #endregion
 
         #region REWARDED VIDEO AD EVENTS
-
-        private void RewardedVideoAvailabilityChangedEvent(bool available)
+        private void ReWardedVideoOnAdAvailableEvent(IronSourceAdInfo adInfo)
         {
 #if ENABLE_MYLOG
-            SdkUtil.logd("ads iron rw RewardedVideoAvailabilityChangedEvent=" + available);
+            SdkUtil.logd("ads iron rw ReWardedVideoOnAdAvailableEvent");
 #endif
             GiftTryLoad = 0;
             isGiftLoading = false;
-            isGiftLoaded = available;
+            isGiftLoaded = true;
+            if (cbGiftLoad != null)
+            {
+                var tmpcb = cbGiftLoad;
+                cbGiftLoad = null;
+                tmpcb(AD_State.AD_LOAD_OK);
+            }
         }
 
-        private void RewardedVideoAdStartedEvent()
+        private void RewardedVideoOnAdUnavailable()
         {
 #if ENABLE_MYLOG
-            SdkUtil.logd("ads iron rw RewardedVideoAdStartedEvent");
+            SdkUtil.logd("ads iron rw RewardedVideoOnAdUnavailable");
+#endif
+            if (isGiftLoading)
+            {
+                isGiftLoading = false;
+                isGiftLoaded = false;
+#if ENABLE_MYLOG
+                SdkUtil.logd("ads iron rw RewardedVideoOnAdUnavailable set fail");
+#endif
+            }
+            //AdsProcessCB.Instance().Enqueue(() =>
+            //{
+            //    GiftTryLoad++;
+            //    tryloadGift();
+            //}, 1.0f);
+        }
+
+        private void RewardedVideoOnAdClickedEvent(IronSourcePlacement placement, IronSourceAdInfo adInfo)
+        {
+#if ENABLE_MYLOG
+            SdkUtil.logd("ads iron rw RewardedVideoOnAdClickedEvent");
 #endif
         }
 
-        private void RewardedVideoAdEndedEvent()
-        {
-#if ENABLE_MYLOG
-            SdkUtil.logd("ads iron rw HandleRewardedVideoAdComplete");
-#endif
-            isRewardCom = true;
-        }
-
-        private void RewardedVideoAdRewardedEvent(IronSourcePlacement placement)
+        private void RewardedVideoAdRewardedEvent(IronSourcePlacement placement, IronSourceAdInfo adInfo)
         {
 #if ENABLE_MYLOG
             SdkUtil.logd("ads iron rw HandleRewardBasedVideoRewarded");
@@ -680,10 +831,10 @@ namespace mygame.sdk
             isRewardCom = true;
         }
 
-        private void RewardedVideoAdShowFailedEvent(IronSourceError err)
+        private void RewardedVideoAdShowFailedEvent(IronSourceError error, IronSourceAdInfo adInfo)
         {
 #if ENABLE_MYLOG
-            SdkUtil.logd("ads iron rw RewardedVideoAdShowFailedEvent err=" + err.ToString());
+            SdkUtil.logd("ads iron rw RewardedVideoAdShowFailedEvent err=" + error.ToString());
 #endif
             if (cbGiftShow != null)
             {
@@ -697,7 +848,7 @@ namespace mygame.sdk
             onGiftClose();
         }
 
-        private void RewardedVideoAdOpenedEvent()
+        private void RewardedVideoAdOpenedEvent(IronSourceAdInfo adInfo)
         {
 #if ENABLE_MYLOG
             SdkUtil.logd("ads iron rw RewardedVideoAdOpenedEvent");
@@ -706,7 +857,7 @@ namespace mygame.sdk
             {
                 AdCallBack tmpcb = cbGiftShow;
 #if ENABLE_MYLOG
-            SdkUtil.logd("ads iron full RewardedVideoAdOpenedEvent 1");
+            SdkUtil.logd("ads iron rw RewardedVideoAdOpenedEvent 1");
 #endif
                 AdsProcessCB.Instance().Enqueue(() =>
                 {
@@ -715,7 +866,7 @@ namespace mygame.sdk
             }
         }
 
-        private void RewardedVideoAdClosedEvent()
+        private void RewardedVideoAdClosedEvent(IronSourceAdInfo adInfo)
         {
 #if ENABLE_MYLOG
             SdkUtil.logd("ads iron rw HandleRewardBasedVideoClosed");

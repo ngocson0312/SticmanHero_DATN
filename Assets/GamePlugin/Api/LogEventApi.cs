@@ -1,4 +1,4 @@
-﻿#define ENABLE_API_LOG
+#define ENABLE_API_LOG
 using mygame.sdk;
 using UnityEngine;
 using System.Collections.Generic;
@@ -22,14 +22,15 @@ namespace Myapi
     public enum LevelPassStatus
     {
         Play = 0,
-        PlayBonus,
+        PlayRe,
         PlayAgain,
-        Skip,
         Win,
+        WinAgain,
         Lose,
-        EndBonus,
-        Die,
-        Skin,
+        LoseAgain,
+        Skip,
+        End4Re,
+        EndOther
     }
     public enum AdsTypeLog
     {
@@ -45,6 +46,7 @@ namespace Myapi
     }
     public class LogEventApi
     {
+        private const bool isLogMysv = false;
         private static LogEventApi _instance = null;
 #if UNITY_ANDROID
         string platform = "ANDROID";
@@ -80,7 +82,7 @@ namespace Myapi
             re += $"&version={AppConfig.verapp}";
             re += $"&platform={platform}";
             re += $"&country={GameHelper.Instance.countryCode}";
-            long tcr = SdkUtil.systemCurrentMiliseconds() / 1000;
+            long tcr = GameHelper.CurrentTimeMilisReal() / 1000;
             re += $"&createTime={tcr}";
 
             return re;
@@ -109,18 +111,11 @@ namespace Myapi
             SdkUtil.logd($"logLogin:={data}");
             LogEvent(MyEventLog.login, data);
         }
-        public void logLevel(int lv, string gameMode, TypeDif typeDif, LevelPassStatus passLevelStatus, string where)
+        public void logLevel(int lv, string gameMode, TypeDif typeDif, LevelPassStatus passLevelStatus, int dua, string where)
         {
-            int dua = (int)GameRes.duarationPlayLv;
             string data = $"{{\"level\":{lv},\"mode\":\"{gameMode}\",\"levelDifficulty\":\"{typeDif.ToString()}\",\"duration\":\"{dua}\",\"passLevelStatus\":\"{passLevelStatus.ToString()}\",\"where\":\"{where}\"}}";
             SdkUtil.logd($"loglevel:={data}");
             LogEvent(MyEventLog.logLevel, data);
-            if (passLevelStatus == LevelPassStatus.Win || passLevelStatus == LevelPassStatus.Lose)
-            {
-                GameRes.timeStartGame = 0;
-                GameRes.timeEndGame = 0;
-                GameRes.duarationPlayLv = 0;
-            }
         }
         public void logInApp(string productId, string transactionId, string purchaseToken, string currencyCode, float price, string where)
         {
@@ -152,6 +147,10 @@ namespace Myapi
 
         public void LogEvent(MyEventLog eventLog, string jsonData)
         {
+            if (!isLogMysv)
+            {
+                return;
+            }
             string url = getbaseParam(eventLog);
 #if !UNITY_EDITOR && ENABLE_API_LOG
             int islog = PlayerPrefs.GetInt("mem_flag_log", 1);
@@ -203,7 +202,7 @@ namespace Myapi
             try
             {
                 ObjectLog re = new ObjectLog();
-                re.logId = SdkUtil.systemCurrentMiliseconds();
+                re.logId = GameHelper.CurrentTimeMilisReal();
                 re.url = url;
                 re.jsonData = jsonData;
 
@@ -252,7 +251,7 @@ namespace Myapi
                 if (File.Exists(path))
                 {
                     listQueueLog.Clear();
-                    long tcr = SdkUtil.systemCurrentMiliseconds();
+                    long tcr = GameHelper.CurrentTimeMilisReal();
                     long dtc = 3 * 24 * 3600000;
                     using (StreamReader sr = File.OpenText(path))
                     {

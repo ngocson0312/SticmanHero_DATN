@@ -1,11 +1,14 @@
 //#define ENABLE_AppsFlyer
-
+//#define AppsFlyer_IAPConnector
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 #if ENABLE_AppsFlyer
 using AppsFlyerSDK;
+#if AppsFlyer_IAPConnector
+using AppsFlyerConnector;
+#endif
 #endif
 
 namespace mygame.sdk
@@ -32,6 +35,8 @@ namespace mygame.sdk
 
         int isLogCon = 1;
 
+        private Action<bool> _callback;
+
         private void Awake()
         {
             if (Instance == null)
@@ -45,17 +50,53 @@ namespace mygame.sdk
 #if ENABLE_AppsFlyer
             // These fields are set from the editor so do not modify!
             //******************************//
+            AppsFlyer.setHost("", "appsflyersdk.com");
+
             AppsFlyerAdRevenue.start();
-            AppsFlyer.setIsDebug(isDebug);
 #if UNITY_WSA_10_0 && !UNITY_EDITOR
         AppsFlyer.initSDK(devKey, UWPAppID, getConversionData ? this : null);
 #else
             AppsFlyer.initSDK(devKey, appID, getConversionData ? this : null);
 #endif
+            AppsFlyer.setIsDebug(isDebug);
+#if AppsFlyer_IAPConnector
+
+#if UNITY_ANDROID
+            AppsFlyerPurchaseConnector.init(this, AppsFlyerConnector.Store.GOOGLE);
+            AppsFlyerPurchaseConnector.setIsSandbox(isDebug);
+            AppsFlyerPurchaseConnector.setAutoLogPurchaseRevenue(AppsFlyerAutoLogPurchaseRevenueOptions.AppsFlyerAutoLogPurchaseRevenueOptionsAutoRenewableSubscriptions, AppsFlyerAutoLogPurchaseRevenueOptions.AppsFlyerAutoLogPurchaseRevenueOptionsInAppPurchases);
+            AppsFlyerPurchaseConnector.setPurchaseRevenueValidationListeners(true);
+            AppsFlyerPurchaseConnector.build();
+            AppsFlyerPurchaseConnector.startObservingTransactions();
+#endif
+#endif
             //******************************/
 
             AppsFlyer.startSDK();
 #endif
+        }
+
+        public void setIapConnectorCB(Action<bool> cb)
+        {
+            _callback = cb;
+        }
+
+        public void didReceivePurchaseRevenueValidationInfo(string validationInfo)
+        {
+            Debug.Log("mysdk: AF didReceivePurchaseRevenueValidationInfo " + validationInfo);
+            if (_callback != null)
+            {
+                if (validationInfo.Contains("success=true"))
+                {
+                    _callback(true);
+                    _callback = null;
+                }
+                else
+                {
+                    _callback(false);
+                    _callback = null;
+                }
+            }
         }
 
         // Mark AppsFlyer CallBacks
@@ -126,7 +167,7 @@ namespace mygame.sdk
                 }
                 if (isLogCon > 0)
                 {
-                    Debug.Log($"mysdk: appsflyer data conversion key={item.Key}, value={item.Value}");
+                    Debug.Log($"mysdk: AF data conversion key={item.Key}, value={item.Value}");
                     if (isbg)
                     {
                         isbg = false;
@@ -144,7 +185,7 @@ namespace mygame.sdk
                 Myapi.LogEventApi.Instance().LogEvent(Myapi.MyEventLog.AdsMaxConversionData, jsondata);
                 isLogCon--;
             }
-            Debug.Log($"mysdk: appsflyer mediaType={SDKManager.Instance.mediaType.ToString()}, meiaCampain={SDKManager.Instance.mediaCampain}");
+            Debug.Log($"mysdk: AF mediaType={SDKManager.Instance.mediaType.ToString()}, meiaCampain={SDKManager.Instance.mediaCampain}");
 #endif
         }
 

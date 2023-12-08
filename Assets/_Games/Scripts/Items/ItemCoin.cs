@@ -1,79 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 namespace SuperFight
 {
-    public class ItemCoin : BaseItem
+    public class ItemCoin : MonoBehaviour
     {
-        [SerializeField] private int minValue = 1;
-        [SerializeField] private int maxValue = 10;
+        private bool isActive;
+        [SerializeField] private Rigidbody2D rb2D;
         [SerializeField] private TextMeshPro coinText;
-        [SerializeField] private BoxCollider2D collider;
-
-        private bool isBeEat = false;
-        public float force;
-        public void InitCoin(Vector3 posInit)
+        [SerializeField] private Animation anim;
+        [SerializeField] private GameObject display;
+        [SerializeField] private float force;
+        private int amount;
+        private float timer;
+        public void Initialize(int amount)
         {
-            isBeEat = false;
-            transform.position = posInit;
-            GetComponent<Rigidbody2D>().AddForce(new Vector2(Random.Range(-force / 2, force / 2), force * 1.5f));
+            isActive = true;
+            this.amount = amount;
+            coinText.text = "+" + amount;
             coinText.gameObject.SetActive(false);
-            StartCoroutine(DelayCollider());
-            collider.enabled = false;
-            transform.GetChild(0).gameObject.SetActive(true);
+            display.SetActive(true);
+            rb2D.AddForce(new Vector2(Random.Range(-force / 2, force / 2), force * 1.5f));
+            timer = 0;
         }
-
-        IEnumerator DelayCollider()
+        private void Update()
         {
-            yield return new WaitForSeconds(0.7f);
-            collider.enabled = true;
-        }
-
-        private void OnTriggerEnter2D(Collider2D col)
-        {
-            if (col.gameObject.layer == LayerMask.NameToLayer(Constant.layerMainPlayer))
+            if (!isActive) return;
+            timer += Time.deltaTime;
+            if (timer > 10)
             {
-                beEat();
+                FactoryObject.Despawn("Item", transform);
             }
         }
-
-        private void beEat()
+        private void OnTriggerEnter2D(Collider2D other)
         {
-            if (isBeEat) return;
-
-            SoundManager.Instance.playSoundFx(SoundManager.Instance.effCollectCoin);
-
-            isBeEat = true;
-            int val = 0;
-            if (GameManager.Instance.CurrLevel <= 10)
-            {
-                val = Random.Range(minValue, maxValue + GameManager.Instance.CurrLevel);
-            }
-            else if (GameManager.Instance.CurrLevel <= 20)
-            {
-                val = Random.Range(minValue + 10, maxValue + GameManager.Instance.CurrLevel);
-            }
-            else if (GameManager.Instance.CurrLevel <= 30)
-            {
-                val = Random.Range(minValue + 15, maxValue + GameManager.Instance.CurrLevel);
-            }
-            else if (GameManager.Instance.CurrLevel <= 40)
-            {
-                val = Random.Range(minValue + 20, maxValue + GameManager.Instance.CurrLevel);
-            }
-            else
-            {
-                val = Random.Range(minValue + 25, maxValue + GameManager.Instance.CurrLevel);
-            }
+            if (!isActive || timer < 0.3f || !other.GetComponent<PlayerManager>()) return;
+            isActive = false;
+            anim.Play("CoinOn");
+            AudioManager.Instance.PlayOneShot("eff_collect_coin", 0.8f);
+            DataManager.Instance.AddCoin(amount, 0, "pickup", false);
+            display.SetActive(false);
             coinText.gameObject.SetActive(true);
-            coinText.text = "+" + val.ToString();
-            collider.enabled = false;
-            transform.GetChild(0).gameObject.SetActive(false);
-            GetComponent<Animation>().Play("CoinOn");
-            GameplayCtrl.Instance.coinBeEat(this, val);
-
+            FactoryObject.Despawn("Item", transform, 1f);
         }
     }
 }
